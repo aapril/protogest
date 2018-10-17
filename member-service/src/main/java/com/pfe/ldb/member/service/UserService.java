@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.pfe.ldb.core.protogest.user.Authoritie;
 import com.pfe.ldb.core.protogest.user.User;
-import com.pfe.ldb.entity.MemberEntity;
-import com.pfe.ldb.entity.UserAuthoritiesEntity;
-import com.pfe.ldb.entity.UserEntity;
+import com.pfe.ldb.entities.MemberEntity;
+import com.pfe.ldb.entities.UserAuthoritiesEntity;
+import com.pfe.ldb.entities.UserEntity;
 import com.pfe.ldb.member.imapper.IMapper;
 import com.pfe.ldb.member.iservice.IUserService;
 import com.pfe.ldb.member.mapper.MemberMapper;

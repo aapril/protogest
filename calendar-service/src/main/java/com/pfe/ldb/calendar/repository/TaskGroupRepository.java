@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.pfe.ldb.entity.TaskGroupEntity;
+import com.pfe.ldb.entities.TaskGroupEntity;
 
 public interface TaskGroupRepository extends  CrudRepository<TaskGroupEntity,Integer> {
 

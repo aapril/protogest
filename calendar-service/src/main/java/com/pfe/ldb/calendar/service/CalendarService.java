@@ -5,15 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.google.api.services.calendar.model.Event;
 import com.pfe.ldb.calendar.iservice.ICalendarService;
-import com.pfe.ldb.calendar.repository.TaskRepository;
-import com.pfe.ldb.core.protogest.task.Task;
-import com.pfe.ldb.core.protogest.event.*;
-
-import com.pfe.ldb.entity.TaskEntity;
 
 public class CalendarService implements ICalendarService {
 

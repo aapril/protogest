@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.pfe.ldb.entity.UserEntity;
+import com.pfe.ldb.entities.UserEntity;
 import com.pfe.ldb.member.repository.UserRepository;
 import com.pfe.ldb.member.security.JwtUserFactory;
 

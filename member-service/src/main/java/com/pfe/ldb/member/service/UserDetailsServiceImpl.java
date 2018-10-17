@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.entity.UserAuthoritiesEntity;
-import com.pfe.ldb.entity.UserEntity;
+import com.pfe.ldb.entities.UserAuthoritiesEntity;
+import com.pfe.ldb.entities.UserEntity;
 import com.pfe.ldb.member.repository.RoleRepository;
 import com.pfe.ldb.member.repository.UserRepository;
 

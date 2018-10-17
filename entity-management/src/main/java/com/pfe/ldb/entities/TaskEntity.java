@@ -1,4 +1,4 @@
-package com.pfe.ldb.entity;
+package com.pfe.ldb.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -18,7 +18,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class TaskEntity extends AbstractEntity {
-
 
 	private @NonNull String name;
 	private @NonNull String description;

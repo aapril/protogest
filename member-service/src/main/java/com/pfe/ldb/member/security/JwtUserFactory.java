@@ -1,7 +1,7 @@
 package com.pfe.ldb.member.security;
 
 
-import com.pfe.ldb.entity.UserEntity;
+import com.pfe.ldb.entities.UserEntity;
 
 
 public final class JwtUserFactory {

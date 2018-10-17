@@ -2,7 +2,7 @@ package com.pfe.ldb.member.iservice;
 import java.util.List;
 
 import com.pfe.ldb.core.protogest.user.User;
-import com.pfe.ldb.entity.UserAuthoritiesEntity;
+import com.pfe.ldb.entities.UserAuthoritiesEntity;
 
 
 

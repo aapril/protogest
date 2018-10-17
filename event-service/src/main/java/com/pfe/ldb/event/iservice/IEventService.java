@@ -6,7 +6,7 @@ import java.util.Map;
 import com.pfe.ldb.core.protogest.event.Event;
 import com.pfe.ldb.core.protogest.event.EventGroup;
 import com.pfe.ldb.core.protogest.event.EventJson;
-import com.pfe.ldb.entity.SuggestionEntity;
+import com.pfe.ldb.entities.SuggestionEntity;
 
 
 public interface IEventService {

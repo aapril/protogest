@@ -1,4 +1,4 @@
-package com.pfe.ldb.entity;
+package com.pfe.ldb.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;

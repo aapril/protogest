@@ -2,7 +2,7 @@ package com.pfe.ldb.member.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.pfe.ldb.entity.AuthoritiesEntity;
+import com.pfe.ldb.entities.AuthoritiesEntity;
 
 
 /**

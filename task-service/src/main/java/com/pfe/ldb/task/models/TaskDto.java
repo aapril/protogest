@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.dto;
+package com.pfe.ldb.task.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor 
 @RequiredArgsConstructor 
-public class TaskDTO {
+public class TaskDto {
 	
 	private @NonNull Integer id;
 	private @NonNull String name;

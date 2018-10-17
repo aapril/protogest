@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.pfe.ldb.entity.UserAuthoritiesEntity;
+import com.pfe.ldb.entities.UserAuthoritiesEntity;
 
 public interface RoleRepository extends CrudRepository<UserAuthoritiesEntity,Integer> {
 

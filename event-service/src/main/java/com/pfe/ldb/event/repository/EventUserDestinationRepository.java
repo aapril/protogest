@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.pfe.ldb.entity.EventEntity;
-import com.pfe.ldb.entity.EventUserDestinationEntity;
+import com.pfe.ldb.entities.EventEntity;
+import com.pfe.ldb.entities.EventUserDestinationEntity;
 
 public interface EventUserDestinationRepository extends  CrudRepository<EventUserDestinationEntity,Integer> {
 

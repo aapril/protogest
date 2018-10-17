@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pfe.ldb.core.protogest.event.Event;
 import com.pfe.ldb.core.protogest.event.EventGroup;
 import com.pfe.ldb.core.protogest.event.EventJson;
-import com.pfe.ldb.entity.SuggestionEntity;
+import com.pfe.ldb.entities.SuggestionEntity;
 import com.pfe.ldb.event.controller.path.PathURI;
 import com.pfe.ldb.event.iservice.IEventService;
 

@@ -1,4 +1,4 @@
-package com.pfe.ldb.entity;
+package com.pfe.ldb.entities;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -11,6 +11,9 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Getter;
+
+@Getter
 @MappedSuperclass
 public abstract class AbstractEntity {
 
@@ -24,16 +27,5 @@ public abstract class AbstractEntity {
     
     public AbstractEntity() {
     	this.createdDate = new Date(Calendar.getInstance().getTime().getTime());
-    }
-
-	public Integer getId() {
-		return id;
-	}
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-    
-    
-    
+    }    
 }
