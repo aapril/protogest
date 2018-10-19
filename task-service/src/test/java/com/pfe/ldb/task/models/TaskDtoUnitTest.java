@@ -43,12 +43,14 @@ public class TaskDtoUnitTest {
 	@Test
 	public void whenConvertTaskDtoToTaskEntity_thenCorrect() {
 		
-		final TaskDto taskDto = new TaskDto(TASK_ID, TASK_NAME, TASK_DESC, TASK_GROUP_ID);
+		final TaskDto taskDto = new TaskDto();
+		taskDto.setId(TASK_ID);
+		taskDto.setName(TASK_NAME);
+		taskDto.setDescription(TASK_DESC);
 		
 		final TaskEntity task = modelMapper.map(taskDto,  TaskEntity.class);
 		assertEquals(task.getId(), taskDto.getId());
 		assertEquals(task.getName(), taskDto.getName());
 		assertEquals(task.getDescription(), taskDto.getDescription());
-		//assertEquals(task.getTaskGroup().getId(), taskDto.getTaskGroupId());
 	}
 }
