@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.pfe.ldb.task.facades.DefaultTaskFacade;
+import com.pfe.ldb.task.facades.TaskFacade;
 import com.pfe.ldb.task.services.DefaultTaskService;
 import com.pfe.ldb.task.services.TaskService;
 
@@ -26,5 +28,10 @@ public class TaskServiceConfiguration {
     @Bean
     public ModelMapper modelMapper() {
         return new ModelMapper();
+    }
+    
+    @Bean
+    public TaskFacade taskFacade() {
+    	return new DefaultTaskFacade();
     }
 }
