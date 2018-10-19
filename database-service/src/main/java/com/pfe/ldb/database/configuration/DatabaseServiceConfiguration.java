@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@EntityScan("com.pfe.ldb.entity")
+@EntityScan("com.pfe.ldb.entities")
 @Profile("dev")
 public class DatabaseServiceConfiguration {
 
