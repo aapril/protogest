@@ -5,42 +5,25 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(name="userAuthorities")
 public class UserAuthoritiesEntity extends AbstractEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "userId")
-	private UserEntity user;
+	private @NonNull UserEntity user;
 
 	@ManyToOne
 	@JoinColumn(name = "authorityId")
-	private AuthoritiesEntity authority;
-	
-	
-	public UserAuthoritiesEntity() {
-		
-	}
-	
-	public UserAuthoritiesEntity(UserEntity user, AuthoritiesEntity authority) {
-		super();
-		this.user = user;
-		this.authority = authority;
-	}
-
-	public UserEntity getUser() {
-		return user;
-	}
-
-	public void setUser(UserEntity user) {
-		this.user = user;
-	}
-
-	public AuthoritiesEntity getAuthority() {
-		return authority;
-	}
-
-	public void setAuthority(AuthoritiesEntity authority) {
-		this.authority = authority;
-	}
+	private @NonNull AuthoritiesEntity authority;
 }
