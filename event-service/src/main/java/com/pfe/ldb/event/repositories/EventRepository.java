@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.repository;
+package com.pfe.ldb.event.repositories;
 
 import java.util.List;
 

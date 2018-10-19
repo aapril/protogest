@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.service;
+package com.pfe.ldb.event.services;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,47 +25,30 @@ import com.pfe.ldb.entities.EventStateEntity;
 import com.pfe.ldb.entities.EventUserDestinationEntity;
 import com.pfe.ldb.entities.MemberEntity;
 import com.pfe.ldb.entities.SuggestionEntity;
-import com.pfe.ldb.event.controller.path.PathURI;
-import com.pfe.ldb.event.iservice.IEventService;
 import com.pfe.ldb.event.mapper.EventGroupMapper;
 import com.pfe.ldb.event.mapper.EventMapper;
-import com.pfe.ldb.event.repository.EventGroupRepository;
-import com.pfe.ldb.event.repository.EventRepository;
-import com.pfe.ldb.event.repository.EventStateRepository;
-import com.pfe.ldb.event.repository.EventUserDestinationRepository;
-import com.pfe.ldb.event.repository.MemberRepository;
-import com.pfe.ldb.event.repository.SuggestionRepository;
+import com.pfe.ldb.event.repositories.EventGroupRepository;
+import com.pfe.ldb.event.repositories.EventRepository;
+import com.pfe.ldb.event.repositories.EventStateRepository;
+import com.pfe.ldb.event.repositories.EventUserDestinationRepository;
+import com.pfe.ldb.event.repositories.MemberRepository;
+import com.pfe.ldb.event.repositories.SuggestionRepository;
 
 @Service
-public class EventService implements IEventService {
+public class DefaultEventService implements EventService {
 
 	private final static Integer TASK_ID_DATE = 1;
-	
 
-	@Autowired
-	private EventRepository eventRepository;
-	
-	@Autowired
-	private EventGroupRepository eventGroupRepository;
-	
-	@Autowired
-	private EventStateRepository eventStateRepository;
-
-	@Autowired
-	private EventUserDestinationRepository eventUserDestRepository;
-	
-	@Autowired
-	private MemberRepository memberRepository;
-	
-	@Autowired
-	private SuggestionRepository suggestionRepository;
-	
-	@Autowired
-	private  EventMapper eventMapper;
+	private @Autowired EventRepository eventRepository;	
+	private @Autowired EventGroupRepository eventGroupRepository;
+	private @Autowired EventStateRepository eventStateRepository;
+	private @Autowired EventUserDestinationRepository eventUserDestRepository;
+	private @Autowired MemberRepository memberRepository;
+	private @Autowired SuggestionRepository suggestionRepository;
+	private @Autowired EventMapper eventMapper;
 	
 	private  EventGroupMapper eventGroupMapper = new EventGroupMapper();
 
-	
 
 	@Override
 	public List<EventGroup> loadEventsGroup() {
@@ -76,6 +59,7 @@ public class EventService implements IEventService {
 		return eventsGroup;
 	}
 
+	
 	@Override
 	public Event updateEvent(Event event) {
 		if(event.getId() == null) {
@@ -89,6 +73,7 @@ public class EventService implements IEventService {
 		addSubscribers(event, updatedEvent);
 		return (Event) eventMapper.convertToDTO(updatedEvent);
 	}
+	
 	
 	private void addSubscribers(Event event, EventEntity updatedEvent) {
 		
@@ -109,6 +94,7 @@ public class EventService implements IEventService {
 		
 	}
 	
+	
 	private void sendEmail(String email, Event event, EventEntity updatedEvent) {
 		try {
 			RestTemplate template = new RestTemplate();
@@ -118,17 +104,18 @@ public class EventService implements IEventService {
 			map.put("taskName", updatedEvent.getTask().getName());
 			map.put("eventDate", updatedEvent.getEventDate().toString());
 			map.put("source", updatedEvent.getMember().getFirstName() + " " + updatedEvent.getMember().getLastName());
-			map.put("link", PathURI.sourceHost);
+			map.put("link", "http://localhost:3001");
 			MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
 			header.add("Content-Type", "application/json");
 			HttpEntity<?> httpEntity = new HttpEntity<>(map, header);
-			template.postForObject(PathURI.emailHost, httpEntity, Map.class);
+			template.postForObject("http://localhost:5999/email", httpEntity, Map.class);
 		}catch(Exception ex) {
 			
 		}
 
 	}
 
+	
 	@Override
 	public List<Event> updateEvents(List<Event> events) {
 		List<Event> updatedEvent = new ArrayList<>();
@@ -140,7 +127,6 @@ public class EventService implements IEventService {
 	}
 	
 	
-
 	@Override
 	public List<EventJson> loadEvents() {
 		List<EventJson> events = new ArrayList<>();
@@ -222,22 +208,20 @@ public class EventService implements IEventService {
 	
 	@Override
 	public Event updateEventForCurrentUser(Map<String, String> event) {
-		Boolean completed = Boolean.parseBoolean(event.get("completed"));
-		Integer eventId = Integer.parseInt(event.get("id"));
-	//	EventEntity eventEntity = eventRepository.findById(eventId).get();
-		EventUserDestinationEntity eventUser  = eventUserDestRepository.findByEventIdAndEmail(eventId,event.get("email"));
+		final Boolean completed = Boolean.parseBoolean(event.get("completed"));
+		final Integer eventId = Integer.parseInt(event.get("id"));
+		final EventUserDestinationEntity eventUser  = eventUserDestRepository.findByEventIdAndEmail(eventId,event.get("email"));
 
 		if(completed) {
-			EventStateEntity eventState = eventStateRepository.findByName(EventState.ACCEPTED.getState());
-			
+			final EventStateEntity eventState = eventStateRepository.findByName(EventState.ACCEPTED.getState());
 			eventUser.setEventState(eventState);
-
-		}
-		else {
-			EventStateEntity eventState = eventStateRepository.findByName(EventState.PENDING.getState());
+		} else {
+			final EventStateEntity eventState = eventStateRepository.findByName(EventState.PENDING.getState());
 			eventUser.setEventState(eventState);		
 		}
-		EventUserDestinationEntity updatedEvent = eventUserDestRepository.save(eventUser);
+		
+		final EventUserDestinationEntity updatedEvent = eventUserDestRepository.save(eventUser);
+		
 		return (Event) eventMapper.convertToDTO(updatedEvent);
 	}
 

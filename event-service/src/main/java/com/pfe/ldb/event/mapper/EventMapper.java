@@ -14,11 +14,11 @@ import com.pfe.ldb.entities.EventStateEntity;
 import com.pfe.ldb.entities.MemberEntity;
 import com.pfe.ldb.entities.TaskEntity;
 import com.pfe.ldb.event.imapper.IMapper;
-import com.pfe.ldb.event.repository.EventGroupRepository;
-import com.pfe.ldb.event.repository.EventRepository;
-import com.pfe.ldb.event.repository.EventStateRepository;
-import com.pfe.ldb.event.repository.MemberRepository;
-import com.pfe.ldb.event.repository.TaskRepository;
+import com.pfe.ldb.event.repositories.EventGroupRepository;
+import com.pfe.ldb.event.repositories.EventRepository;
+import com.pfe.ldb.event.repositories.EventStateRepository;
+import com.pfe.ldb.event.repositories.MemberRepository;
+import com.pfe.ldb.event.repositories.TaskRepository;
 
 @Component
 public class EventMapper implements IMapper {

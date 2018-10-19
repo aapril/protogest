@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.iservice;
+package com.pfe.ldb.event.services;
 
 import java.util.List;
 import java.util.Map;
@@ -9,7 +9,7 @@ import com.pfe.ldb.core.protogest.event.EventJson;
 import com.pfe.ldb.entities.SuggestionEntity;
 
 
-public interface IEventService {
+public interface EventService {
 
 	public List<EventJson> loadEvents();
 	public List<EventGroup> loadEventsGroup();

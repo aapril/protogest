@@ -1,14 +1,13 @@
-package com.pfe.ldb.event.controller;
+package com.pfe.ldb.event.controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,54 +16,58 @@ import com.pfe.ldb.core.protogest.event.Event;
 import com.pfe.ldb.core.protogest.event.EventGroup;
 import com.pfe.ldb.core.protogest.event.EventJson;
 import com.pfe.ldb.entities.SuggestionEntity;
-import com.pfe.ldb.event.controller.path.PathURI;
-import com.pfe.ldb.event.iservice.IEventService;
+import com.pfe.ldb.event.services.EventService;
 
 @RestController
 public class EventController {
 
-	@Autowired
-	private IEventService eventService;
+	
+	private @Autowired EventService eventService;
 
-	@RequestMapping(method = RequestMethod.GET, value = PathURI.EVENTS)
+	
+	@RequestMapping("/events")
 	public List<EventJson> getEvents() throws Exception {
+		
 		return eventService.loadEvents();
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = PathURI.EVENTS_USER)
-	public List<EventJson> getEventsForCurrentUser(HttpServletRequest request) throws Exception {
-		
-		String user = request.getHeader("email");
-		return eventService.loadEventsForCurrentUser(user);
+	
+	@RequestMapping("/events/user/")
+	public List<EventJson> getEventsForCurrentUser(final @RequestHeader String email) throws Exception {
+		return eventService.loadEventsForCurrentUser(email);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = PathURI.EVENTS_GROUP)
+	
+	@RequestMapping("/events/group")
 	public List<EventGroup> getEventsGroup() throws Exception {
 		return eventService.loadEventsGroup();
 	}
-	@RequestMapping(method = RequestMethod.GET, value = PathURI.EVENT_SUGGESTION)
-	public List<SuggestionEntity> getSuggestionForCurrentUser(HttpServletRequest request) throws Exception {
+	
+	
+	@RequestMapping("/event/user/suggestion")
+	public List<SuggestionEntity> getSuggestionForCurrentUser(final @RequestHeader String email, 
+															  final @RequestHeader String eventId) 
+					throws Exception {
 		
-		String user = request.getHeader("email");
-		String eventId = request.getHeader("eventId");
-		return eventService.loadSuggestionForCurrentUser(user,eventId);
+		return eventService.loadSuggestionForCurrentUser(email, eventId);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = PathURI.EVENT)
+	
+	@RequestMapping("/event")
 	public Event updateEvent(@RequestBody(required = true) final Map<String, String> event) throws Exception {
 		
 		return eventService.updateEventForCurrentUser(event);
 	}
 	
 	
-	@RequestMapping(method = RequestMethod.POST, value = PathURI.EVENT_SUGGESTION)
+	@RequestMapping(method = RequestMethod.POST, value = "/event/user/suggestion")
 	public Boolean updateEventWithSuggestion(@RequestBody(required = true) final Map<String, String> event) throws Exception {
 		
 		return eventService.updateEventWithSuggestionForCurrentUser(event);
 	}
 	
 	
-	@RequestMapping(method = RequestMethod.POST, value = PathURI.EVENTS)
+	@RequestMapping(method = RequestMethod.POST, value = "/events")
 	public List<Event> updateEvents(@RequestBody(required = true) final Map<String, String> events) throws Exception {
 		List<Event> eventss = new ArrayList<>();
 		Thread.sleep(1000);
