@@ -21,24 +21,23 @@ import lombok.Setter;
 @Table(name="event")
 public class EventEntity extends AbstractEntity {
 
-	private @NonNull String name;
-	private @NonNull String description;
-	private @NonNull Date eventDate;
-	
 	@ManyToOne
 	@JoinColumn(name = "eventGroupId")
 	private @NonNull EventGroupEntity eventGroup;
 	
-	
 	@ManyToOne
 	@JoinColumn(name = "taskId")
-	private TaskEntity task;
+	private @NonNull TaskEntity task;
 
 	@ManyToOne
 	@JoinColumn(name = "sourceId")
-	private MemberEntity member;
+	private @NonNull MemberEntity member;
 	
 	@ManyToOne
 	@JoinColumn(name = "eventStateId")
-	private EventStateEntity eventState;
+	private @NonNull EventStateEntity eventState;
+	
+	private @NonNull String name;
+	private @NonNull String description;
+	private @NonNull Date eventDate;
 }

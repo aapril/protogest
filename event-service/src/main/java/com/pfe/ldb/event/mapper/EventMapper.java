@@ -13,7 +13,6 @@ import com.pfe.ldb.entities.EventGroupEntity;
 import com.pfe.ldb.entities.EventStateEntity;
 import com.pfe.ldb.entities.MemberEntity;
 import com.pfe.ldb.entities.TaskEntity;
-import com.pfe.ldb.entities.TaskGroupEntity;
 import com.pfe.ldb.event.imapper.IMapper;
 import com.pfe.ldb.event.repository.EventGroupRepository;
 import com.pfe.ldb.event.repository.EventRepository;
@@ -26,19 +25,18 @@ public class EventMapper implements IMapper {
 
 	// For PROTOTYPE purpose
 	private final Integer SOURCE_ID = 1;
-	@Autowired
-	private TaskRepository taskRepository;
-	@Autowired
-	private MemberRepository memberRepository;
-	@Autowired
-	private EventStateRepository eventStateRepository;
-	@Autowired
-	private EventGroupRepository eventGroupRepository;
-	@Autowired
-	private EventRepository eventRepository;
+	
+	private @Autowired TaskRepository taskRepository;
+	private @Autowired MemberRepository memberRepository;
+	private @Autowired EventStateRepository eventStateRepository;
+	private @Autowired EventGroupRepository eventGroupRepository;
+	private @Autowired EventRepository eventRepository;
 
 	@Override
 	public AbstractModel convertToDTO(AbstractEntity entity) throws ParseException {
+		
+		
+		
 		EventEntity eventEntity = (EventEntity) entity;
 		EventState state = EventState.valueOf(eventEntity.getEventState().getName().toUpperCase());
 		Event event = new Event(eventEntity.getId(), eventEntity.getEventDate(), eventEntity.getTask().getId(),
@@ -66,8 +64,8 @@ public class EventMapper implements IMapper {
 			if (eventGroupEntity == null) {
 				eventGroupEntity = eventGroupRepository.save(new EventGroupEntity(event.getEventName(), ""));
 			}
-			 eventEntity = new EventEntity("", "", event.getEventDate(), eventGroupEntity, taskEntity,
-					memberEntity, eventState);
+			 eventEntity = new EventEntity(eventGroupEntity, taskEntity,
+					memberEntity, eventState, "", "", event.getEventDate());
 		
 		return eventEntity;
 	}

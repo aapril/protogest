@@ -97,7 +97,7 @@ public class EventService implements IEventService {
 			MemberEntity member = memberRepository.findByEmail(email);
 			if(dest == null) {
 				EventStateEntity eventState = eventStateRepository.findByName(event.getEventState().getState());
-				EventUserDestinationEntity eventUserEntity =new EventUserDestinationEntity(updatedEvent, email, member,eventState);
+				EventUserDestinationEntity eventUserEntity =new EventUserDestinationEntity(eventState, updatedEvent, member, email);
 				eventUserDestRepository.save(eventUserEntity);
 			}
 			else {
@@ -249,7 +249,6 @@ public class EventService implements IEventService {
 			Date dateSuggestion1 = formatter.parse(event.get("date1"));
 			Date dateSuggestion2 = formatter.parse(event.get("date2"));
 			Integer eventId = Integer.parseInt(event.get("id"));
-			Integer taskId = Integer.parseInt(event.get("task"));
 			String email = event.get("email");
 			EventUserDestinationEntity eventUser = eventUserDestRepository.findByEventIdAndEmail(eventId, email);
 			SuggestionEntity suggestion1Entity = new SuggestionEntity("", "", dateSuggestion1, eventUser);
@@ -268,7 +267,7 @@ public class EventService implements IEventService {
 
 	
 	private List<Event> getChildEvent(EventGroup eventGroup) {
-		List<Event> childEvents = new ArrayList();
+		List<Event> childEvents = new ArrayList<Event>();
 		for(EventEntity eventEntity : eventRepository.findByEventGroupId(eventGroup.getId())) {
 			Event event = (Event)eventMapper.convertToDTO(eventEntity);
 			event.setEventName(eventEntity.getTask().getName());
@@ -286,49 +285,4 @@ public class EventService implements IEventService {
 		List<SuggestionEntity> suggestions = suggestionRepository.findByEventUserDestinationId(eventUser.getId());
 		return suggestions;
 	}
-
-	
-	/*
-	
-	@Override
-	public List<EventJson> loadEvents() {
-		List<EventJson> events = new ArrayList<>();
-		List<Integer> labels = new ArrayList<>();
-		labels.add(1);
-		labels.add(4);
-		for(EventGroup eventGroup : loadEventsGroup()) {
-			Boolean completed;
-			Boolean pending;
-		//	EventEntity eventEntity = eventRepository.findByTaskIdAndEventGroupId(TASK_ID_DATE,  eventGroup.getId());
-			for(EventEntity eventEntity : eventRepository.findByEventGroupId(eventGroup.getId())) {
-					
-				EventState state = EventState.valueOf(eventEntity.getEventState().getName().toUpperCase());
-				if(state.getState().equalsIgnoreCase("Accepted")) {
-					completed = true;
-					pending = false;
-				}
-				else if(state.getState().equalsIgnoreCase("Pending")) {
-					completed = false;
-					pending = true;
-				}
-				EventJson event = new EventJson(eventEntity.getId(), eventEntity.getEventDate(), eventEntity.getTask().getId(),
-						eventEntity.getMember().getId(), state);
-					List<String> emails = new ArrayList<>();
-					for(EventUserDestinationEntity eventUser : eventUserDestRepository.findByEventId(event.getId())){
-						emails.add(eventUser.getEmail());
-					}
-				   event.setTitle(eventGroup.getEventName());
-				   event.setEmails(emails);
-				   event.setLabels(labels);
-				   events.add(event);
-			}
-		}
-		return events;
-	}*/
-
-
-
-
-
-
 }

@@ -19,8 +19,6 @@ import lombok.Setter;
 @Table(name="eventUserDestination")
 public class EventUserDestinationEntity extends AbstractEntity {
 	
-	private @NonNull String email;
-	
 	@ManyToOne
 	@JoinColumn(name = "eventStateId")
 	private @NonNull EventStateEntity eventState;
@@ -32,4 +30,6 @@ public class EventUserDestinationEntity extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private @NonNull MemberEntity member;
+	
+	private @NonNull String email;
 }
