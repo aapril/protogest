@@ -12,7 +12,11 @@ import com.pfe.ldb.task.repositories.exceptions.TaskGroupEntityNotFoundException
 @Service
 public interface TaskService {
 
-	public List<TaskDTO> getTasksFromTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException;
+	public TaskDTO getTaskById(final Integer id) throws TaskEntityNotFoundException;
+
+	public TaskGroupDTO getTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
+	
+	public List<TaskDTO> getTasksByTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException;
 	
 	public List<TaskGroupDTO> getTaskGroups();
 	

@@ -24,6 +24,33 @@ public class DefaultTaskService implements TaskService {
 	
 	private @Autowired ModelMapper modelMapper;
 	
+	
+	@Override
+	public TaskDTO getTaskById(final Integer id) throws TaskEntityNotFoundException {
+		
+		if(!taskRepository.existsById(id)) {
+			throw new TaskEntityNotFoundException();
+		}
+		
+		final TaskEntity taskEntity = taskRepository.findById(id).get();
+		
+		return modelMapper.map(taskEntity, TaskDTO.class);
+	}
+
+
+	@Override
+	public TaskGroupDTO getTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException {
+
+		if(!taskGroupRepository.existsById(id)) {
+			throw new TaskGroupEntityNotFoundException();
+		}
+		
+		final TaskGroupEntity taskGroupEntity = taskGroupRepository.findById(id).get();
+		
+		return modelMapper.map(taskGroupEntity, TaskGroupDTO.class);
+	}
+	
+	
 	@Override
 	public List<TaskGroupDTO> getTaskGroups() {
 		
@@ -36,7 +63,7 @@ public class DefaultTaskService implements TaskService {
 	
 	
 	@Override
-	public List<TaskDTO> getTasksFromTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException {
+	public List<TaskDTO> getTasksByTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException {
 		
 		if(!taskGroupRepository.existsById(taskGroupId)) {
 			throw new TaskGroupEntityNotFoundException();
@@ -81,8 +108,9 @@ public class DefaultTaskService implements TaskService {
             throw new TaskEntityNotFoundException();
         }
         
-		final TaskEntity taskEntityToSave = modelMapper.map(taskDTO, TaskEntity.class);
-		final TaskEntity taskEntity = taskRepository.save(taskEntityToSave);
+		final TaskEntity taskEntityToUpdate = taskRepository.findById(id).get();
+		modelMapper.map(taskDTO, taskEntityToUpdate);
+		final TaskEntity taskEntity = taskRepository.save(taskEntityToUpdate);
 		
 		return modelMapper.map(taskEntity, TaskDTO.class);
 	}
@@ -96,8 +124,9 @@ public class DefaultTaskService implements TaskService {
             throw new TaskGroupEntityNotFoundException();
         }
 		
-		final TaskGroupEntity taskGroupEntityToSave = modelMapper.map(taskGroupDTO, TaskGroupEntity.class);
-		final TaskGroupEntity taskGroupEntity = taskGroupRepository.save(taskGroupEntityToSave);
+		final TaskGroupEntity taskGroupEntityToUpdate = taskGroupRepository.findById(id).get();
+		modelMapper.map(taskGroupDTO, taskGroupEntityToUpdate);
+		final TaskGroupEntity taskGroupEntity = taskGroupRepository.save(taskGroupEntityToUpdate);
 		
 		return modelMapper.map(taskGroupEntity, TaskGroupDTO.class);
 	}

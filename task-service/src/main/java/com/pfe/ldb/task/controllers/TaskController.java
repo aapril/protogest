@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.client.http.HttpResponse;
 import com.pfe.ldb.task.models.TaskDTO;
 import com.pfe.ldb.task.models.TaskGroupDTO;
 import com.pfe.ldb.task.repositories.exceptions.TaskEntityNotFoundException;
@@ -30,7 +30,7 @@ public class TaskController {
 	
 	@GetMapping("/taskGroup/all")
 	@ApiOperation(value = "Get a list of all task groups.", response = TaskGroupDTO.class, responseContainer = "List")
-    public ResponseEntity<List<TaskGroupDTO>> getTasksFromTaskGroupId() {
+    public ResponseEntity<List<TaskGroupDTO>> getAllTasksGroups() {
 		
 		final List<TaskGroupDTO> responseBody = taskService.getTaskGroups();
 		
@@ -38,13 +38,13 @@ public class TaskController {
     }
 	
 	
-	@GetMapping("/task/{taskGroupId}")
+	@GetMapping("/task/all")
 	@ApiOperation(value = "Get a list of all tasks within a task group.", response = TaskDTO.class, responseContainer = "List")
-    public ResponseEntity<List<TaskDTO>> getTasksFromTaskGroupId(
-    		final @PathVariable Integer taskGroupId) {
+    public ResponseEntity<List<TaskDTO>> getAllTasksByTaskGroupId(
+    		final @RequestParam Integer taskGroupId) {
 		
 		try {
-			List<TaskDTO> responseBody = taskService.getTasksFromTaskGroupId(taskGroupId);
+			List<TaskDTO> responseBody = taskService.getTasksByTaskGroupId(taskGroupId);
 			
 			return ResponseEntity.ok().body(responseBody); 
 			
@@ -53,6 +53,37 @@ public class TaskController {
 		}
     }
 
+	
+	@GetMapping("/task/{id}")
+	@ApiOperation(value = "Get a task group.", response = TaskDTO.class)
+    public ResponseEntity<TaskDTO> getTaskById(final @PathVariable Integer id) {
+		
+		try {
+			final TaskDTO responseBody= taskService.getTaskById(id);
+			
+			return ResponseEntity.ok().body(responseBody);
+			
+		} catch (TaskEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+    }
+	
+	
+	@GetMapping("/taskGroup/{id}")
+	@ApiOperation(value = "Get a task group.", response = TaskGroupDTO.class)
+    public ResponseEntity<TaskGroupDTO> getTaskGroupById(final @PathVariable Integer id) {
+		
+		try {
+			final TaskGroupDTO responseBody = taskService.getTaskGroupById(id);
+
+			return ResponseEntity.ok().body(responseBody);
+		
+		} catch (TaskGroupEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+		
+    }
+	
 	
 	@PostMapping("/task")
 	@ApiOperation(value = "Add a task to a group task.", response = TaskDTO.class)

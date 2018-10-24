@@ -27,7 +27,7 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
 
 	private ApiInfo metaData() {
 		return new ApiInfoBuilder()
-				.title("Spring Boot REST API for Protoguest")
+				.title("Spring Boot REST API for Task-Service")
 				.version("1.0")
 				.build();
 	}

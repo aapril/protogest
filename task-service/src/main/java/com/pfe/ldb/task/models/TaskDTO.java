@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaskDTO {
 	
-	@ApiModelProperty(notes = "Only for output purpose.")
+	@ApiModelProperty(notes = "Only for output purposes.")
 	private Integer id;
 	
 	@ApiModelProperty(required = true)
