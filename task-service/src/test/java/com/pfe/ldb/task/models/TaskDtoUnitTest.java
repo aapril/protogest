@@ -9,7 +9,7 @@ import org.modelmapper.ModelMapper;
 
 import com.pfe.ldb.entities.TaskEntity;
 import com.pfe.ldb.entities.TaskGroupEntity;
-import com.pfe.ldb.task.models.TaskDto;
+import com.pfe.ldb.task.models.TaskDTO;
 
 public class TaskDtoUnitTest {
 
@@ -32,8 +32,7 @@ public class TaskDtoUnitTest {
 		when(taskMock.getTaskGroup()).thenReturn(taskGroupMock);
 		when(taskGroupMock.getId()).thenReturn(TASK_GROUP_ID);
 		
-		final TaskDto taskDto = modelMapper.map(taskMock, TaskDto.class);
-		assertEquals(taskMock.getId(), taskDto.getId());
+		final TaskDTO taskDto = modelMapper.map(taskMock, TaskDTO.class);
 		assertEquals(taskMock.getName(), taskDto.getName());
 		assertEquals(taskMock.getDescription(), taskDto.getDescription());
 		assertEquals(taskMock.getTaskGroup().getId(), taskDto.getTaskGroupId());
@@ -43,13 +42,11 @@ public class TaskDtoUnitTest {
 	@Test
 	public void whenConvertTaskDtoToTaskEntity_thenCorrect() {
 		
-		final TaskDto taskDto = new TaskDto();
-		taskDto.setId(TASK_ID);
+		final TaskDTO taskDto = new TaskDTO();
 		taskDto.setName(TASK_NAME);
 		taskDto.setDescription(TASK_DESC);
 		
 		final TaskEntity task = modelMapper.map(taskDto,  TaskEntity.class);
-		assertEquals(task.getId(), taskDto.getId());
 		assertEquals(task.getName(), taskDto.getName());
 		assertEquals(task.getDescription(), taskDto.getDescription());
 	}
