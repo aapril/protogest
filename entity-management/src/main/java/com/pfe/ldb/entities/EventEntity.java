@@ -31,7 +31,7 @@ public class EventEntity extends AbstractEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "sourceId")
-	private @NonNull MemberEntity member;
+	private @NonNull MemberEntity authorId;
 	
 	@ManyToOne
 	@JoinColumn(name = "eventStateId")

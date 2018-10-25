@@ -1,272 +1,170 @@
 package com.pfe.ldb.event.services;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.core.protogest.event.Event;
-import com.pfe.ldb.core.protogest.event.EventGroup;
-import com.pfe.ldb.core.protogest.event.EventJson;
-import com.pfe.ldb.core.protogest.event.EventState;
 import com.pfe.ldb.entities.EventEntity;
 import com.pfe.ldb.entities.EventGroupEntity;
 import com.pfe.ldb.entities.EventStateEntity;
-import com.pfe.ldb.entities.EventUserDestinationEntity;
-import com.pfe.ldb.entities.MemberEntity;
-import com.pfe.ldb.entities.SuggestionEntity;
-import com.pfe.ldb.event.mapper.EventGroupMapper;
-import com.pfe.ldb.event.mapper.EventMapper;
+import com.pfe.ldb.event.models.EventDTO;
+import com.pfe.ldb.event.models.EventGroupDTO;
+import com.pfe.ldb.event.models.EventStateDTO;
 import com.pfe.ldb.event.repositories.EventGroupRepository;
 import com.pfe.ldb.event.repositories.EventRepository;
 import com.pfe.ldb.event.repositories.EventStateRepository;
-import com.pfe.ldb.event.repositories.EventUserDestinationRepository;
-import com.pfe.ldb.event.repositories.MemberRepository;
-import com.pfe.ldb.event.repositories.SuggestionRepository;
+import com.pfe.ldb.event.repositories.exceptions.EventEntityNotFoundException;
+import com.pfe.ldb.event.repositories.exceptions.EventGroupEntityNotFoundException;
 
-@Service
 public class DefaultEventService implements EventService {
-
-	private final static Integer TASK_ID_DATE = 1;
-
-	private @Autowired EventRepository eventRepository;	
+	
+	private @Autowired EventRepository eventRepository;
 	private @Autowired EventGroupRepository eventGroupRepository;
 	private @Autowired EventStateRepository eventStateRepository;
-	private @Autowired EventUserDestinationRepository eventUserDestRepository;
-	private @Autowired MemberRepository memberRepository;
-	private @Autowired SuggestionRepository suggestionRepository;
-	private @Autowired EventMapper eventMapper;
 	
-	private  EventGroupMapper eventGroupMapper = new EventGroupMapper();
-
-
-	@Override
-	public List<EventGroup> loadEventsGroup() {
-		List<EventGroup> eventsGroup = new ArrayList<>();
-		for(EventGroupEntity eventGroupEntity : eventGroupRepository.findAll()) {
-			eventsGroup.add((EventGroup)eventGroupMapper.convertToDTO(eventGroupEntity));
-		}
-		return eventsGroup;
-	}
-
+	private @Autowired ModelMapper modelMapper;
+	
 	
 	@Override
-	public Event updateEvent(Event event) {
-		if(event.getId() == null) {
-			event.setEventState(EventState.PENDING);
-		}
-		else {
-			event.setEventState(EventState.ACCEPTED);
-		}
-		EventEntity eventEntity = (EventEntity) eventMapper.convertToEntity(event);
-		EventEntity updatedEvent = eventRepository.save(eventEntity);
-		addSubscribers(event, updatedEvent);
-		return (Event) eventMapper.convertToDTO(updatedEvent);
-	}
-	
-	
-	private void addSubscribers(Event event, EventEntity updatedEvent) {
+	public EventDTO getEventById(final Integer id) throws EventEntityNotFoundException {
 		
-		for(String email : event.getEmails()) {
-			EventUserDestinationEntity dest = eventUserDestRepository.findByEventIdAndEmail(updatedEvent.getId(), email);
-			MemberEntity member = memberRepository.findByEmail(email);
-			if(dest == null) {
-				EventStateEntity eventState = eventStateRepository.findByName(event.getEventState().getState());
-				EventUserDestinationEntity eventUserEntity =new EventUserDestinationEntity(eventState, updatedEvent, member, email);
-				eventUserDestRepository.save(eventUserEntity);
-			}
-			else {
-				dest.setMember(member);
-				eventUserDestRepository.save(dest);
-			}
-			sendEmail(email, event, updatedEvent);
+		if(!eventRepository.existsById(id)) {
+			throw new EventEntityNotFoundException();
 		}
 		
-	}
-	
-	
-	private void sendEmail(String email, Event event, EventEntity updatedEvent) {
-		try {
-			RestTemplate template = new RestTemplate();
-			Map<String, String> map = new LinkedHashMap<>();
-			map.put("email", email);
-			map.put("eventName", event.getEventName());
-			map.put("taskName", updatedEvent.getTask().getName());
-			map.put("eventDate", updatedEvent.getEventDate().toString());
-			map.put("source", updatedEvent.getMember().getFirstName() + " " + updatedEvent.getMember().getLastName());
-			map.put("link", "http://localhost:3001");
-			MultiValueMap<String, String> header = new LinkedMultiValueMap<>();
-			header.add("Content-Type", "application/json");
-			HttpEntity<?> httpEntity = new HttpEntity<>(map, header);
-			template.postForObject("http://localhost:5999/email", httpEntity, Map.class);
-		}catch(Exception ex) {
-			
-		}
-
+		final EventEntity eventEntity = eventRepository.findById(id).get();
+		
+		return modelMapper.map(eventEntity, EventDTO.class);
 	}
 
-	
+
 	@Override
-	public List<Event> updateEvents(List<Event> events) {
-		List<Event> updatedEvent = new ArrayList<>();
-		for(Event event : events) {
-			updatedEvent.add(updateEvent(event));
+	public EventGroupDTO getEventGroupById(final Integer id) throws EventGroupEntityNotFoundException {
+
+		if(!eventGroupRepository.existsById(id)) {
+			throw new EventGroupEntityNotFoundException();
 		}
 		
-		return updatedEvent;
+		final EventGroupEntity eventGroupEntity = eventGroupRepository.findById(id).get();
+		
+		return modelMapper.map(eventGroupEntity, EventGroupDTO.class);
 	}
 	
 	
 	@Override
-	public List<EventJson> loadEvents() {
-		List<EventJson> events = new ArrayList<>();
-		List<Integer> labels = new ArrayList<>();
-		labels.add(1);
-		labels.add(4);
-		for(EventGroup eventGroup : loadEventsGroup()) {
-			Boolean completed =false;
-			Boolean pending = false;
-			Boolean deleted = false;
-			Boolean archived = false;
-			EventEntity eventEntity = eventRepository.findByTaskIdAndEventGroupId(TASK_ID_DATE,  eventGroup.getId());
-					
-				EventState state = EventState.valueOf(eventEntity.getEventState().getName().toUpperCase());
-				if(state.getState().equalsIgnoreCase("Accepted")) {
-					completed = true;
-					pending = false;
-				}
-				else if(state.getState().equalsIgnoreCase("Pending")) {
-					completed = false;
-					pending = true;
-				}
-				EventJson event = new EventJson(eventEntity.getId(), eventEntity.getEventDate(), eventEntity.getTask().getId(),
-						eventEntity.getMember().getId(), state);
-					List<String> emails = new ArrayList<>();
-					for(EventUserDestinationEntity eventUser : eventUserDestRepository.findByEventId(event.getId())){
-						emails.add(eventUser.getEmail());
-					}
-				   event.setTitle(eventGroup.getEventName());
-				   event.setEmails(emails);
-				   event.setLabels(labels);
-				   event.setCompleted(completed);
-				   event.setPending(pending);
-				   event.setDeleted(deleted);
-				   event.setArchived(archived);
-				   event.setChildEvents(getChildEvent(eventGroup));
-				   events.add(event);
-			}
-		return events;
-	}
-	
-	@Override
-	public List<EventJson> loadEventsForCurrentUser(String user) {
-		List<EventJson> events = new ArrayList<>();
-		List<Integer> labels = new ArrayList<>();
-		labels.add(1);
-		labels.add(4);
-		MemberEntity memberEntity = memberRepository.findByEmail(user);
-		for(EventUserDestinationEntity eventUser: eventUserDestRepository.findByMemberIdOrEmail(memberEntity.getId(), memberEntity.getEmail())) {
-			Boolean completed =false;
-			Boolean pending = false;
-			Boolean deleted = false;
-			Boolean archived = false;
-			EventEntity eventEntity = eventRepository.findById(eventUser.getEvent().getId()).get();
-			EventState state = EventState.valueOf(eventUser.getEventState().getName().toUpperCase());
-			
-			if(state.getState().equalsIgnoreCase("Accepted")) {
-				completed = true;
-				pending = false;
-			}
-			else if(state.getState().equalsIgnoreCase("Pending")) {
-				completed = false;
-				pending = true;
-			}
-			EventJson event = new EventJson(eventEntity.getId(), eventEntity.getEventDate(), eventEntity.getTask().getId(),
-					eventEntity.getMember().getId(), state);
-			 event.setTitle(eventEntity.getEventGroup().getName());
-			   event.setLabels(labels);
-			   event.setCompleted(completed);
-			   event.setPending(pending);
-			   event.setDeleted(deleted);
-			   event.setArchived(archived);
-			   event.setTaskName(eventEntity.getTask().getName());
-			   events.add(event);
-		}
-		return events;
+	public List<EventGroupDTO> getEventGroups() {
+		
+		final Iterable<EventGroupEntity> eventGroupEntities = eventGroupRepository.findAll(); 
+		
+		return StreamSupport.stream(eventGroupEntities.spliterator(), true)
+			.map(eventGroupEntity -> modelMapper.map(eventGroupEntity, EventGroupDTO.class))
+			.collect(Collectors.toList());
 	}
 	
 	
 	@Override
-	public Event updateEventForCurrentUser(Map<String, String> event) {
-		final Boolean completed = Boolean.parseBoolean(event.get("completed"));
-		final Integer eventId = Integer.parseInt(event.get("id"));
-		final EventUserDestinationEntity eventUser  = eventUserDestRepository.findByEventIdAndEmail(eventId,event.get("email"));
-
-		if(completed) {
-			final EventStateEntity eventState = eventStateRepository.findByName(EventState.ACCEPTED.getState());
-			eventUser.setEventState(eventState);
-		} else {
-			final EventStateEntity eventState = eventStateRepository.findByName(EventState.PENDING.getState());
-			eventUser.setEventState(eventState);		
+	public List<EventDTO> getEventsByEventGroupId(final Integer eventGroupId) throws EventGroupEntityNotFoundException {
+		
+		if(!eventGroupRepository.existsById(eventGroupId)) {
+			throw new EventGroupEntityNotFoundException();
 		}
 		
-		final EventUserDestinationEntity updatedEvent = eventUserDestRepository.save(eventUser);
+		final Iterable<EventEntity> eventEntities = eventRepository.findByEventGroupId(eventGroupId); 
 		
-		return (Event) eventMapper.convertToDTO(updatedEvent);
+		return StreamSupport.stream(eventEntities.spliterator(), true)
+			.map(eventEntity -> modelMapper.map(eventEntity, EventDTO.class))
+			.collect(Collectors.toList());
 	}
 
-	
+
+	@Transactional
 	@Override
-	public Boolean updateEventWithSuggestionForCurrentUser(Map<String, String> event) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			Date dateSuggestion1 = formatter.parse(event.get("date1"));
-			Date dateSuggestion2 = formatter.parse(event.get("date2"));
-			Integer eventId = Integer.parseInt(event.get("id"));
-			String email = event.get("email");
-			EventUserDestinationEntity eventUser = eventUserDestRepository.findByEventIdAndEmail(eventId, email);
-			SuggestionEntity suggestion1Entity = new SuggestionEntity("", "", dateSuggestion1, eventUser);
-			suggestionRepository.save(suggestion1Entity);
-			SuggestionEntity suggestion2Entity = new SuggestionEntity("", "", dateSuggestion2, eventUser);
-			suggestionRepository.save(suggestion2Entity);
-			
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
-
-	
-	private List<Event> getChildEvent(EventGroup eventGroup) {
-		List<Event> childEvents = new ArrayList<Event>();
-		for(EventEntity eventEntity : eventRepository.findByEventGroupId(eventGroup.getId())) {
-			Event event = (Event)eventMapper.convertToDTO(eventEntity);
-			event.setEventName(eventEntity.getTask().getName());
-			childEvents.add(event);
-			
-		}
-		return childEvents;
-	}
-	
-	
-	@Override
-	public List<SuggestionEntity> loadSuggestionForCurrentUser(String user, String eventId) {
+	public EventDTO createEvent(final EventDTO eventDTO) {
 		
-		EventUserDestinationEntity eventUser = eventUserDestRepository.findByEventIdAndEmail(Integer.parseInt(eventId), user);
-		List<SuggestionEntity> suggestions = suggestionRepository.findByEventUserDestinationId(eventUser.getId());
-		return suggestions;
+		final EventEntity eventEntityToSave = modelMapper.map(eventDTO, EventEntity.class);
+		final EventEntity eventEntity = eventRepository.save(eventEntityToSave);
+		
+		return modelMapper.map(eventEntity, EventDTO.class);
+	}
+	
+	
+	@Transactional
+	@Override
+	public EventGroupDTO createEventGroup(final EventGroupDTO eventGroupDTO) {
+		
+		EventGroupEntity eventGroupEntityToSave = modelMapper.map(eventGroupDTO, EventGroupEntity.class);
+		final EventGroupEntity eventGroupEntity = eventGroupRepository.save(eventGroupEntityToSave);
+		
+		return modelMapper.map(eventGroupEntity, EventGroupDTO.class);
+	}
+
+
+	@Transactional
+	@Override
+	public EventDTO updateEvent(final Integer id, final EventDTO eventDTO) 
+			throws EventEntityNotFoundException {
+		
+		if(!eventRepository.existsById(id)) {
+            throw new EventEntityNotFoundException();
+        }
+        
+		final EventEntity eventEntityToUpdate = eventRepository.findById(id).get();
+		modelMapper.map(eventDTO, eventEntityToUpdate);
+		final EventEntity eventEntity = eventRepository.save(eventEntityToUpdate);
+		
+		return modelMapper.map(eventEntity, EventDTO.class);
+	}
+
+
+	@Override
+	public EventGroupDTO updateEventGroup(final Integer id, final EventGroupDTO eventGroupDTO) 
+			throws EventGroupEntityNotFoundException {
+		
+		if(!eventGroupRepository.existsById(id)) {
+            throw new EventGroupEntityNotFoundException();
+        }
+		
+		final EventGroupEntity eventGroupEntityToUpdate = eventGroupRepository.findById(id).get();
+		modelMapper.map(eventGroupDTO, eventGroupEntityToUpdate);
+		final EventGroupEntity eventGroupEntity = eventGroupRepository.save(eventGroupEntityToUpdate);
+		
+		return modelMapper.map(eventGroupEntity, EventGroupDTO.class);
+	}
+
+
+	@Override
+	public void deleteEventById(final Integer id) throws EventEntityNotFoundException {
+		
+		if(!eventRepository.existsById(id)) {
+			throw new EventEntityNotFoundException();
+		}
+	
+		eventRepository.deleteById(id);
+	}
+
+
+	@Override
+	public void deleteEventGroupById(final Integer id) throws EventGroupEntityNotFoundException {
+		
+		if(!eventGroupRepository.existsById(id)) {
+			throw new EventGroupEntityNotFoundException();
+		}
+	
+		eventGroupRepository.deleteById(id);
+	}
+
+
+	@Override
+	public List<EventStateDTO> getEventStates() {
+		
+		final Iterable<EventStateEntity> eventStateEntities = eventStateRepository.findAll(); 
+		
+		return StreamSupport.stream(eventStateEntities.spliterator(), true)
+			.map(eventStateEntity -> modelMapper.map(eventStateEntity, EventStateDTO.class))
+			.collect(Collectors.toList());
 	}
 }
