@@ -3,18 +3,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.pfe.ldb.database</groupId>
-	<artifactId>database-service</artifactId>
+	<groupId>com.pfe.ldb.calendar</groupId>
+	<artifactId>calendar-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>database-service</name>
-	<description>Database Service</description>
+	<name>calendar-service</name>
+	<description>calendar Service</description>
 
-	<scm>
-		<url>scm:git:https://github.com/walidbe/lawyer-doodle/tree/master/database-service</url>
-		<connection>scm:git:https://github.com/walidbe/lawyer-doodle/tree/master/database-service</connection>
-	</scm>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -28,18 +24,26 @@
 		<java.version>1.8</java.version>
 		<spring-cloud.version>Finchley.RC2</spring-cloud.version>
 		<entity-management.version>0.0.1-SNAPSHOT</entity-management.version>
+		<protogest-core.version>0.0.1-SNAPSHOT</protogest-core.version>
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>com.pfe.ldb.core</groupId>
+			<artifactId>protogest-core</artifactId>
+			<version>${protogest-core.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.pfe.ldb.entity</groupId>
 			<artifactId>entity-management</artifactId>
 			<version>${entity-management.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter</artifactId>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-calendar</artifactId>
+			<version>v3-rev224-1.22.0</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -49,12 +53,18 @@
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -62,9 +72,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-        	<groupId>mysql</groupId>
-        	<artifactId>mysql-connector-java</artifactId>
-    	</dependency>
+			<groupId>com.google.apis</groupId>
+			<artifactId>google-api-services-calendar</artifactId>
+			<version>v3-rev224-1.22.0</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
