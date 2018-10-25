@@ -1,26 +1,39 @@
 package com.pfe.ldb.event.services;
 
 import java.util.List;
-import java.util.Map;
 
-import com.pfe.ldb.core.protogest.event.Event;
-import com.pfe.ldb.core.protogest.event.EventGroup;
-import com.pfe.ldb.core.protogest.event.EventJson;
-import com.pfe.ldb.entities.SuggestionEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.pfe.ldb.event.models.EventDTO;
+import com.pfe.ldb.event.models.EventGroupDTO;
+import com.pfe.ldb.event.models.EventStateDTO;
+import com.pfe.ldb.event.repositories.exceptions.EventEntityNotFoundException;
+import com.pfe.ldb.event.repositories.exceptions.EventGroupEntityNotFoundException;
 
+@Service
+@Transactional(readOnly = true)
 public interface EventService {
 
-	public List<EventJson> loadEvents();
-	public List<EventGroup> loadEventsGroup();
-	public List<EventJson> loadEventsForCurrentUser(String user);
-	public List<SuggestionEntity> loadSuggestionForCurrentUser(String user, String eventId);
-	public Event updateEvent(Event event);
-	public Event updateEventForCurrentUser(Map<String,String> event);
-	public Boolean updateEventWithSuggestionForCurrentUser(Map<String,String> event);
-	public List<Event> updateEvents(List<Event> event);
+	public EventDTO getEventById(final Integer id) throws EventEntityNotFoundException;
 
+	public EventGroupDTO getEventGroupById(final Integer id) throws EventGroupEntityNotFoundException;
+	
+	public List<EventDTO> getEventsByEventGroupId(final Integer eventGroupId) throws EventGroupEntityNotFoundException;
+	
+	public List<EventGroupDTO> getEventGroups();
+	
+	public List<EventStateDTO> getEventStates();
+	
+	public EventDTO createEvent(final EventDTO eventDTO);
+	
+	public EventGroupDTO createEventGroup(final EventGroupDTO eventGroupDTO);
 
+	public EventDTO updateEvent(final Integer id, final EventDTO eventDTO) throws EventEntityNotFoundException;
 
+	public EventGroupDTO updateEventGroup(final Integer id, final EventGroupDTO eventGroupDTO) throws EventGroupEntityNotFoundException;
 
+	public void deleteEventById(final Integer id) throws EventEntityNotFoundException;
+
+	public void deleteEventGroupById(final Integer id) throws EventGroupEntityNotFoundException;
 }

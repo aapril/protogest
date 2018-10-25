@@ -3,13 +3,12 @@ package com.pfe.ldb.event.repositories;
 import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.entities.EventEntity;
 
+@Transactional(readOnly = true)
+public interface EventRepository extends CrudRepository<EventEntity, Integer> {
 
-public interface EventRepository extends  CrudRepository<EventEntity,Integer> {
-
-		EventEntity findByTaskIdAndEventGroupId(Integer taskId, Integer eventGroupId);
-		List<EventEntity> findByEventGroupId(Integer eventGroupId);
-		
+	List<EventEntity> findByEventGroupId(final Integer eventGroupId);
 }

@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.configurations;
+package com.pfe.ldb.event.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -6,7 +6,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
@@ -20,15 +19,15 @@ public class SwaggerConfiguration extends WebMvcConfigurationSupport {
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.pfe.ldb.task.controllers"))
+				.apis(RequestHandlerSelectors.basePackage("com.pfe.ldb.event.controllers"))
 				.build()
 				.apiInfo(metaData());
 	}
 
 	private ApiInfo metaData() {
 		return new ApiInfoBuilder()
-				.title("Spring Boot REST API for Task-Service")
-				.version("2.0")
+				.title("Spring Boot REST API for Event-Service")
+				.version("1.0")
 				.build();
 	}
 

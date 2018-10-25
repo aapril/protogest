@@ -1,4 +1,4 @@
-package com.pfe.ldb.event;
+package com.pfe.ldb.event.configurations;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -14,7 +14,7 @@ import com.pfe.ldb.event.services.EventService;
 
 @Configuration
 @ComponentScan(basePackages = { "com.pfe.ldb.event"})
-@EntityScan("com.pfe.ldb.entity")
+@EntityScan("com.pfe.ldb.entities")
 @EnableJpaRepositories("com.pfe.ldb.event.repositories")
 @Profile({"dev","prod"})
 public class EventServiceConfiguration {

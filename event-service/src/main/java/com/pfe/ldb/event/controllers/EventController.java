@@ -1,91 +1,185 @@
 package com.pfe.ldb.event.controllers;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pfe.ldb.core.protogest.event.Event;
-import com.pfe.ldb.core.protogest.event.EventGroup;
-import com.pfe.ldb.core.protogest.event.EventJson;
-import com.pfe.ldb.entities.SuggestionEntity;
+import com.pfe.ldb.event.models.EventDTO;
+import com.pfe.ldb.event.models.EventGroupDTO;
+import com.pfe.ldb.event.models.EventStateDTO;
+import com.pfe.ldb.event.repositories.exceptions.EventEntityNotFoundException;
+import com.pfe.ldb.event.repositories.exceptions.EventGroupEntityNotFoundException;
 import com.pfe.ldb.event.services.EventService;
+
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class EventController {
-
 	
 	private @Autowired EventService eventService;
-
 	
-	@RequestMapping("/events")
-	public List<EventJson> getEvents() throws Exception {
+	
+	@GetMapping("/eventGroup/all")
+	@ApiOperation(value = "Get a list of all event groups.", response = EventGroupDTO.class, responseContainer = "List")
+    public ResponseEntity<List<EventGroupDTO>> getAllEventsGroups() {
 		
-		return eventService.loadEvents();
-	}
-	
-	
-	@RequestMapping("/events/user/")
-	public List<EventJson> getEventsForCurrentUser(final @RequestHeader String email) throws Exception {
-		return eventService.loadEventsForCurrentUser(email);
-	}
-
-	
-	@RequestMapping("/events/group")
-	public List<EventGroup> getEventsGroup() throws Exception {
-		return eventService.loadEventsGroup();
-	}
-	
-	
-	@RequestMapping("/event/user/suggestion")
-	public List<SuggestionEntity> getSuggestionForCurrentUser(final @RequestHeader String email, 
-															  final @RequestHeader String eventId) 
-					throws Exception {
+		final List<EventGroupDTO> responseBody = eventService.getEventGroups();
 		
-		return eventService.loadSuggestionForCurrentUser(email, eventId);
-	}
-
+		return ResponseEntity.ok().body(responseBody);
+    }
 	
-	@RequestMapping("/event")
-	public Event updateEvent(@RequestBody(required = true) final Map<String, String> event) throws Exception {
+	
+	@GetMapping("/event/all")
+	@ApiOperation(value = "Get a list of all events within a event group.", response = EventDTO.class, responseContainer = "List")
+    public ResponseEntity<List<EventDTO>> getAllEventsByEventGroupId(
+    		final @RequestParam Integer eventGroupId) {
 		
-		return eventService.updateEventForCurrentUser(event);
-	}
-	
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/event/user/suggestion")
-	public Boolean updateEventWithSuggestion(@RequestBody(required = true) final Map<String, String> event) throws Exception {
-		
-		return eventService.updateEventWithSuggestionForCurrentUser(event);
-	}
-	
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/events")
-	public List<Event> updateEvents(@RequestBody(required = true) final Map<String, String> events) throws Exception {
-		List<Event> eventss = new ArrayList<>();
-		Thread.sleep(1000);
-		int cnt = 1;
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		String eventName = events.get("eventName");
-		List<String> emailsToNotify = new ArrayList<>();
-		emailsToNotify.add(events.get("email1"));
-		emailsToNotify.add(events.get("email2"));
-
-		for (String key : events.keySet()) {
-			if(!key.equals("eventName") && !key.equals("email1") && !key.equals("email2")) {
-				eventss.add(new Event(formatter.parse(events.get(key)), cnt++, eventName,emailsToNotify));
-			}
+		try {
+			List<EventDTO> responseBody = eventService.getEventsByEventGroupId(eventGroupId);
+			
+			return ResponseEntity.ok().body(responseBody); 
+			
+		} catch (EventGroupEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
 		}
-		return eventService.updateEvents(eventss);
-	}
+    }
+	
+	
+	@GetMapping("/eventState/all")
+	@ApiOperation(value = "Get a list of all event states.", response = EventStateDTO.class, responseContainer = "List")
+    public ResponseEntity<List<EventStateDTO>> getAllEventsStates() {
+		
+		final List<EventStateDTO> responseBody = eventService.getEventStates();
+		
+		return ResponseEntity.ok().body(responseBody);
+    }
 
 	
+	@GetMapping("/event/{id}")
+	@ApiOperation(value = "Get a event group.", response = EventDTO.class)
+    public ResponseEntity<EventDTO> getEventById(final @PathVariable Integer id) {
+		
+		try {
+			final EventDTO responseBody= eventService.getEventById(id);
+			
+			return ResponseEntity.ok().body(responseBody);
+			
+		} catch (EventEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+    }
+	
+	
+	@GetMapping("/eventGroup/{id}")
+	@ApiOperation(value = "Get a event group.", response = EventGroupDTO.class)
+    public ResponseEntity<EventGroupDTO> getEventGroupById(final @PathVariable Integer id) {
+		
+		try {
+			final EventGroupDTO responseBody = eventService.getEventGroupById(id);
 
+			return ResponseEntity.ok().body(responseBody);
+		
+		} catch (EventGroupEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+		
+    }
+	
+	
+	@PostMapping("/event")
+	@ApiOperation(value = "Add a event to a group event.", response = EventDTO.class)
+	public ResponseEntity<EventDTO> createEvent(
+			final @Validated @RequestBody EventDTO eventDTO) {
+		
+		final EventDTO responseBody = eventService.createEvent(eventDTO);
+		
+		return ResponseEntity.ok().body(responseBody);
+	}
+	
+	
+	@PostMapping("/eventGroup")
+	@ApiOperation(value = "Add a event group.", response = EventGroupDTO.class)
+	public ResponseEntity<EventGroupDTO> createEventGroup(
+			final @Validated @RequestBody EventGroupDTO eventGroupDTO) {
+		
+		final EventGroupDTO responseBody = eventService.createEventGroup(eventGroupDTO);
+		
+		return ResponseEntity.ok().body(responseBody);
+	}
+	
+	
+	@PutMapping("/event/{id}")
+	@ApiOperation(value = "Update a event.", response = EventDTO.class)
+	public ResponseEntity<EventDTO> updateEvent(
+			final @PathVariable Integer id, 
+			final @RequestBody EventDTO eventDTO) {
+		
+		try {
+			final EventDTO responseBody = eventService.updateEvent(id, eventDTO);
+			
+			return ResponseEntity.ok().body(responseBody);
+			
+		} catch (EventEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}	
+	}
+	
+	
+	@PutMapping("/eventGroup/{id}")
+	@ApiOperation(value = "Update a event group.", response = EventGroupDTO.class)
+	public ResponseEntity<EventGroupDTO> updateEventGroup(
+			final @PathVariable Integer id, 
+			final @RequestBody EventGroupDTO eventGroupDTO) {
+		
+		try {
+			final EventGroupDTO responseBody = eventService.updateEventGroup(id, eventGroupDTO);
+			
+			return ResponseEntity.ok().body(responseBody);
+			
+		} catch (EventGroupEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	
+	@DeleteMapping("/event/{id}")
+	@ApiOperation(value = "Delete a event.")
+	public ResponseEntity<?> deleteEvent(final @PathVariable Integer id) {
+			
+		try {
+			eventService.deleteEventById(id);
+			
+			return ResponseEntity.ok().build();
+			
+		} catch (EventEntityNotFoundException e) {
+			
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	
+	@DeleteMapping("/eventGroup/{id}")
+	@ApiOperation(value = "Delete a event group.")
+	public ResponseEntity<?> deleteEventGroup(final @PathVariable Integer id) {
+			
+		try {
+			eventService.deleteEventGroupById(id);
+			
+			return ResponseEntity.ok().build();
+			
+		} catch (EventGroupEntityNotFoundException e) {
+			
+			return ResponseEntity.notFound().build();
+		}
+	}
 }
