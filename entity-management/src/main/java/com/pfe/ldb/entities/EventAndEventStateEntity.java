@@ -17,7 +17,7 @@ import lombok.Setter;
 @RequiredArgsConstructor
 @Entity
 @Table(name="ebventState")
-public class EBventStateEntity extends AbstractEntity {
+public class EventAndEventStateEntity extends AbstractEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "eventId")
