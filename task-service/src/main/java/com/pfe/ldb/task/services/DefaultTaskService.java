@@ -6,6 +6,7 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.entities.TaskEntity;
@@ -17,6 +18,8 @@ import com.pfe.ldb.task.repositories.TaskRepository;
 import com.pfe.ldb.task.repositories.exceptions.TaskEntityNotFoundException;
 import com.pfe.ldb.task.repositories.exceptions.TaskGroupEntityNotFoundException;
 
+
+@Transactional(readOnly = true)
 public class DefaultTaskService implements TaskService {
 
 	private @Autowired TaskRepository taskRepository;
