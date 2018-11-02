@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EventStateDTO {
 
-	@ApiModelProperty(notes = "Only for output purposes.")
+	@ApiModelProperty(position = 0, notes = "Only for output purposes.")
 	private Integer id;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String name;	
 }

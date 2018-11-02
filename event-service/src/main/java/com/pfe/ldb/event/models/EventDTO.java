@@ -7,33 +7,32 @@ import javax.validation.constraints.NotNull;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 @Data
 @NoArgsConstructor
 public class EventDTO {
 
-	@ApiModelProperty(notes = "Only for output purposes.")
+	@ApiModelProperty(position = 0, notes = "Only for output purposes.")
 	private Integer id;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String name;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 2, required = true)
 	private @NotNull String description;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 3, required = true)
 	private @NotNull Date eventDate;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 4, required = true)
 	private @NotNull Integer eventGroupId;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 5, required = true)
 	private @NotNull Integer taskId;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 6, required = true)
 	private @NotNull Integer authorId;
 
-	@ApiModelProperty(required = true)
+	@ApiModelProperty(position = 7, required = true)
 	private @NotNull Integer eventStateId;
 }

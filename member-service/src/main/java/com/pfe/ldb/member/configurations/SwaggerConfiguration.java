@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.configurations;
+package com.pfe.ldb.member.configurations;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,26 +17,19 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfiguration extends WebMvcConfigurationSupport {
 	@Bean
 	public Docket productApi() {
-		return new Docket(DocumentationType.SWAGGER_2)
-				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.pfe.ldb.task.controllers"))
-				.build()
+		return new Docket(DocumentationType.SWAGGER_2).select()
+				.apis(RequestHandlerSelectors.basePackage("com.pfe.ldb.member.controllers")).build()
 				.apiInfo(metaData());
 	}
 
 	private ApiInfo metaData() {
-		return new ApiInfoBuilder()
-				.title("Spring Boot REST API for Task-Service")
-				.version("2.0")
-				.build();
+		return new ApiInfoBuilder().title("Spring Boot REST API for Member-Service").version("2.0").build();
 	}
 
 	@Override
 	protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("swagger-ui.html")
-				.addResourceLocations("classpath:/META-INF/resources/");
-		
-		registry.addResourceHandler("/webjars/**")
-				.addResourceLocations("classpath:/META-INF/resources/webjars/");
+		registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
+
+		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 	}
 }
