@@ -20,6 +20,7 @@ import lombok.Setter;
 public class UserEntity extends AbstractEntity {
 
 	private @NonNull String username;
+	private @NonNull String email;
 	private @NonNull String password;	
 
 	@OneToOne

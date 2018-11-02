@@ -32,7 +32,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.pfe.ldb.entity</groupId>
+			<groupId>com.pfe.ldb.entities</groupId>
 			<artifactId>entity-management</artifactId>
 			<version>${entity-management.version}</version>
 		</dependency>

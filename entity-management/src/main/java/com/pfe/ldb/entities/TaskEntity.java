@@ -11,12 +11,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name="task")
+
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Entity
+@Table(name="task")
 public class TaskEntity extends AbstractEntity {
 
 	private @NonNull String name;

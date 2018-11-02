@@ -33,3 +33,7 @@ zuul:
     event-service:
       path: /event-service/**
       serviceId: event-service 
+      
+    auth-service:
+      path: /auth-service/**
+      serviceId: auth-service 
