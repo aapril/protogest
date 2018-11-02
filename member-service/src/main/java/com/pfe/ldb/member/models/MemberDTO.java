@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.models;
+package com.pfe.ldb.member.models;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,17 +8,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class TaskDTO {
-	
+public class MemberDTO {
+
 	@ApiModelProperty(position = 0, notes = "Only for output purposes.")
 	private Integer id;
 	
 	@ApiModelProperty(position = 1, required = true)
-	private @NotNull String name;
+	private @NotNull String firstName;
 	
 	@ApiModelProperty(position = 2, required = true)
-	private @NotNull String description;
+	private @NotNull String lastName;
 	
 	@ApiModelProperty(position = 3, required = true)
-	private @NotNull Integer taskGroupId;
+	private @NotNull String email;
 }
