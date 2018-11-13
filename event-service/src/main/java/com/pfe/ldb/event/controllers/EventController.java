@@ -55,6 +55,16 @@ public class EventController {
     }
 	
 	
+	@GetMapping("/event/mine")
+	@ApiOperation(value = "Get all the event of the current authentificated user.", response = EventDTO.class, responseContainer = "List")
+    public ResponseEntity<List<EventDTO>> getAllEventsByCurrentUser() {
+		
+		List<EventDTO> responseBody = eventService.getEventsByCurrentUser();
+		
+		return ResponseEntity.ok().body(responseBody);
+    }
+	
+	
 	@GetMapping("/eventState/all")
 	@ApiOperation(value = "Get a list of all event states.", response = EventStateDTO.class, responseContainer = "List")
     public ResponseEntity<List<EventStateDTO>> getAllEventsStates() {

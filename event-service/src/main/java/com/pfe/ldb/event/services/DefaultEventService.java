@@ -167,4 +167,18 @@ public class DefaultEventService implements EventService {
 			.map(eventStateEntity -> modelMapper.map(eventStateEntity, EventStateDTO.class))
 			.collect(Collectors.toList());
 	}
+
+
+	@Override
+	public List<EventDTO> getEventsByCurrentUser() {
+		
+		//Integer userId = 12312;
+		
+		//final Iterable<EventEntity> eventEntities = eventRepository.findAllByUserId(userId);
+		final Iterable<EventEntity> eventEntities = eventRepository.findAll(); 
+		
+		return StreamSupport.stream(eventEntities.spliterator(), true)
+			.map(eventEntity -> modelMapper.map(eventEntity, EventDTO.class))
+			.collect(Collectors.toList());
+	}
 }

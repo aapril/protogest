@@ -36,4 +36,6 @@ public interface EventService {
 	public void deleteEventById(final Integer id) throws EventEntityNotFoundException;
 
 	public void deleteEventGroupById(final Integer id) throws EventGroupEntityNotFoundException;
+
+	public List<EventDTO> getEventsByCurrentUser();
 }
