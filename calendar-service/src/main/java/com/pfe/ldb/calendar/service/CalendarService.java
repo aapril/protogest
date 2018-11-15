@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.api.services.calendar.model.Event;
 import com.pfe.ldb.calendar.iservice.ICalendarService;
+import com.pfe.ldb.entities.EventEntity;
 
 public class CalendarService implements ICalendarService {
 
@@ -17,8 +18,8 @@ public class CalendarService implements ICalendarService {
 		eventList.addAll(events);
 	}
 	@Override
-	public List<com.pfe.ldb.core.protogest.event.Event> generateDate(Date date) {
-		List<com.pfe.ldb.core.protogest.event.Event> events = new ArrayList<>();
+	public List<EventEntity> generateDate(Date date) {
+		List<EventEntity> events = new ArrayList<>();
 		Calendar c = Calendar.getInstance();
         c.setTime(date);
 	//	List<TaskEntity> taskEntitys = (List<TaskEntity>) taskRepository.findAll();

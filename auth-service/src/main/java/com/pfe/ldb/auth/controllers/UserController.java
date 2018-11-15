@@ -1,91 +1,99 @@
 package com.pfe.ldb.auth.controllers;
 
+
 import javax.servlet.http.HttpServletRequest;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pfe.ldb.auth.models.AuthenticationDTO;
+import com.pfe.ldb.auth.security.exceptions.InvalidUsernamePasswordException;
+import com.pfe.ldb.auth.security.exceptions.UserDoesntExistsException;
+import com.pfe.ldb.auth.security.exceptions.UsernameAlreadyExistsException;
 import com.pfe.ldb.auth.services.UserService;
-import com.pfe.ldb.entities.UserEntity;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @RestController
-@RequestMapping("/users")
-@Api(tags = "users")
 public class UserController {
 
   @Autowired
   private UserService userService;
 
-  @Autowired
-  private ModelMapper modelMapper;
-
-  @PostMapping("/signin")
-  @ApiOperation(value = "${UserController.signin}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 422, message = "Invalid username/password supplied")})
-  public String login(//
-      @ApiParam("Username") @RequestParam String username, //
-      @ApiParam("Password") @RequestParam String password) {
-    return userService.signin(username, password);
+  
+  @PostMapping("/user/signin")
+  @ApiOperation(value = "Allow a user to login.", response = String.class)
+  @ApiResponses(value = {@ApiResponse(code = 422, message = "Invalid username/password supplied")})
+  public ResponseEntity<String> login(final @RequestParam String username,
+		  			  				  final @RequestParam String password) {
+    
+	try {
+		final String responseBody = userService.signin(username, password);
+		
+		return ResponseEntity.ok().body(responseBody); 
+		
+	} catch (final InvalidUsernamePasswordException e) {
+		return ResponseEntity.status(422).build();
+	}
   }
 
-  @PostMapping("/signup")
-  @ApiOperation(value = "${UserController.signup}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 422, message = "Username is already in use"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public String signup(@ApiParam("Signup User") @RequestBody AuthenticationDTO user) {
-    return userService.signup(modelMapper.map(user, UserEntity.class));
+  
+  @PostMapping("/user/signup")
+  @ApiOperation(value = "Allow a user to signup.", response = String.class)
+  @ApiResponses(value = {@ApiResponse(code = 422, message = "Username is already in use")})
+  public ResponseEntity<String> signup(final @RequestBody AuthenticationDTO authentiction) {
+    
+	try {
+		final String responseBody = userService.signup(authentiction);
+		
+		return ResponseEntity.ok().body(responseBody); 
+		
+	} catch (UsernameAlreadyExistsException e) {
+		return ResponseEntity.status(422).build();
+	}
   }
 
-  @DeleteMapping(value = "/{username}")
-  @ApiOperation(value = "${UserController.delete}")
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 404, message = "The user doesn't exist"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public String delete(@ApiParam("Username") @PathVariable String username) {
-    userService.delete(username);
-    return username;
+  
+  @DeleteMapping(value = "/user/")
+  @ApiOperation(value = "Delete a user.")
+  public ResponseEntity<?> delete(final @RequestParam String username) {
+    
+	userService.delete(username);
+	
+	return ResponseEntity.ok().build();
+  }
+  
+
+  @GetMapping(value = "/user/")
+  @ApiOperation(value = "Search a user by username.", response = AuthenticationDTO.class)
+  @ApiResponses(value = {@ApiResponse(code = 404, message = "The user doesn't exist")})
+  public ResponseEntity<AuthenticationDTO> search(final @RequestParam String username) {
+	    
+	try {
+		final AuthenticationDTO responseBody = userService.search(username);
+		
+		return ResponseEntity.ok().body(responseBody); 
+		
+	} catch (UserDoesntExistsException e) {
+		return ResponseEntity.status(404).build();
+	}
   }
 
-  @GetMapping(value = "/{username}")
-  @ApiOperation(value = "${UserController.search}", response = AuthenticationDTO.class)
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 404, message = "The user doesn't exist"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public AuthenticationDTO search(@ApiParam("Username") @PathVariable String username) {
-    return modelMapper.map(userService.search(username), AuthenticationDTO.class);
-  }
-
-  @GetMapping(value = "/me")
-  @ApiOperation(value = "${UserController.me}", response = AuthenticationDTO.class)
-  @ApiResponses(value = {//
-      @ApiResponse(code = 400, message = "Something went wrong"), //
-      @ApiResponse(code = 403, message = "Access denied"), //
-      @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
-  public AuthenticationDTO whoami(HttpServletRequest req) {
-    return modelMapper.map(userService.whoami(req), AuthenticationDTO.class);
+  
+  @GetMapping(value = "/user/me")
+  @ApiOperation(value = "Get info from the current user.", response = AuthenticationDTO.class)
+  public ResponseEntity<AuthenticationDTO> whoami(final HttpServletRequest request) {
+	  
+    final AuthenticationDTO responseBody = userService.whoami(request);
+	
+	return ResponseEntity.ok().body(responseBody); 
   }
 }

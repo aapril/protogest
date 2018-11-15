@@ -9,13 +9,13 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="eventState")
+@Table(name = "eventState")
 public class EventStateEntity extends AbstractEntity {
 
-	private @NonNull String name;	
+	private @NonNull String name;
 }

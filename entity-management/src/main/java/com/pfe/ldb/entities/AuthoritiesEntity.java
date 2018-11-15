@@ -11,13 +11,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="authorities")
+@Table(name = "authorities")
 public class AuthoritiesEntity extends AbstractEntity implements GrantedAuthority {
+
+	private static final long serialVersionUID = 1L;
 
 	private @NonNull String name;
 

@@ -9,15 +9,15 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="member")
+@Table(name = "member")
 public class MemberEntity extends AbstractEntity {
 
 	private @NonNull String firstName;
 	private @NonNull String lastName;
-	private @NonNull String email;	
+	private @NonNull String email;
 }

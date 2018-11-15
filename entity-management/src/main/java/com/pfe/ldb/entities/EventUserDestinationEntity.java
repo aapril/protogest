@@ -11,25 +11,25 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="eventUserDestination")
+@Table(name = "eventUserDestination")
 public class EventUserDestinationEntity extends AbstractEntity {
-	
+
 	@ManyToOne
 	@JoinColumn(name = "eventStateId")
 	private @NonNull EventStateEntity eventState;
 
 	@ManyToOne
 	@JoinColumn(name = "eventId")
-	private @NonNull EventEntity event;	
-	
+	private @NonNull EventEntity event;
+
 	@ManyToOne
 	@JoinColumn(name = "memberId")
 	private @NonNull MemberEntity member;
-	
+
 	private @NonNull String email;
 }

@@ -11,26 +11,26 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="vote")
-public class VoteEntity extends AbstractEntity{
+@Table(name = "vote")
+public class VoteEntity extends AbstractEntity {
 
 	private @NonNull String name;
 	private @NonNull String description;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "voterId")
 	private @NonNull MemberEntity member;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "eventId")
 	private @NonNull EventEntity event;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "voteState")
-	private @NonNull VoteStateEntity voteState;	
+	private @NonNull VoteStateEntity voteState;
 }

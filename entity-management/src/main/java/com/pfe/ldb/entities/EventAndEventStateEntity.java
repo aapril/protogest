@@ -11,18 +11,18 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="ebventState")
+@Table(name = "ebventState")
 public class EventAndEventStateEntity extends AbstractEntity {
-	
+
 	@ManyToOne
 	@JoinColumn(name = "eventId")
 	private @NonNull EventEntity event;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "stateId")
 	private @NonNull EventStateEntity state;

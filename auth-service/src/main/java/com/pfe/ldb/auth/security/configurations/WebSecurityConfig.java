@@ -1,8 +1,9 @@
-package com.pfe.ldb.auth.security;
+package com.pfe.ldb.auth.security.configurations;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -11,15 +12,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.pfe.ldb.auth.security.JwtFilterConfigurer;
+import com.pfe.ldb.auth.security.JwtProvider;
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
-	private JwtTokenProvider jwtTokenProvider;
+	private JwtProvider jwtProvider;
 
 	@Override
-	protected void configure(HttpSecurity http) throws Exception {
+	protected void configure(final HttpSecurity http) throws Exception {
 
 		// Disable CSRF (cross site request forgery)
 		http.csrf().disable();
@@ -29,8 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 		// Entry points
 		http.authorizeRequests()//
-				.antMatchers("/users/signin").permitAll()//
-				.antMatchers("/users/signup").permitAll()//
+				.antMatchers("/user/signin").permitAll()//
+				.antMatchers("/user/signup").permitAll()//
 				.antMatchers("/h2-console/**/**").permitAll()
 				// Disallow everything else..
 				.anyRequest().authenticated();
@@ -39,14 +43,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.exceptionHandling().accessDeniedPage("/login");
 
 		// Apply JWT
-		http.apply(new JwtTokenFilterConfigurer(jwtTokenProvider));
+		http.apply(new JwtFilterConfigurer(jwtProvider));
 
 		// Optional, if you want to test the API from a browser
 		// http.httpBasic();
 	}
 
 	@Override
-	public void configure(WebSecurity web) throws Exception {
+	public void configure(final WebSecurity web) throws Exception {
 		// Allow swagger to be accessed without authentication
 		web.ignoring().antMatchers("/v2/api-docs")//
 				.antMatchers("/swagger-resources/**")//
@@ -66,4 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder(12);
 	}
 
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+	    return super.authenticationManagerBean();
+	}
 }

@@ -1,0 +1,40 @@
+security:
+  jwt:
+    client:
+      secret: mySecret
+      accessTokenUri: http://localhost:52170/user/login
+    resource:
+      userInfoUri: http://localhost:52170/user/info
+      
+spring:
+  application:
+    name: auth-service
+
+  profiles:
+    active: dev
+  
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        
+  datasource:
+    platform: h2
+    continue-on-error: false
+    initialization-mode: always
+    url: jdbc:h2:tcp://localhost:9091/mem:lawyer-db;
+    username: sa
+    password: null
+    driver-class-name: org.h2.Driver
+    
+    
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:9999/eureka/
+      
+server:
+  port: 52177

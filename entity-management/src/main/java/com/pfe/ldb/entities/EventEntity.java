@@ -13,18 +13,18 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="event")
+@Table(name = "event")
 public class EventEntity extends AbstractEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "eventGroupId")
 	private @NonNull EventGroupEntity eventGroup;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "taskId")
 	private @NonNull TaskEntity task;
@@ -32,11 +32,11 @@ public class EventEntity extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "sourceId")
 	private @NonNull MemberEntity authorId;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "eventStateId")
 	private @NonNull EventStateEntity eventState;
-	
+
 	private @NonNull String name;
 	private @NonNull String description;
 	private @NonNull Date eventDate;

@@ -29,11 +29,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.pfe.ldb.core</groupId>
-			<artifactId>protogest-core</artifactId>
-			<version>${protogest-core.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.pfe.ldb.entities</groupId>
 			<artifactId>entity-management</artifactId>
 			<version>${entity-management.version}</version>

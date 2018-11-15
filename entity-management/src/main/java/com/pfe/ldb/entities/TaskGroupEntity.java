@@ -12,16 +12,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="taskGroup")
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@Table(name = "taskGroup")
 public class TaskGroupEntity extends AbstractEntity {
 
 	private @NonNull String name;
 	private @NonNull String description;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "parentId")
 	private TaskGroupEntity parent;

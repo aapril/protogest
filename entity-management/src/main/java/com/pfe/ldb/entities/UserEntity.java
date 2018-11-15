@@ -11,17 +11,17 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="user")
+@Table(name = "user")
 public class UserEntity extends AbstractEntity {
-
+	
 	private @NonNull String username;
 	private @NonNull String email;
-	private @NonNull String password;	
+	private @NonNull String password;
 
 	@OneToOne
 	@JoinColumn(name = "memberId")

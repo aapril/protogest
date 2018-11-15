@@ -9,12 +9,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="voteState")
+@Table(name = "voteState")
 public class VoteStateEntity extends AbstractEntity {
 
 	private @NonNull String name;

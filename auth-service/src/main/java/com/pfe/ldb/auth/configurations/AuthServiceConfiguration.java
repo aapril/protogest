@@ -13,7 +13,7 @@ import com.pfe.ldb.auth.services.UserService;
 @Configuration
 @EntityScan("com.pfe.ldb.entities")
 @EnableJpaRepositories("com.pfe.ldb.auth.repositories")
-@Profile({ "dev", "prod" })
+@Profile({"dev", "prod"})
 public class AuthServiceConfiguration {
 
 	@Bean

@@ -9,12 +9,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Entity
-@Table(name="eventGroup")
+@Table(name = "eventGroup")
 public class EventGroupEntity extends AbstractEntity {
 
 	private @NonNull String name;
