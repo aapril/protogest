@@ -11,15 +11,7 @@ spring:
     name: auth-service
 
   profiles:
-    active: dev
-  
-datasource:
-    platform: mysql
-    continue-on-error: false
-    initialization-mode: never
-    url: jdbc:mysql://lawyerdev.coh0yeelrta5.us-east-1.rds.amazonaws.com:3306/lawyer_db
-    username: root
-    password: 4PROTOdb      
+    active: dev     
     
 eureka:
   client:

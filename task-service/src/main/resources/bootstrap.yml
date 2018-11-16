@@ -1,11 +1,3 @@
-security:
-  jwt:
-    client:
-      secret: mySecret
-      accessTokenUri: http://localhost:52170/user/login
-    resource:
-      userInfoUri: http://localhost:52170/user/info
-      
 spring:
   application:
     name: task-service
@@ -14,12 +6,12 @@ spring:
     active: dev
   
 datasource:
-    platform: mysql
-    continue-on-error: false
-    initialization-mode: never
-    url: jdbc:mysql://lawyerdev.coh0yeelrta5.us-east-1.rds.amazonaws.com:3306/lawyer_db
-    username: root
-    password: 4PROTOdb      
+  platform: mysql
+  continue-on-error: false
+  initialization-mode: never
+  url: jdbc:mysql://lawyerdev.coh0yeelrta5.us-east-1.rds.amazonaws.com:3306/lawyer_db
+  username: root
+  password: 4PROTOdb      
     
 eureka:
   client:
