@@ -1,0 +1,14 @@
+service: task-service
+
+provider:
+  name: aws
+  runtime: java8
+
+functions:
+  springBootServerless:
+    handler: com.pfe.ldb.task.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: task/{id}
+          method: get
+    timeout: 30
