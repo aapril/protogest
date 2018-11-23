@@ -6,6 +6,8 @@ import java.util.stream.StreamSupport;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.entities.MemberEntity;
 import com.pfe.ldb.entities.UserEntity;
@@ -15,10 +17,12 @@ import com.pfe.ldb.member.repositories.UserRepository;
 import com.pfe.ldb.member.repositories.exceptions.MemberEntityNotFoundException;
 import com.pfe.ldb.member.repositories.exceptions.UserEntityNotFoundException;
 
+@Transactional
+@Service
 public class DefaultMemberService implements MemberService {
 
 	private @Autowired MemberRepository memberRepository;
-	
+
 	private @Autowired UserRepository userRepository;
 
 	private @Autowired ModelMapper modelMapper;

@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.auth.models.AuthenticationDTO;
 import com.pfe.ldb.auth.repositories.UserRepository;
@@ -24,6 +25,7 @@ import com.pfe.ldb.auth.security.exceptions.UsernameAlreadyExistsException;
 import com.pfe.ldb.entities.AuthoritiesEntity;
 import com.pfe.ldb.entities.UserEntity;
 
+@Transactional
 @Service
 public class DefaultUserService implements UserService {
 

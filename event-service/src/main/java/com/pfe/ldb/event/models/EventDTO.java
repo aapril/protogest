@@ -33,6 +33,6 @@ public class EventDTO {
 	@ApiModelProperty(position = 6, required = true)
 	private @NotNull Integer authorId;
 
-	@ApiModelProperty(position = 7, required = true)
+	@ApiModelProperty(position = 7, notes = "Only for output purposes.")
 	private @NotNull Integer eventStateId;
 }

@@ -20,7 +20,7 @@ import lombok.Setter;
 public class AuthoritiesEntity extends AbstractEntity implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private @NonNull String name;
 
 	@Override
