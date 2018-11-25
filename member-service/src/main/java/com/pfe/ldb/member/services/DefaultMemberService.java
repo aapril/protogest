@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pfe.ldb.entities.MemberEntity;
 import com.pfe.ldb.entities.UserEntity;
 import com.pfe.ldb.member.models.MemberDTO;
-import com.pfe.ldb.member.repositories.MemberRepository;
-import com.pfe.ldb.member.repositories.UserRepository;
-import com.pfe.ldb.member.repositories.exceptions.MemberEntityNotFoundException;
-import com.pfe.ldb.member.repositories.exceptions.UserEntityNotFoundException;
+import com.pfe.ldb.repositories.MemberRepository;
+import com.pfe.ldb.repositories.UserRepository;
+import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
 
 @Transactional
 @Service

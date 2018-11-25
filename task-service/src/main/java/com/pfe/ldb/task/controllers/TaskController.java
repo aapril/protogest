@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pfe.ldb.repositories.exceptions.TaskEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.TaskGroupEntityNotFoundException;
 import com.pfe.ldb.task.models.TaskDTO;
 import com.pfe.ldb.task.models.TaskGroupDTO;
-import com.pfe.ldb.task.repositories.exceptions.TaskEntityNotFoundException;
-import com.pfe.ldb.task.repositories.exceptions.TaskGroupEntityNotFoundException;
 import com.pfe.ldb.task.services.TaskService;
 
 import io.swagger.annotations.ApiOperation;
@@ -30,9 +30,9 @@ public class TaskController {
 	
 	@GetMapping("/taskGroup/all")
 	@ApiOperation(value = "Get a list of all task groups.", response = TaskGroupDTO.class, responseContainer = "List")
-    public ResponseEntity<List<TaskGroupDTO>> getAllTasksGroups() {
+    public ResponseEntity<List<TaskGroupDTO>> getAllTasksGroups(final @PathVariable Integer eventId) {
 		
-		final List<TaskGroupDTO> responseBody = taskService.getTaskGroups();
+		final List<TaskGroupDTO> responseBody = taskService.getTaskGroupsByEventId(eventId);
 		
 		return ResponseEntity.ok().body(responseBody);
     }

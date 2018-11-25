@@ -28,7 +28,4 @@ public class TaskEntity extends AbstractEntity {
 	@ManyToOne
 	@JoinColumn(name = "taskGroupId")
 	private @NonNull TaskGroupEntity taskGroup;
-	
-	@OneToMany(mappedBy = "task", orphanRemoval = true)
-	private Set<EventEntity> events;
 }

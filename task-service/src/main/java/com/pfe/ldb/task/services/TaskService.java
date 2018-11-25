@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pfe.ldb.repositories.exceptions.TaskEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.TaskGroupEntityNotFoundException;
 import com.pfe.ldb.task.models.TaskDTO;
 import com.pfe.ldb.task.models.TaskGroupDTO;
-import com.pfe.ldb.task.repositories.exceptions.TaskEntityNotFoundException;
-import com.pfe.ldb.task.repositories.exceptions.TaskGroupEntityNotFoundException;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,8 +19,6 @@ public interface TaskService {
 	public TaskGroupDTO getTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
 	
 	public List<TaskDTO> getTasksByTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException;
-	
-	public List<TaskGroupDTO> getTaskGroups();
 	
 	public TaskDTO createTask(final TaskDTO taskDTO);
 	
@@ -33,4 +31,6 @@ public interface TaskService {
 	public void deleteTaskById(final Integer id) throws TaskEntityNotFoundException;
 
 	public void deleteTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
+
+	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId);
 }

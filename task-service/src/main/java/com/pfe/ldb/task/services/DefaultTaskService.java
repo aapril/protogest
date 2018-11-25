@@ -11,12 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.entities.TaskEntity;
 import com.pfe.ldb.entities.TaskGroupEntity;
+import com.pfe.ldb.repositories.TaskGroupRepository;
+import com.pfe.ldb.repositories.TaskRepository;
+import com.pfe.ldb.repositories.exceptions.TaskEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.TaskGroupEntityNotFoundException;
 import com.pfe.ldb.task.models.TaskDTO;
 import com.pfe.ldb.task.models.TaskGroupDTO;
-import com.pfe.ldb.task.repositories.TaskGroupRepository;
-import com.pfe.ldb.task.repositories.TaskRepository;
-import com.pfe.ldb.task.repositories.exceptions.TaskEntityNotFoundException;
-import com.pfe.ldb.task.repositories.exceptions.TaskGroupEntityNotFoundException;
 
 @Transactional
 @Service
@@ -49,16 +49,6 @@ public class DefaultTaskService implements TaskService {
 		final TaskGroupEntity taskGroupEntity = taskGroupRepository.findById(id).get();
 
 		return modelMapper.map(taskGroupEntity, TaskGroupDTO.class);
-	}
-
-	@Override
-	public List<TaskGroupDTO> getTaskGroups() {
-
-		final Iterable<TaskGroupEntity> taskGroupEntities = taskGroupRepository.findAll();
-
-		return StreamSupport.stream(taskGroupEntities.spliterator(), true)
-				.map(taskGroupEntity -> modelMapper.map(taskGroupEntity, TaskGroupDTO.class))
-				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -139,5 +129,14 @@ public class DefaultTaskService implements TaskService {
 		}
 
 		taskGroupRepository.deleteById(id);
+	}
+
+	@Override
+	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId) {
+
+		final List<TaskGroupEntity> taskGroupEntities = taskGroupRepository.findByEventId(eventId);
+
+		return taskGroupEntities.stream().map(taskGroupEntity -> modelMapper.map(taskGroupEntity, TaskGroupDTO.class))
+				.collect(Collectors.toList());
 	}
 }

@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.repositories;
+package com.pfe.ldb.repositories;
 
 import java.util.List;
 

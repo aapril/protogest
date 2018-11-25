@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pfe.ldb.event.models.EventDTO;
 import com.pfe.ldb.event.models.EventGroupDTO;
 import com.pfe.ldb.event.models.EventStateDTO;
-import com.pfe.ldb.event.repositories.exceptions.EventEntityNotDeletedException;
-import com.pfe.ldb.event.repositories.exceptions.EventEntityNotFoundException;
-import com.pfe.ldb.event.repositories.exceptions.EventGroupEntityNotFoundException;
 import com.pfe.ldb.event.services.EventService;
+import com.pfe.ldb.repositories.exceptions.EventEntityNotDeletedException;
+import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.EventGroupEntityNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
 

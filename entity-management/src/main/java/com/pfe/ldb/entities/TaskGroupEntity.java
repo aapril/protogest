@@ -1,8 +1,11 @@
 package com.pfe.ldb.entities;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -21,8 +24,11 @@ public class TaskGroupEntity extends AbstractEntity {
 
 	private @NonNull String name;
 	private @NonNull String description;
-
+	
 	@ManyToOne
-	@JoinColumn(name = "parentId")
-	private TaskGroupEntity parent;
+	@JoinColumn(name = "eventId")
+	private EventEntity event;
+	
+	@OneToMany(mappedBy = "taskGroup")
+	private Set<TaskEntity> tasks;
 }

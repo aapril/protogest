@@ -1,4 +1,4 @@
-package com.pfe.ldb.auth.repositories;
+package com.pfe.ldb.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Transactional;

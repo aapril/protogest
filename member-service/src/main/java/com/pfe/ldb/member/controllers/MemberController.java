@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pfe.ldb.member.models.MemberDTO;
-import com.pfe.ldb.member.repositories.exceptions.MemberEntityNotFoundException;
-import com.pfe.ldb.member.repositories.exceptions.UserEntityNotFoundException;
 import com.pfe.ldb.member.services.MemberService;
+import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -68,9 +68,9 @@ public class MemberController {
 	
 	@PostMapping("/member")
 	@ApiOperation(value = "Add a member.", response = MemberDTO.class)
-	public ResponseEntity<MemberDTO> createMember(final @Validated @RequestBody MemberDTO taskDTO) {
+	public ResponseEntity<MemberDTO> createMember(final @Validated @RequestBody MemberDTO memberDTO) {
 
-		final MemberDTO responseBody = memberService.createMember(taskDTO);
+		final MemberDTO responseBody = memberService.createMember(memberDTO);
 
 		return ResponseEntity.ok().body(responseBody);
 	}

@@ -15,7 +15,7 @@ import com.pfe.ldb.event.services.EventService;
 @Configuration
 @ComponentScan(basePackages = { "com.pfe.ldb.event"})
 @EntityScan("com.pfe.ldb.entities")
-@EnableJpaRepositories("com.pfe.ldb.event.repositories")
+@EnableJpaRepositories("com.pfe.ldb.repositories")
 @Profile({"dev","prod"})
 public class EventServiceConfiguration {
 

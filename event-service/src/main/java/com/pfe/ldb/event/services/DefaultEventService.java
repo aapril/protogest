@@ -15,11 +15,11 @@ import com.pfe.ldb.entities.EventStateEntity;
 import com.pfe.ldb.event.models.EventDTO;
 import com.pfe.ldb.event.models.EventGroupDTO;
 import com.pfe.ldb.event.models.EventStateDTO;
-import com.pfe.ldb.event.repositories.EventGroupRepository;
-import com.pfe.ldb.event.repositories.EventRepository;
-import com.pfe.ldb.event.repositories.EventStateRepository;
-import com.pfe.ldb.event.repositories.exceptions.EventEntityNotFoundException;
-import com.pfe.ldb.event.repositories.exceptions.EventGroupEntityNotFoundException;
+import com.pfe.ldb.repositories.EventGroupRepository;
+import com.pfe.ldb.repositories.EventRepository;
+import com.pfe.ldb.repositories.EventStateRepository;
+import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.EventGroupEntityNotFoundException;
 
 @Transactional
 @Service
@@ -81,6 +81,7 @@ public class DefaultEventService implements EventService {
 	@Override
 	public EventDTO createEvent(final EventDTO eventDTO) {
 
+		eventDTO.setEventStateId(1); // PENDING
 		final EventEntity eventEntityToSave = modelMapper.map(eventDTO, EventEntity.class);
 		final EventEntity eventEntity = eventRepository.save(eventEntityToSave);
 

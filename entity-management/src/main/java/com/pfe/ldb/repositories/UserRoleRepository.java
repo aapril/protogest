@@ -1,4 +1,4 @@
-package com.pfe.ldb.auth.repositories;
+package com.pfe.ldb.repositories;
 
 import java.util.Collection;
 

@@ -9,10 +9,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.pfe.ldb.auth.repositories.UserRepository;
-import com.pfe.ldb.auth.repositories.UserRoleRepository;
 import com.pfe.ldb.entities.AuthoritiesEntity;
 import com.pfe.ldb.entities.UserEntity;
+import com.pfe.ldb.repositories.UserRepository;
+import com.pfe.ldb.repositories.UserRoleRepository;
 
 @Service
 public class DefaultUserDetailsService implements UserDetailsService {

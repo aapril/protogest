@@ -16,14 +16,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.auth.models.AuthenticationDTO;
-import com.pfe.ldb.auth.repositories.UserRepository;
-import com.pfe.ldb.auth.repositories.UserRoleRepository;
 import com.pfe.ldb.auth.security.JwtProvider;
 import com.pfe.ldb.auth.security.exceptions.InvalidUsernamePasswordException;
 import com.pfe.ldb.auth.security.exceptions.UserDoesntExistsException;
 import com.pfe.ldb.auth.security.exceptions.UsernameAlreadyExistsException;
 import com.pfe.ldb.entities.AuthoritiesEntity;
 import com.pfe.ldb.entities.UserEntity;
+import com.pfe.ldb.repositories.UserRepository;
+import com.pfe.ldb.repositories.UserRoleRepository;
 
 @Transactional
 @Service
