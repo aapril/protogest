@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.repositories.exceptions;
+package com.pfe.ldb.repositories.exceptions;
 
 public class TaskGroupEntityNotFoundException extends Exception {
 

@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: database-service
-
-  profiles:
-    active: dev

@@ -1,6 +1,6 @@
 package com.pfe.ldb.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -22,6 +22,6 @@ public class EventStateEntity extends AbstractEntity {
 
 	private @NonNull String name;
 	
-	@OneToMany(mappedBy = "eventState", orphanRemoval = true)
-	private Set<EventEntity> events;
+	@OneToMany(mappedBy = "eventState")
+	private List<EventEntity> events;
 }

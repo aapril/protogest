@@ -1,4 +1,4 @@
-package com.pfe.ldb.member.repositories.exceptions;
+package com.pfe.ldb.repositories.exceptions;
 
 public class MemberEntityNotFoundException extends Exception {
 

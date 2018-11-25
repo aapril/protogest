@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.repositories.exceptions;
+package com.pfe.ldb.repositories.exceptions;
 
 public class EventEntityNotDeletedException extends Exception {
 

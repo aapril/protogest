@@ -1,104 +1,72 @@
 package com.pfe.ldb.auth.services;
 
-import java.util.Collection;
-import java.util.stream.Collectors;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.auth.models.AuthenticationDTO;
-import com.pfe.ldb.auth.security.JwtProvider;
-import com.pfe.ldb.auth.security.exceptions.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.security.exceptions.UserDoesntExistsException;
-import com.pfe.ldb.auth.security.exceptions.UsernameAlreadyExistsException;
-import com.pfe.ldb.entities.AuthoritiesEntity;
+import com.pfe.ldb.auth.models.SignInDTO;
+import com.pfe.ldb.auth.models.SignUpDTO;
+import com.pfe.ldb.auth.models.UserDTO;
+import com.pfe.ldb.auth.services.exceptions.InvalidUsernamePasswordException;
+import com.pfe.ldb.auth.services.exceptions.UserDoesntExistsException;
+import com.pfe.ldb.auth.services.exceptions.UsernameAlreadyExistsException;
 import com.pfe.ldb.entities.UserEntity;
 import com.pfe.ldb.repositories.UserRepository;
-import com.pfe.ldb.repositories.UserRoleRepository;
 
-@Transactional
 @Service
+@Transactional
 public class DefaultUserService implements UserService {
 
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
-	private UserRoleRepository userRoleRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
-	@Autowired
-	private JwtProvider jwtTokenProvider;
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
 	private ModelMapper modelMapper;
 
-	public String signin(final String username, final String password) throws InvalidUsernamePasswordException {
-		try {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+	@Override
+	public UserDTO signIn(final SignInDTO signInDTO) throws InvalidUsernamePasswordException {
 
-			final UserEntity user = userRepository.findByUsername(username);
-			final Collection<AuthoritiesEntity> roles = userRoleRepository.findByUserId(user.getId());
+		final UserEntity userEntity = userRepository.findByUsername(signInDTO.getUsername());
 
-			return jwtTokenProvider.createToken(username, roles.stream().collect(Collectors.toList()));
-
-		} catch (AuthenticationException e) {
-			throw new InvalidUsernamePasswordException("Invalid username/password supplied",
-					HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-	}
-
-	public String signup(final AuthenticationDTO authentication) throws UsernameAlreadyExistsException {
-		final UserEntity userEntity = modelMapper.map(authentication, UserEntity.class);
-
-		if (userRepository.existsByUsername(userEntity.getUsername())) {
-			throw new UsernameAlreadyExistsException("Username is already in use.", HttpStatus.UNPROCESSABLE_ENTITY);
+		if (!userEntity.getPassword().equals(signInDTO.getPassword())) {
+			throw new InvalidUsernamePasswordException();
 		}
 
-		userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
-		userRepository.save(userEntity);
-
-		final Collection<AuthoritiesEntity> roles = userRoleRepository.findByUserId(userEntity.getId());
-
-		return jwtTokenProvider.createToken(userEntity.getUsername(), roles.stream().collect(Collectors.toList()));
+		return modelMapper.map(userEntity, UserDTO.class);
 	}
 
-	public void delete(final String username) {
+	@Override
+	public UserDTO signUp(final SignUpDTO signUpDTO) throws UsernameAlreadyExistsException {
 
-		userRepository.deleteByUsername(username);
+		if (userRepository.existsByUsername(signUpDTO.getUsername())) {
+			throw new UsernameAlreadyExistsException();
+		}
+
+		final UserEntity userEntity = new UserEntity(signUpDTO.getUsername(), signUpDTO.getPassword());
+
+		final UserEntity userEntitySaved = userRepository.save(userEntity);
+
+		return modelMapper.map(userEntitySaved, UserDTO.class);
 	}
 
-	public AuthenticationDTO search(final String username) throws UserDoesntExistsException {
+	@Override
+	public void deleteById(final Integer id) throws UserDoesntExistsException {
+
+		if (!userRepository.existsById(id)) {
+			throw new UserDoesntExistsException();
+		}
+
+		userRepository.deleteById(id);
+	}
+
+	@Override
+	public UserDTO search(final String username) throws UserDoesntExistsException {
 
 		if (!userRepository.existsByUsername(username)) {
-			throw new UserDoesntExistsException("The user doesn't exist", HttpStatus.NOT_FOUND);
+			throw new UserDoesntExistsException();
 		}
 
-		final UserEntity userEntity = userRepository.findByUsername(username);
-
-		return modelMapper.map(userEntity, AuthenticationDTO.class);
-	}
-
-	public AuthenticationDTO whoami(final HttpServletRequest request) {
-
-		final String username = jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(request));
-
-		final UserEntity userEntity = userRepository.findByUsername(username);
-
-		return modelMapper.map(userEntity, AuthenticationDTO.class);
+		return modelMapper.map(userRepository.findByUsername(username), UserDTO.class);
 	}
 }

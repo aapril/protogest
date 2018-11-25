@@ -1,9 +1,8 @@
 package com.pfe.ldb.entities;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,10 +25,9 @@ public class MemberEntity extends AbstractEntity {
 	private @NonNull String lastName;
 	private @NonNull String email;
 	
-	@OneToMany(mappedBy = "author")
-	private Set<EventEntity> events;
+	@OneToMany(mappedBy = "member")
+	private List<EventEntity> events;
 	
-	@OneToOne(mappedBy = "member")
-	@JoinColumn(name = "userId")
+	@OneToOne
 	private UserEntity user;
 }

@@ -18,7 +18,4 @@ public class TaskGroupDTO {
 	
 	@ApiModelProperty(position = 2, required = true)
 	private @NotNull String description;
-	
-	@ApiModelProperty(position = 3, required = true)
-	private Integer ParentGroupId;
 }

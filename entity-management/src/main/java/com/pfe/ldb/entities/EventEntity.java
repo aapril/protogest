@@ -1,10 +1,9 @@
 package com.pfe.ldb.entities;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -24,19 +23,16 @@ import lombok.Setter;
 public class EventEntity extends AbstractEntity {
 
 	@ManyToOne
-	@JoinColumn(name = "eventGroupId")
 	private @NonNull EventGroupEntity eventGroup;
 
 	@ManyToOne
-	@JoinColumn(name = "sourceId")
-	private @NonNull MemberEntity author;
+	private @NonNull MemberEntity member;
 
 	@ManyToOne
-	@JoinColumn(name = "eventStateId")
 	private @NonNull EventStateEntity eventState;
 
 	@OneToMany(mappedBy = "event")
-	private Set<TaskGroupEntity> taskGroup;
+	private List<TaskGroupEntity> taskGroup;
 
 	private @NonNull String name;
 	private @NonNull String description;

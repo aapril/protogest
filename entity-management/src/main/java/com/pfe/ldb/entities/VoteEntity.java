@@ -1,7 +1,6 @@
 package com.pfe.ldb.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,14 +22,11 @@ public class VoteEntity extends AbstractEntity {
 	private @NonNull String description;
 
 	@ManyToOne
-	@JoinColumn(name = "voterId")
 	private @NonNull MemberEntity member;
 
 	@ManyToOne
-	@JoinColumn(name = "eventId")
 	private @NonNull EventEntity event;
 
 	@ManyToOne
-	@JoinColumn(name = "voteState")
 	private @NonNull VoteStateEntity voteState;
 }
