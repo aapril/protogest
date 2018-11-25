@@ -1,24 +1,22 @@
 package com.pfe.ldb.auth.services;
 
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
-import com.pfe.ldb.auth.models.AuthenticationDTO;
-import com.pfe.ldb.auth.security.exceptions.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.security.exceptions.UserDoesntExistsException;
-import com.pfe.ldb.auth.security.exceptions.UsernameAlreadyExistsException;
+import com.pfe.ldb.auth.models.SignInDTO;
+import com.pfe.ldb.auth.models.SignUpDTO;
+import com.pfe.ldb.auth.models.UserDTO;
+import com.pfe.ldb.auth.services.exceptions.InvalidUsernamePasswordException;
+import com.pfe.ldb.auth.services.exceptions.UserDoesntExistsException;
+import com.pfe.ldb.auth.services.exceptions.UsernameAlreadyExistsException;
 
 @Service
 public interface UserService {
 
-	public String signin(final String username, final String password) throws InvalidUsernamePasswordException;
+	public UserDTO signIn(final SignInDTO signInDTO) throws InvalidUsernamePasswordException;
 
-	public String signup(final AuthenticationDTO authentication) throws UsernameAlreadyExistsException;
+	public UserDTO signUp(final SignUpDTO signUpDTO) throws UsernameAlreadyExistsException;
 
-	public void delete(final String username);
+	public void deleteById(final Integer id) throws UserDoesntExistsException;
 
-	public AuthenticationDTO search(final String username) throws UserDoesntExistsException;
-
-	public AuthenticationDTO whoami(final HttpServletRequest req);
-
+	public UserDTO searchByUsername(final String username) throws UserDoesntExistsException;
 }

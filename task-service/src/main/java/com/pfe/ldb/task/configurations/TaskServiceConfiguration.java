@@ -12,7 +12,7 @@ import com.pfe.ldb.task.services.TaskService;
 
 @Configuration
 @EntityScan("com.pfe.ldb.entities")
-@EnableJpaRepositories("com.pfe.ldb.task.repositories")
+@EnableJpaRepositories("com.pfe.ldb.repositories")
 @Profile({"dev", "prod"})
 public class TaskServiceConfiguration {   
 

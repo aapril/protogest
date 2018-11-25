@@ -1,6 +1,9 @@
 package com.pfe.ldb.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,4 +21,7 @@ import lombok.Setter;
 public class EventStateEntity extends AbstractEntity {
 
 	private @NonNull String name;
+	
+	@OneToMany(mappedBy = "eventState")
+	private List<EventEntity> events;
 }

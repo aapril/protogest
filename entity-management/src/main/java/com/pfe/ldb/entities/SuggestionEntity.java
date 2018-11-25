@@ -3,7 +3,6 @@ package com.pfe.ldb.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -26,6 +25,5 @@ public class SuggestionEntity extends AbstractEntity {
 	private @NonNull Date suggestionDate;
 
 	@ManyToOne
-	@JoinColumn(name = "eventUserDestinationId")
-	private @NonNull EventUserDestinationEntity eventUserDestination;
+	private @NonNull EventMemberStateEntity eventUserDestination;
 }

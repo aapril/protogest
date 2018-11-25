@@ -1,7 +1,6 @@
 package com.pfe.ldb.entities;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,6 +22,5 @@ public class TaskEntity extends AbstractEntity {
 	private @NonNull String description;
 
 	@ManyToOne
-	@JoinColumn(name = "taskGroupId")
 	private @NonNull TaskGroupEntity taskGroup;
 }

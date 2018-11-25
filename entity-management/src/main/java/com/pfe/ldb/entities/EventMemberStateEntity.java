@@ -1,10 +1,7 @@
 package com.pfe.ldb.entities;
 
-import javax.persistence.OneToMany;
-
-import java.util.List;
-
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,12 +15,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "eventGroup")
-public class EventGroupEntity extends AbstractEntity {
+@Table(name = "eventUserDestination")
+public class EventMemberStateEntity extends AbstractEntity {
 
-	private @NonNull String name;
-	private @NonNull String description;
-	
-	@OneToMany(mappedBy = "eventGroup")
-	private List<EventEntity> events;
+	@ManyToOne
+	private @NonNull EventStateEntity eventState;
+
+	@ManyToOne
+	private @NonNull EventEntity event;
+
+	@ManyToOne
+	private @NonNull MemberEntity member;
 }

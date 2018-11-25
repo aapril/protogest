@@ -3,8 +3,8 @@ package com.pfe.ldb.member.services;
 import java.util.List;
 
 import com.pfe.ldb.member.models.MemberDTO;
-import com.pfe.ldb.member.repositories.exceptions.MemberEntityNotFoundException;
-import com.pfe.ldb.member.repositories.exceptions.UserEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
+import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
 
 public interface MemberService {
 

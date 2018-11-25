@@ -11,7 +11,7 @@ import com.pfe.ldb.member.services.DefaultMemberService;
 import com.pfe.ldb.member.services.MemberService;
 @Configuration
 @EntityScan("com.pfe.ldb.entities")
-@EnableJpaRepositories("com.pfe.ldb.member.repositories")
+@EnableJpaRepositories("com.pfe.ldb.repositories")
 @Profile({"dev", "prod"})
 public class MemberServiceConfiguration {   
 
