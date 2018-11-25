@@ -18,5 +18,5 @@ public interface UserService {
 
 	public void deleteById(final Integer id) throws UserDoesntExistsException;
 
-	public UserDTO search(final String username) throws UserDoesntExistsException;
+	public UserDTO searchByUsername(final String username) throws UserDoesntExistsException;
 }

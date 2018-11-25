@@ -1,10 +1,10 @@
 package com.pfe.ldb.repositories;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Repository;
 
 import com.pfe.ldb.entities.EventStateEntity;
 
-@Transactional(readOnly = true)
+@Repository
 public interface EventStateRepository extends CrudRepository<EventStateEntity, Integer> {
 }

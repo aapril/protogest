@@ -28,11 +28,8 @@ public class EventDTO {
 	private @NotNull Integer eventGroupId;
 
 	@ApiModelProperty(position = 5, required = true)
-	private @NotNull Integer taskId;
+	private @NotNull Integer memberId;
 
-	@ApiModelProperty(position = 6, required = true)
-	private @NotNull Integer authorId;
-
-	@ApiModelProperty(position = 7, notes = "Only for output purposes.")
+	@ApiModelProperty(position = 6, notes = "Only for output purposes.")
 	private @NotNull Integer eventStateId;
 }

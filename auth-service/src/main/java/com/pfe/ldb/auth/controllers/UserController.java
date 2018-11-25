@@ -78,7 +78,7 @@ public class UserController {
 	public ResponseEntity<UserDTO> search(final @RequestParam String username) {
 
 		try {
-			final UserDTO responseBody = userService.search(username);
+			final UserDTO responseBody = userService.searchByUsername(username);
 
 			return ResponseEntity.ok().body(responseBody);
 

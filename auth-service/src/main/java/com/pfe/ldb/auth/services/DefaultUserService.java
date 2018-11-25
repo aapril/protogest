@@ -14,8 +14,8 @@ import com.pfe.ldb.auth.services.exceptions.UsernameAlreadyExistsException;
 import com.pfe.ldb.entities.UserEntity;
 import com.pfe.ldb.repositories.UserRepository;
 
-@Service
 @Transactional
+@Service
 public class DefaultUserService implements UserService {
 
 	@Autowired
@@ -61,7 +61,7 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
-	public UserDTO search(final String username) throws UserDoesntExistsException {
+	public UserDTO searchByUsername(final String username) throws UserDoesntExistsException {
 
 		if (!userRepository.existsByUsername(username)) {
 			throw new UserDoesntExistsException();
