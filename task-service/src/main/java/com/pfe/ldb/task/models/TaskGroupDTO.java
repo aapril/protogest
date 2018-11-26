@@ -10,12 +10,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TaskGroupDTO {
 
-	@ApiModelProperty(position = 0, notes = "Only for output purposes.")
+	@ApiModelProperty(position = 0)
 	private Integer id;
 	
-	@ApiModelProperty(position = 1, required = true)
+	@ApiModelProperty(position = 1)
 	private @NotNull String name;
 	
-	@ApiModelProperty(position = 2, required = true)
+	@ApiModelProperty(position = 2)
 	private @NotNull String description;
+	
+	@ApiModelProperty(position = 3)
+	private @NotNull Integer eventId;
 }

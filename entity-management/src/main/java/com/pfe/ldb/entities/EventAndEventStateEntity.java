@@ -1,6 +1,7 @@
 package com.pfe.ldb.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -19,8 +20,10 @@ import lombok.Setter;
 public class EventAndEventStateEntity extends AbstractEntity {
 
 	@ManyToOne
+	@JoinColumn(name = "event_id")
 	private @NonNull EventEntity event;
 
 	@ManyToOne
+	@JoinColumn(name = "state_id")
 	private @NonNull EventStateEntity state;
 }

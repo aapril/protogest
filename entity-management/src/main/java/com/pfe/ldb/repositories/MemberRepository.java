@@ -12,5 +12,5 @@ public interface MemberRepository extends CrudRepository<MemberEntity, Integer> 
 
 	Optional<MemberEntity> findById(final Integer id);
 
-	boolean existsById(final Integer id);
+	Optional<MemberEntity> findByUserId(final Integer id);
 }

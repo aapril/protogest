@@ -1,6 +1,7 @@
 package com.pfe.ldb.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -19,8 +20,10 @@ import lombok.Setter;
 public class UserAuthoritiesEntity extends AbstractEntity {
 
 	@ManyToOne
+	@JoinColumn(name = "user_id")
 	private @NonNull UserEntity user;
 
 	@ManyToOne
+	@JoinColumn(name = "authority_id")
 	private @NonNull AuthorityEntity authority;
 }

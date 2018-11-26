@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pfe.ldb.event.models.EventCreateDTO;
 import com.pfe.ldb.event.models.EventDTO;
+import com.pfe.ldb.event.models.EventGroupCreateDTO;
 import com.pfe.ldb.event.models.EventGroupDTO;
+import com.pfe.ldb.event.models.EventGroupUpdateDTO;
 import com.pfe.ldb.event.models.EventStateDTO;
+import com.pfe.ldb.event.models.EventUpdateDTO;
 import com.pfe.ldb.event.services.EventService;
 import com.pfe.ldb.repositories.exceptions.EventEntityNotDeletedException;
 import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
@@ -60,7 +64,7 @@ public class EventController {
 	@ApiOperation(value = "Get all the event of the current authentificated user.", response = EventDTO.class, responseContainer = "List")
     public ResponseEntity<List<EventDTO>> getAllEventsByCurrentUser() {
 		
-		List<EventDTO> responseBody = eventService.getEventsByCurrentUser();
+		final List<EventDTO> responseBody = eventService.getEventsByCurrentUser();
 		
 		return ResponseEntity.ok().body(responseBody);
     }
@@ -108,35 +112,33 @@ public class EventController {
 	
 	
 	@PostMapping("/event")
-	@ApiOperation(value = "Add a event to a group event.", response = EventDTO.class)
+	@ApiOperation(value = "Add a event to a group event.", response = EventCreateDTO.class)
 	public ResponseEntity<EventDTO> createEvent(
-			final @Validated @RequestBody EventDTO eventDTO) {
+			final @Validated @RequestBody EventCreateDTO eventCreateDTO) {
 		
-		final EventDTO responseBody = eventService.createEvent(eventDTO);
+		final EventDTO responseBody = eventService.createEvent(eventCreateDTO);
 		
 		return ResponseEntity.ok().body(responseBody);
 	}
 	
 	
 	@PostMapping("/eventGroup")
-	@ApiOperation(value = "Add a event group.", response = EventGroupDTO.class)
+	@ApiOperation(value = "Add a event group.", response = EventGroupCreateDTO.class)
 	public ResponseEntity<EventGroupDTO> createEventGroup(
-			final @Validated @RequestBody EventGroupDTO eventGroupDTO) {
+			final @Validated @RequestBody EventGroupCreateDTO eventGroupCreateDTO) {
 		
-		final EventGroupDTO responseBody = eventService.createEventGroup(eventGroupDTO);
+		final EventGroupDTO responseBody = eventService.createEventGroup(eventGroupCreateDTO);
 		
 		return ResponseEntity.ok().body(responseBody);
 	}
 	
 	
 	@PutMapping("/event/{id}")
-	@ApiOperation(value = "Update a event.", response = EventDTO.class)
-	public ResponseEntity<EventDTO> updateEvent(
-			final @PathVariable Integer id, 
-			final @RequestBody EventDTO eventDTO) {
+	@ApiOperation(value = "Update a event.", response = EventUpdateDTO.class)
+	public ResponseEntity<EventDTO> updateEvent(final @Validated @RequestBody EventUpdateDTO eventUpdateDTO) {
 		
 		try {
-			final EventDTO responseBody = eventService.updateEvent(id, eventDTO);
+			final EventDTO responseBody = eventService.updateEvent(eventUpdateDTO);
 			
 			return ResponseEntity.ok().body(responseBody);
 			
@@ -147,13 +149,11 @@ public class EventController {
 	
 	
 	@PutMapping("/eventGroup/{id}")
-	@ApiOperation(value = "Update a event group.", response = EventGroupDTO.class)
-	public ResponseEntity<EventGroupDTO> updateEventGroup(
-			final @PathVariable Integer id, 
-			final @RequestBody EventGroupDTO eventGroupDTO) {
+	@ApiOperation(value = "Update a event group.", response = EventGroupUpdateDTO.class)
+	public ResponseEntity<EventGroupDTO> updateEventGroup(final @Validated @RequestBody EventGroupUpdateDTO eventGroupUpdateDTO) {
 		
 		try {
-			final EventGroupDTO responseBody = eventService.updateEventGroup(id, eventGroupDTO);
+			final EventGroupDTO responseBody = eventService.updateEventGroup(eventGroupUpdateDTO);
 			
 			return ResponseEntity.ok().body(responseBody);
 			

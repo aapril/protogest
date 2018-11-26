@@ -16,7 +16,7 @@ import com.pfe.ldb.member.services.MemberService;
 public class MemberServiceConfiguration {   
 
 	@Bean
-	public MemberService taskService() {
+	public MemberService memberService() {
 		return new DefaultMemberService();
 	}
 	

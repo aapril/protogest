@@ -1,6 +1,7 @@
 package com.pfe.ldb.event.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -12,9 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.pfe.ldb.entities.EventEntity;
 import com.pfe.ldb.entities.EventGroupEntity;
 import com.pfe.ldb.entities.EventStateEntity;
+import com.pfe.ldb.event.models.EventCreateDTO;
 import com.pfe.ldb.event.models.EventDTO;
+import com.pfe.ldb.event.models.EventGroupCreateDTO;
 import com.pfe.ldb.event.models.EventGroupDTO;
+import com.pfe.ldb.event.models.EventGroupUpdateDTO;
 import com.pfe.ldb.event.models.EventStateDTO;
+import com.pfe.ldb.event.models.EventUpdateDTO;
 import com.pfe.ldb.repositories.EventGroupRepository;
 import com.pfe.ldb.repositories.EventRepository;
 import com.pfe.ldb.repositories.EventStateRepository;
@@ -79,51 +84,55 @@ public class DefaultEventService implements EventService {
 	}
 
 	@Override
-	public EventDTO createEvent(final EventDTO eventDTO) {
+	public EventDTO createEvent(final EventCreateDTO eventCreateDTO) {
 
-		eventDTO.setEventStateId(1); // PENDING
-		final EventEntity eventEntityToSave = modelMapper.map(eventDTO, EventEntity.class);
-		final EventEntity eventEntity = eventRepository.save(eventEntityToSave);
+		final EventEntity toSave = modelMapper.map(eventCreateDTO, EventEntity.class);
+		toSave.setEventState(eventStateRepository.findById(1).get());
+		final EventEntity saved = eventRepository.save(toSave);
 
-		return modelMapper.map(eventEntity, EventDTO.class);
+		return modelMapper.map(saved, EventDTO.class);
 	}
 
 	@Override
-	public EventGroupDTO createEventGroup(final EventGroupDTO eventGroupDTO) {
+	public EventGroupDTO createEventGroup(final EventGroupCreateDTO eventGroupCreateDTO) {
 
-		EventGroupEntity eventGroupEntityToSave = modelMapper.map(eventGroupDTO, EventGroupEntity.class);
-		final EventGroupEntity eventGroupEntity = eventGroupRepository.save(eventGroupEntityToSave);
+		EventGroupEntity toSave = modelMapper.map(eventGroupCreateDTO, EventGroupEntity.class);
+		final EventGroupEntity saved = eventGroupRepository.save(toSave);
 
-		return modelMapper.map(eventGroupEntity, EventGroupDTO.class);
+		return modelMapper.map(saved, EventGroupDTO.class);
 	}
 
 	@Override
-	public EventDTO updateEvent(final Integer id, final EventDTO eventDTO) throws EventEntityNotFoundException {
+	public EventDTO updateEvent(final EventUpdateDTO eventUpdateDTO) throws EventEntityNotFoundException {
 
-		if (!eventRepository.existsById(id)) {
+		final Optional<EventEntity> eventEntity = eventRepository.findById(eventUpdateDTO.getId());
+		
+		if (!eventEntity.isPresent()) {
 			throw new EventEntityNotFoundException();
 		}
 
-		final EventEntity eventEntityToUpdate = eventRepository.findById(id).get();
-		modelMapper.map(eventDTO, eventEntityToUpdate);
-		final EventEntity eventEntity = eventRepository.save(eventEntityToUpdate);
+		final EventEntity toUpdate = eventEntity.get();
+		modelMapper.map(eventUpdateDTO, toUpdate);
+		final EventEntity saved = eventRepository.save(toUpdate);
 
-		return modelMapper.map(eventEntity, EventDTO.class);
+		return modelMapper.map(saved, EventDTO.class);
 	}
 
 	@Override
-	public EventGroupDTO updateEventGroup(final Integer id, final EventGroupDTO eventGroupDTO)
+	public EventGroupDTO updateEventGroup(final EventGroupUpdateDTO eventGroupUpdateDTO)
 			throws EventGroupEntityNotFoundException {
 
-		if (!eventGroupRepository.existsById(id)) {
+		final Optional<EventGroupEntity> eventGroupEntity = eventGroupRepository.findById(eventGroupUpdateDTO.getId());
+		
+		if (!eventGroupEntity.isPresent()) {
 			throw new EventGroupEntityNotFoundException();
 		}
 
-		final EventGroupEntity eventGroupEntityToUpdate = eventGroupRepository.findById(id).get();
-		modelMapper.map(eventGroupDTO, eventGroupEntityToUpdate);
-		final EventGroupEntity eventGroupEntity = eventGroupRepository.save(eventGroupEntityToUpdate);
+		final EventGroupEntity toUpdate = eventGroupEntity.get();
+		modelMapper.map(eventGroupUpdateDTO, toUpdate);
+		final EventGroupEntity saved = eventGroupRepository.save(toUpdate);
 
-		return modelMapper.map(eventGroupEntity, EventGroupDTO.class);
+		return modelMapper.map(saved, EventGroupDTO.class);
 	}
 
 	@Override
@@ -159,10 +168,7 @@ public class DefaultEventService implements EventService {
 	@Override
 	public List<EventDTO> getEventsByCurrentUser() {
 
-		// Integer userId = 12312;
-
-		// final Iterable<EventEntity> eventEntities =
-		// eventRepository.findAllByUserId(userId);
+		// TODO : Change logic to fetch event of the current user.
 
 		final Iterable<EventEntity> eventEntities = eventRepository.findAll();
 

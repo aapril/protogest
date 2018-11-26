@@ -3,7 +3,7 @@ package com.pfe.ldb.entities;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -21,13 +21,16 @@ import lombok.Setter;
 @Table(name = "member")
 public class MemberEntity extends AbstractEntity {
 
+	@JoinColumn(name = "firstName")
 	private @NonNull String firstName;
+
+	@JoinColumn(name = "lastName")
 	private @NonNull String lastName;
+
+	@JoinColumn(name = "email")
 	private @NonNull String email;
-	
-	@OneToMany(mappedBy = "member")
-	private List<EventEntity> events;
-	
+
 	@OneToOne
+	@JoinColumn(name = "user_id")
 	private UserEntity user;
 }

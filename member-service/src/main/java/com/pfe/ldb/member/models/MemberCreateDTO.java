@@ -8,20 +8,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MemberDTO {
+public class MemberCreateDTO {
 
-	@ApiModelProperty(position = 0)
-	private Integer id;
-	
-	@ApiModelProperty(position = 1)
+	@ApiModelProperty(position = 0, required = true)
 	private @NotNull String firstName;
-	
-	@ApiModelProperty(position = 2)
+
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String lastName;
-	
-	@ApiModelProperty(position = 3)
+
+	@ApiModelProperty(position = 2, required = true)
 	private @NotNull String email;
-	
-	@ApiModelProperty(position = 4)
+
+	@ApiModelProperty(position = 3, required = true)
 	private @NotNull Integer userId;
 }

@@ -5,9 +5,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pfe.ldb.event.models.EventCreateDTO;
 import com.pfe.ldb.event.models.EventDTO;
+import com.pfe.ldb.event.models.EventGroupCreateDTO;
 import com.pfe.ldb.event.models.EventGroupDTO;
+import com.pfe.ldb.event.models.EventGroupUpdateDTO;
 import com.pfe.ldb.event.models.EventStateDTO;
+import com.pfe.ldb.event.models.EventUpdateDTO;
 import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
 import com.pfe.ldb.repositories.exceptions.EventGroupEntityNotFoundException;
 
@@ -25,13 +29,13 @@ public interface EventService {
 	
 	public List<EventStateDTO> getEventStates();
 	
-	public EventDTO createEvent(final EventDTO eventDTO);
+	public EventDTO createEvent(final EventCreateDTO eventCreateDTO);
 	
-	public EventGroupDTO createEventGroup(final EventGroupDTO eventGroupDTO);
+	public EventGroupDTO createEventGroup(final EventGroupCreateDTO eventGroupCreateDTO);
 
-	public EventDTO updateEvent(final Integer id, final EventDTO eventDTO) throws EventEntityNotFoundException;
+	public EventDTO updateEvent(final EventUpdateDTO eventUpdateDTO) throws EventEntityNotFoundException;
 
-	public EventGroupDTO updateEventGroup(final Integer id, final EventGroupDTO eventGroupDTO) throws EventGroupEntityNotFoundException;
+	public EventGroupDTO updateEventGroup(final EventGroupUpdateDTO eventGroupUpdateDTO) throws EventGroupEntityNotFoundException;
 
 	public void deleteEventById(final Integer id) throws EventEntityNotFoundException;
 

@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pfe.ldb.member.models.MemberCreateDTO;
 import com.pfe.ldb.member.models.MemberDTO;
+import com.pfe.ldb.member.models.MemberUpdateDTO;
 import com.pfe.ldb.member.services.MemberService;
 import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
 import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
@@ -67,22 +69,21 @@ public class MemberController {
 
 	
 	@PostMapping("/member")
-	@ApiOperation(value = "Add a member.", response = MemberDTO.class)
-	public ResponseEntity<MemberDTO> createMember(final @Validated @RequestBody MemberDTO memberDTO) {
+	@ApiOperation(value = "Add a member.", response = MemberCreateDTO.class)
+	public ResponseEntity<MemberDTO> createMember(final @Validated @RequestBody MemberCreateDTO memberCreateDTO) {
 
-		final MemberDTO responseBody = memberService.createMember(memberDTO);
+		final MemberDTO responseBody = memberService.createMember(memberCreateDTO);
 
 		return ResponseEntity.ok().body(responseBody);
 	}
 
 	
 	@PutMapping("/member/{id}")
-	@ApiOperation(value = "Update a member.", response = MemberDTO.class)
-	public ResponseEntity<MemberDTO> updateMember(final @PathVariable Integer id,
-			final @RequestBody MemberDTO taskDTO) {
+	@ApiOperation(value = "Update a member.", response = MemberUpdateDTO.class)
+	public ResponseEntity<MemberDTO> updateMember(final @Validated @RequestBody MemberUpdateDTO memberUpdateDTO) {
 
 		try {
-			final MemberDTO responseBody = memberService.updateMember(id, taskDTO);
+			final MemberDTO responseBody = memberService.updateMember(memberUpdateDTO);
 
 			return ResponseEntity.ok().body(responseBody);
 

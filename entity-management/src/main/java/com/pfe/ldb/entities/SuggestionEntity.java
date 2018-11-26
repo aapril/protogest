@@ -23,7 +23,4 @@ public class SuggestionEntity extends AbstractEntity {
 	private @NonNull String name;
 	private @NonNull String description;
 	private @NonNull Date suggestionDate;
-
-	@ManyToOne
-	private @NonNull EventMemberStateEntity eventUserDestination;
 }

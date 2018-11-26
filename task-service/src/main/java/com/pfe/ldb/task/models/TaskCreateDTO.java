@@ -8,17 +8,14 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class TaskDTO {
+public class TaskCreateDTO {
 	
-	@ApiModelProperty(position = 0)
-	private Integer id;
-	
-	@ApiModelProperty(position = 1)
+	@ApiModelProperty(position = 0, required = true)
 	private @NotNull String name;
 	
-	@ApiModelProperty(position = 2)
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String description;
 	
-	@ApiModelProperty(position = 3)
+	@ApiModelProperty(position = 2, required = true)
 	private @NotNull Integer taskGroupId;
 }

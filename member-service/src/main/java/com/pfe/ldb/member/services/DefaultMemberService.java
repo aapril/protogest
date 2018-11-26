@@ -1,6 +1,7 @@
 package com.pfe.ldb.member.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -10,10 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.entities.MemberEntity;
-import com.pfe.ldb.entities.UserEntity;
+import com.pfe.ldb.member.models.MemberCreateDTO;
 import com.pfe.ldb.member.models.MemberDTO;
+import com.pfe.ldb.member.models.MemberUpdateDTO;
 import com.pfe.ldb.repositories.MemberRepository;
-import com.pfe.ldb.repositories.UserRepository;
 import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
 import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
 
@@ -22,8 +23,6 @@ import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
 public class DefaultMemberService implements MemberService {
 
 	private @Autowired MemberRepository memberRepository;
-
-	private @Autowired UserRepository userRepository;
 
 	private @Autowired ModelMapper modelMapper;
 
@@ -52,37 +51,38 @@ public class DefaultMemberService implements MemberService {
 	@Override
 	public MemberDTO getMemberByUserId(final Integer id) throws UserEntityNotFoundException {
 
-		if (!userRepository.existsById(id)) {
+		final Optional<MemberEntity> memberEntity = memberRepository.findByUserId(id);
+		
+		if (!memberEntity.isPresent()) {
 			throw new UserEntityNotFoundException();
 		}
 
-		final UserEntity userEntity = userRepository.findById(id).get();
-		final MemberEntity memberEntity = userEntity.getMember();
-
-		return modelMapper.map(memberEntity, MemberDTO.class);
+		return modelMapper.map(memberEntity.get(), MemberDTO.class);
 	}
 
 	@Override
-	public MemberDTO createMember(final MemberDTO memberDTO) {
+	public MemberDTO createMember(final MemberCreateDTO memberCreateDTO) {
 
-		MemberEntity memberEntityToSave = modelMapper.map(memberDTO, MemberEntity.class);
+		MemberEntity memberEntityToSave = modelMapper.map(memberCreateDTO, MemberEntity.class);
 		final MemberEntity memberEntity = memberRepository.save(memberEntityToSave);
 
 		return modelMapper.map(memberEntity, MemberDTO.class);
 	}
 
 	@Override
-	public MemberDTO updateMember(final Integer id, final MemberDTO memberDTO) throws MemberEntityNotFoundException {
+	public MemberDTO updateMember(final MemberUpdateDTO memberUpdateDTO) throws MemberEntityNotFoundException {
 
-		if (!memberRepository.existsById(id)) {
+		final Optional<MemberEntity> memberEntity = memberRepository.findById(memberUpdateDTO.getId());
+
+		if (!memberEntity.isPresent()) {
 			throw new MemberEntityNotFoundException();
 		}
 
-		final MemberEntity memberEntityToUpdate = memberRepository.findById(id).get();
-		modelMapper.map(memberDTO, memberEntityToUpdate);
-		final MemberEntity memberEntity = memberRepository.save(memberEntityToUpdate);
+		final MemberEntity toUpdate = memberEntity.get();
+		modelMapper.map(memberUpdateDTO, toUpdate);
+		final MemberEntity saved = memberRepository.save(toUpdate);
 
-		return modelMapper.map(memberEntity, MemberDTO.class);
+		return modelMapper.map(saved, MemberDTO.class);
 	}
 
 	@Override
