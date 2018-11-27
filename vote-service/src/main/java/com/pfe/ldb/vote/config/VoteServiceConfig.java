@@ -11,8 +11,8 @@ import com.pfe.ldb.vote.service.DefaultVoteService;
 import com.pfe.ldb.vote.service.VoteService;
 
 @Configuration
-@EntityScan("com.pfe.ldb.task.dao.entity")
-@EnableJpaRepositories("com.pfe.ldb.task.dao.repository")
+@EntityScan("com.pfe.ldb.vote.dao.entity")
+@EnableJpaRepositories("com.pfe.ldb.vote.dao.repository")
 @Profile({"dev", "prod"})
 public class VoteServiceConfig {   
 
