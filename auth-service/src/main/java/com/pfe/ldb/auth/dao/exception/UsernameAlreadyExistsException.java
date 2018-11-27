@@ -1,4 +1,4 @@
-package com.pfe.ldb.auth.services.exceptions;
+package com.pfe.ldb.auth.dao.exception;
 
 public class UsernameAlreadyExistsException extends Exception {
 

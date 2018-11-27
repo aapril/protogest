@@ -1,13 +1,13 @@
-package com.pfe.ldb.auth.services;
+package com.pfe.ldb.auth.service;
 
 import org.springframework.stereotype.Service;
 
-import com.pfe.ldb.auth.models.SignInDTO;
-import com.pfe.ldb.auth.models.SignUpDTO;
-import com.pfe.ldb.auth.models.UserDTO;
-import com.pfe.ldb.auth.services.exceptions.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.services.exceptions.UserDoesntExistsException;
-import com.pfe.ldb.auth.services.exceptions.UsernameAlreadyExistsException;
+import com.pfe.ldb.auth.dao.exception.InvalidUsernamePasswordException;
+import com.pfe.ldb.auth.dao.exception.UserDoesntExistsException;
+import com.pfe.ldb.auth.dao.exception.UsernameAlreadyExistsException;
+import com.pfe.ldb.auth.dto.SignInDTO;
+import com.pfe.ldb.auth.dto.SignUpDTO;
+import com.pfe.ldb.auth.dto.UserDTO;
 
 @Service
 public interface UserService {

@@ -30,11 +30,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.pfe.ldb.entities</groupId>
-			<artifactId>entity-management</artifactId>
-			<version>${entity-management.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
 			<version>5.1.1.RELEASE</version>

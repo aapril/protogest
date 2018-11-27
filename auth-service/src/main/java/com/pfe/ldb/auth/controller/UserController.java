@@ -1,4 +1,4 @@
-package com.pfe.ldb.auth.controllers;
+package com.pfe.ldb.auth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pfe.ldb.auth.models.SignInDTO;
-import com.pfe.ldb.auth.models.SignUpDTO;
-import com.pfe.ldb.auth.models.UserDTO;
-import com.pfe.ldb.auth.services.UserService;
-import com.pfe.ldb.auth.services.exceptions.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.services.exceptions.UserDoesntExistsException;
-import com.pfe.ldb.auth.services.exceptions.UsernameAlreadyExistsException;
+import com.pfe.ldb.auth.dao.exception.InvalidUsernamePasswordException;
+import com.pfe.ldb.auth.dao.exception.UserDoesntExistsException;
+import com.pfe.ldb.auth.dao.exception.UsernameAlreadyExistsException;
+import com.pfe.ldb.auth.dto.SignInDTO;
+import com.pfe.ldb.auth.dto.SignUpDTO;
+import com.pfe.ldb.auth.dto.UserDTO;
+import com.pfe.ldb.auth.service.UserService;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

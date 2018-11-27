@@ -1,4 +1,4 @@
-package com.pfe.ldb.auth.models;
+package com.pfe.ldb.auth.dto;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class SignUpDTO {
+public class UserDTO {
 
 	@ApiModelProperty(position = 0)
-	private @NotNull String username;
+	private @NotNull Integer id;
 
 	@ApiModelProperty(position = 1)
-	private @NotNull String password;
+	private @NotNull String username;
 }

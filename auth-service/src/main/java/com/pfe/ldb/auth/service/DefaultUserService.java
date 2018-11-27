@@ -1,28 +1,26 @@
-package com.pfe.ldb.auth.services;
+package com.pfe.ldb.auth.service;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.auth.models.SignInDTO;
-import com.pfe.ldb.auth.models.SignUpDTO;
-import com.pfe.ldb.auth.models.UserDTO;
-import com.pfe.ldb.auth.services.exceptions.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.services.exceptions.UserDoesntExistsException;
-import com.pfe.ldb.auth.services.exceptions.UsernameAlreadyExistsException;
-import com.pfe.ldb.entities.UserEntity;
-import com.pfe.ldb.repositories.UserRepository;
+import com.pfe.ldb.auth.dao.entity.UserEntity;
+import com.pfe.ldb.auth.dao.exception.InvalidUsernamePasswordException;
+import com.pfe.ldb.auth.dao.exception.UserDoesntExistsException;
+import com.pfe.ldb.auth.dao.exception.UsernameAlreadyExistsException;
+import com.pfe.ldb.auth.dao.repository.UserRepository;
+import com.pfe.ldb.auth.dto.SignInDTO;
+import com.pfe.ldb.auth.dto.SignUpDTO;
+import com.pfe.ldb.auth.dto.UserDTO;
 
 @Transactional
 @Service
 public class DefaultUserService implements UserService {
+	
+	private @Autowired UserRepository userRepository;
 
-	@Autowired
-	private UserRepository userRepository;
-
-	@Autowired
-	private ModelMapper modelMapper;
+	private @Autowired ModelMapper modelMapper;
 
 	@Override
 	public UserDTO signIn(final SignInDTO signInDTO) throws InvalidUsernamePasswordException {

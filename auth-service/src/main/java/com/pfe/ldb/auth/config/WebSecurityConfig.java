@@ -1,4 +1,4 @@
-package com.pfe.ldb.auth.configurations;
+package com.pfe.ldb.auth.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
