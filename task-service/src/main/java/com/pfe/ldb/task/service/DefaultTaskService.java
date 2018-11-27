@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.services;
+package com.pfe.ldb.task.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,21 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.entities.EventEntity;
-import com.pfe.ldb.entities.TaskEntity;
-import com.pfe.ldb.entities.TaskGroupEntity;
-import com.pfe.ldb.repositories.EventRepository;
-import com.pfe.ldb.repositories.TaskGroupRepository;
-import com.pfe.ldb.repositories.TaskRepository;
-import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.TaskEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.TaskGroupEntityNotFoundException;
-import com.pfe.ldb.task.models.TaskCreateDTO;
-import com.pfe.ldb.task.models.TaskDTO;
-import com.pfe.ldb.task.models.TaskGroupCreateDTO;
-import com.pfe.ldb.task.models.TaskGroupDTO;
-import com.pfe.ldb.task.models.TaskGroupUpdateDTO;
-import com.pfe.ldb.task.models.TaskUpdateDTO;
+import com.pfe.ldb.task.dao.entity.TaskEntity;
+import com.pfe.ldb.task.dao.entity.TaskGroupEntity;
+import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
+import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
+import com.pfe.ldb.task.dao.repository.TaskGroupRepository;
+import com.pfe.ldb.task.dao.repository.TaskRepository;
+import com.pfe.ldb.task.dto.TaskCreateDTO;
+import com.pfe.ldb.task.dto.TaskDTO;
+import com.pfe.ldb.task.dto.TaskGroupCreateDTO;
+import com.pfe.ldb.task.dto.TaskGroupDTO;
+import com.pfe.ldb.task.dto.TaskGroupUpdateDTO;
+import com.pfe.ldb.task.dto.TaskUpdateDTO;
 
 @Service
 @Transactional
@@ -32,7 +29,6 @@ public class DefaultTaskService implements TaskService {
 
 	private @Autowired TaskRepository taskRepository;
 	private @Autowired TaskGroupRepository taskGroupRepository;
-	private @Autowired EventRepository eventRepository;
 
 	private @Autowired ModelMapper modelMapper;
 
@@ -151,15 +147,9 @@ public class DefaultTaskService implements TaskService {
 	}
 
 	@Override
-	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId) throws EventEntityNotFoundException {
+	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId) {
 
-		final Optional<EventEntity> eventEntity = eventRepository.findById(eventId);
-
-		if (!eventEntity.isPresent()) {
-			throw new EventEntityNotFoundException();
-		}
-
-		final List<TaskGroupEntity> taskGroupEntities = eventEntity.get().getTaskGroup();
+		final List<TaskGroupEntity> taskGroupEntities = taskGroupRepository.findByEventId(eventId);
 
 		return taskGroupEntities.stream().map(taskGroupEntity -> modelMapper.map(taskGroupEntity, TaskGroupDTO.class))
 				.collect(Collectors.toList());

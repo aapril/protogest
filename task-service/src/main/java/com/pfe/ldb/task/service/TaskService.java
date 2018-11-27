@@ -1,19 +1,18 @@
-package com.pfe.ldb.task.services;
+package com.pfe.ldb.task.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.TaskEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.TaskGroupEntityNotFoundException;
-import com.pfe.ldb.task.models.TaskCreateDTO;
-import com.pfe.ldb.task.models.TaskDTO;
-import com.pfe.ldb.task.models.TaskGroupCreateDTO;
-import com.pfe.ldb.task.models.TaskGroupDTO;
-import com.pfe.ldb.task.models.TaskGroupUpdateDTO;
-import com.pfe.ldb.task.models.TaskUpdateDTO;
+import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
+import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
+import com.pfe.ldb.task.dto.TaskCreateDTO;
+import com.pfe.ldb.task.dto.TaskDTO;
+import com.pfe.ldb.task.dto.TaskGroupCreateDTO;
+import com.pfe.ldb.task.dto.TaskGroupDTO;
+import com.pfe.ldb.task.dto.TaskGroupUpdateDTO;
+import com.pfe.ldb.task.dto.TaskUpdateDTO;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,5 +36,5 @@ public interface TaskService {
 
 	public void deleteTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
 
-	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId) throws EventEntityNotFoundException;
+	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId);
 }

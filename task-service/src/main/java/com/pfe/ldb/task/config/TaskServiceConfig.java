@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.configurations;
+package com.pfe.ldb.task.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.pfe.ldb.task.services.DefaultTaskService;
-import com.pfe.ldb.task.services.TaskService;
+import com.pfe.ldb.task.service.DefaultTaskService;
+import com.pfe.ldb.task.service.TaskService;
 
 @Configuration
-@EntityScan("com.pfe.ldb.entities")
-@EnableJpaRepositories("com.pfe.ldb.repositories")
+@EntityScan("com.pfe.ldb.task.dao.entity")
+@EnableJpaRepositories("com.pfe.ldb.task.dao.repository")
 @Profile({"dev", "prod"})
-public class TaskServiceConfiguration {   
+public class TaskServiceConfig {   
 
 	@Bean
 	public TaskService taskService() {

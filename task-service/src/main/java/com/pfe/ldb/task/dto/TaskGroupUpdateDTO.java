@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.models;
+package com.pfe.ldb.task.dto;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,14 +8,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class TaskGroupCreateDTO {
+public class TaskGroupUpdateDTO {
 
 	@ApiModelProperty(position = 0, required = true)
-	private @NotNull String name;
+	private Integer id;
 
 	@ApiModelProperty(position = 1, required = true)
-	private @NotNull String description;
+	private @NotNull String name;
 
 	@ApiModelProperty(position = 2, required = true)
+	private @NotNull String description;
+
+	@ApiModelProperty(position = 3, required = true)
 	private @NotNull Integer eventId;
 }

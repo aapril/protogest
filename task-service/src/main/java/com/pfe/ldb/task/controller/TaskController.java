@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.controllers;
+package com.pfe.ldb.task.controller;
 
 import java.util.List;
 
@@ -14,16 +14,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.TaskEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.TaskGroupEntityNotFoundException;
-import com.pfe.ldb.task.models.TaskCreateDTO;
-import com.pfe.ldb.task.models.TaskDTO;
-import com.pfe.ldb.task.models.TaskGroupCreateDTO;
-import com.pfe.ldb.task.models.TaskGroupDTO;
-import com.pfe.ldb.task.models.TaskGroupUpdateDTO;
-import com.pfe.ldb.task.models.TaskUpdateDTO;
-import com.pfe.ldb.task.services.TaskService;
+import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
+import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
+import com.pfe.ldb.task.dto.TaskCreateDTO;
+import com.pfe.ldb.task.dto.TaskDTO;
+import com.pfe.ldb.task.dto.TaskGroupCreateDTO;
+import com.pfe.ldb.task.dto.TaskGroupDTO;
+import com.pfe.ldb.task.dto.TaskGroupUpdateDTO;
+import com.pfe.ldb.task.dto.TaskUpdateDTO;
+import com.pfe.ldb.task.service.TaskService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -36,15 +35,9 @@ public class TaskController {
 	@ApiOperation(value = "Get a list of all task groups.", response = TaskGroupDTO.class, responseContainer = "List")
 	public ResponseEntity<List<TaskGroupDTO>> getAllTasksGroups(final @RequestParam Integer eventId) {
 
-		try {
-			List<TaskGroupDTO> responseBody = taskService.getTaskGroupsByEventId(eventId);
-			
-			return ResponseEntity.ok().body(responseBody);
-			
-		} catch (EventEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		List<TaskGroupDTO> responseBody = taskService.getTaskGroupsByEventId(eventId);
 
+		return ResponseEntity.ok().body(responseBody);
 	}
 
 	@GetMapping("/task/all")
@@ -56,7 +49,7 @@ public class TaskController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (TaskGroupEntityNotFoundException e) {
+		} catch (final TaskGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -70,7 +63,7 @@ public class TaskController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (TaskEntityNotFoundException e) {
+		} catch (final TaskEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -84,7 +77,7 @@ public class TaskController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (TaskGroupEntityNotFoundException e) {
+		} catch (final TaskGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 
@@ -101,7 +94,8 @@ public class TaskController {
 
 	@PostMapping("/taskGroup")
 	@ApiOperation(value = "Add a task group.", response = TaskGroupCreateDTO.class)
-	public ResponseEntity<TaskGroupDTO> createTaskGroup(final @Validated @RequestBody TaskGroupCreateDTO taskGroupCreateDTO) {
+	public ResponseEntity<TaskGroupDTO> createTaskGroup(
+			final @Validated @RequestBody TaskGroupCreateDTO taskGroupCreateDTO) {
 
 		final TaskGroupDTO responseBody = taskService.createTaskGroup(taskGroupCreateDTO);
 
@@ -117,21 +111,22 @@ public class TaskController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (TaskEntityNotFoundException e) {
+		} catch (final TaskEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
 	@PutMapping("/taskGroup/{id}")
 	@ApiOperation(value = "Update a task group.", response = TaskGroupUpdateDTO.class)
-	public ResponseEntity<TaskGroupDTO> updateTaskGroup(final @Validated @RequestBody TaskGroupUpdateDTO taskGroupUpdateDTO) {
+	public ResponseEntity<TaskGroupDTO> updateTaskGroup(
+			final @Validated @RequestBody TaskGroupUpdateDTO taskGroupUpdateDTO) {
 
 		try {
 			final TaskGroupDTO responseBody = taskService.updateTaskGroup(taskGroupUpdateDTO);
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (TaskGroupEntityNotFoundException e) {
+		} catch (final TaskGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -145,7 +140,7 @@ public class TaskController {
 
 			return ResponseEntity.ok().build();
 
-		} catch (TaskEntityNotFoundException e) {
+		} catch (final TaskEntityNotFoundException e) {
 
 			return ResponseEntity.notFound().build();
 		}
@@ -160,7 +155,7 @@ public class TaskController {
 
 			return ResponseEntity.ok().build();
 
-		} catch (TaskGroupEntityNotFoundException e) {
+		} catch (final TaskGroupEntityNotFoundException e) {
 
 			return ResponseEntity.notFound().build();
 		}

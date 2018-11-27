@@ -1,4 +1,4 @@
-package com.pfe.ldb.task.models;
+package com.pfe.ldb.task.dto;
 
 import javax.validation.constraints.NotNull;
 
