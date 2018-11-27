@@ -18,8 +18,6 @@ import lombok.Setter;
 @Table(name = "authorities")
 public class AuthorityEntity extends AbstractEntity {
 
-	private static final long serialVersionUID = 1L;
-
 	@JoinColumn(name = "name")
 	private @NonNull String name;
 }
