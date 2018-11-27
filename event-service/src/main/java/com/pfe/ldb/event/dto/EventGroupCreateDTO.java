@@ -1,4 +1,6 @@
-package com.pfe.ldb.event.models;
+package com.pfe.ldb.event.dto;
+
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,14 +10,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EventGroupDTO {
+public class EventGroupCreateDTO {
 
-	@ApiModelProperty(position = 0)
-	private Integer id;
-
-	@ApiModelProperty(position = 1)
+	@ApiModelProperty(position = 0, required = true)
 	private @NotNull String name;
-	
-	@ApiModelProperty(position = 2)
+
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String description;
 }

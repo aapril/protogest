@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.services;
+package com.pfe.ldb.event.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,21 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.entities.EventEntity;
-import com.pfe.ldb.entities.EventGroupEntity;
-import com.pfe.ldb.entities.EventStateEntity;
-import com.pfe.ldb.event.models.EventCreateDTO;
-import com.pfe.ldb.event.models.EventDTO;
-import com.pfe.ldb.event.models.EventGroupCreateDTO;
-import com.pfe.ldb.event.models.EventGroupDTO;
-import com.pfe.ldb.event.models.EventGroupUpdateDTO;
-import com.pfe.ldb.event.models.EventStateDTO;
-import com.pfe.ldb.event.models.EventUpdateDTO;
-import com.pfe.ldb.repositories.EventGroupRepository;
-import com.pfe.ldb.repositories.EventRepository;
-import com.pfe.ldb.repositories.EventStateRepository;
-import com.pfe.ldb.repositories.exceptions.EventEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.EventGroupEntityNotFoundException;
+import com.pfe.ldb.event.dao.entity.EventEntity;
+import com.pfe.ldb.event.dao.entity.EventGroupEntity;
+import com.pfe.ldb.event.dao.entity.EventStateEntity;
+import com.pfe.ldb.event.dao.exception.EventEntityNotFoundException;
+import com.pfe.ldb.event.dao.exception.EventGroupEntityNotFoundException;
+import com.pfe.ldb.event.dao.repository.EventGroupRepository;
+import com.pfe.ldb.event.dao.repository.EventRepository;
+import com.pfe.ldb.event.dao.repository.EventStateRepository;
+import com.pfe.ldb.event.dto.EventCreateDTO;
+import com.pfe.ldb.event.dto.EventDTO;
+import com.pfe.ldb.event.dto.EventGroupCreateDTO;
+import com.pfe.ldb.event.dto.EventGroupDTO;
+import com.pfe.ldb.event.dto.EventGroupUpdateDTO;
+import com.pfe.ldb.event.dto.EventStateDTO;
+import com.pfe.ldb.event.dto.EventUpdateDTO;
 
 @Transactional
 @Service

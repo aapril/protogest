@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.models;
+package com.pfe.ldb.event.dto;
 
 import java.util.Date;
 
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class EventGroupUpdateDTO {
+public class EventCreateDTO {
 
 	@ApiModelProperty(position = 0, required = true)
 	private Integer id;
@@ -20,4 +20,13 @@ public class EventGroupUpdateDTO {
 
 	@ApiModelProperty(position = 2, required = true)
 	private @NotNull String description;
+
+	@ApiModelProperty(position = 3, required = true)
+	private @NotNull Date eventDate;
+
+	@ApiModelProperty(position = 4, required = true)
+	private @NotNull Integer eventGroupId;
+
+	@ApiModelProperty(position = 5, required = true)
+	private @NotNull Integer memberId;
 }

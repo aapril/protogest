@@ -1,4 +1,4 @@
-package com.pfe.ldb.event.models;
+package com.pfe.ldb.event.dto;
 
 import java.util.Date;
 

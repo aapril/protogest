@@ -1,23 +1,21 @@
-package com.pfe.ldb.event.configurations;
+package com.pfe.ldb.event.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.pfe.ldb.event.services.DefaultEventService;
-import com.pfe.ldb.event.services.EventService;
+import com.pfe.ldb.event.service.DefaultEventService;
+import com.pfe.ldb.event.service.EventService;
 
 
 @Configuration
-@ComponentScan(basePackages = { "com.pfe.ldb.event"})
-@EntityScan("com.pfe.ldb.entities")
-@EnableJpaRepositories("com.pfe.ldb.repositories")
+@EntityScan("com.pfe.ldb.event.dao.entity")
+@EnableJpaRepositories("com.pfe.ldb.event.dao.repository")
 @Profile({"dev","prod"})
-public class EventServiceConfiguration {
+public class EventServiceConfig {
 
     @Bean
     public EventService eventService() {
