@@ -15,7 +15,7 @@ import com.pfe.ldb.task.dto.TaskGroupUpdateDTO;
 import com.pfe.ldb.task.dto.TaskUpdateDTO;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public interface TaskService {
 
 	public TaskDTO getTaskById(final Integer id) throws TaskEntityNotFoundException;

@@ -19,7 +19,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 	public Docket productApi() {
 		return new Docket(DocumentationType.SWAGGER_2)
 				.select()
-				.apis(RequestHandlerSelectors.basePackage("com.pfe.ldb.task.controllers"))
+				.apis(RequestHandlerSelectors.basePackage("com.pfe.ldb.task.controller"))
 				.build()
 				.apiInfo(metaData());
 	}
