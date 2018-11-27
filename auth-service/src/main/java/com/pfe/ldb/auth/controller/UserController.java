@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pfe.ldb.auth.dao.exception.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.dao.exception.UserDoesntExistsException;
+import com.pfe.ldb.auth.dao.exception.UserEntityNotFoundException;
 import com.pfe.ldb.auth.dao.exception.UsernameAlreadyExistsException;
 import com.pfe.ldb.auth.dto.SignInDTO;
 import com.pfe.ldb.auth.dto.SignUpDTO;
@@ -40,6 +40,9 @@ public class UserController {
 
 		} catch (final InvalidUsernamePasswordException e) {
 			return ResponseEntity.status(422).build();
+			
+		} catch (final UserEntityNotFoundException e) {
+			return ResponseEntity.status(404).build();
 		}
 	}
 
@@ -60,13 +63,15 @@ public class UserController {
 
 	@DeleteMapping(value = "/user/")
 	@ApiOperation(value = "Delete a user account.")
+	@ApiResponses(value = { @ApiResponse(code = 404, message = "The user doesn't exist.") })
 	public ResponseEntity<?> delete(final @RequestParam Integer userId) {
 
 		try {
 			userService.deleteById(userId);
 
-		} catch (final UserDoesntExistsException e) {
+		} catch (final UserEntityNotFoundException e) {
 			return ResponseEntity.status(404).build();
+			
 		}
 
 		return ResponseEntity.ok().build();
@@ -82,7 +87,7 @@ public class UserController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (final UserDoesntExistsException e) {
+		} catch (final UserEntityNotFoundException e) {
 			return ResponseEntity.status(404).build();
 		}
 	}

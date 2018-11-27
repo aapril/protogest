@@ -1,5 +1,7 @@
 package com.pfe.ldb.auth.service;
 
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -7,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.auth.dao.entity.UserEntity;
 import com.pfe.ldb.auth.dao.exception.InvalidUsernamePasswordException;
-import com.pfe.ldb.auth.dao.exception.UserDoesntExistsException;
+import com.pfe.ldb.auth.dao.exception.UserEntityNotFoundException;
 import com.pfe.ldb.auth.dao.exception.UsernameAlreadyExistsException;
 import com.pfe.ldb.auth.dao.repository.UserRepository;
 import com.pfe.ldb.auth.dto.SignInDTO;
@@ -17,17 +19,24 @@ import com.pfe.ldb.auth.dto.UserDTO;
 @Transactional
 @Service
 public class DefaultUserService implements UserService {
-	
+
 	private @Autowired UserRepository userRepository;
 
 	private @Autowired ModelMapper modelMapper;
 
 	@Override
-	public UserDTO signIn(final SignInDTO signInDTO) throws InvalidUsernamePasswordException {
+	public UserDTO signIn(final SignInDTO signInDTO) 
+			throws InvalidUsernamePasswordException, UserEntityNotFoundException {
 
-		final UserEntity userEntity = userRepository.findByUsername(signInDTO.getUsername());
+		final Optional<UserEntity> userEntity = userRepository.findByUsername(signInDTO.getUsername());
 
-		if (!userEntity.getPassword().equals(signInDTO.getPassword())) {
+		if (!userEntity.isPresent()) {
+			throw new UserEntityNotFoundException();
+		}
+		
+		final UserEntity toSignIn = userEntity.get();
+		
+		if (!toSignIn.getPassword().equals(signInDTO.getPassword())) {
 			throw new InvalidUsernamePasswordException();
 		}
 
@@ -49,22 +58,26 @@ public class DefaultUserService implements UserService {
 	}
 
 	@Override
-	public void deleteById(final Integer id) throws UserDoesntExistsException {
+	public void deleteById(final Integer id) throws UserEntityNotFoundException {
 
-		if (!userRepository.existsById(id)) {
-			throw new UserDoesntExistsException();
+		final Optional<UserEntity> userEntity = userRepository.findById(id);
+
+		if (!userEntity.isPresent()) {
+			throw new UserEntityNotFoundException();
 		}
 
-		userRepository.deleteById(id);
+		userRepository.delete(userEntity.get());
 	}
 
 	@Override
-	public UserDTO searchByUsername(final String username) throws UserDoesntExistsException {
+	public UserDTO searchByUsername(final String username) throws UserEntityNotFoundException {
 
-		if (!userRepository.existsByUsername(username)) {
-			throw new UserDoesntExistsException();
+		final Optional<UserEntity> userEntity = userRepository.findByUsername(username);
+		
+		if (!userEntity.isPresent()) {
+			throw new UserEntityNotFoundException();
 		}
 
-		return modelMapper.map(userRepository.findByUsername(username), UserDTO.class);
+		return modelMapper.map(userEntity.get(), UserDTO.class);
 	}
 }
