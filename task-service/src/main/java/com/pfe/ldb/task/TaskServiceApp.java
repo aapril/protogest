@@ -7,9 +7,9 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class TaskServiceApplication {
+public class TaskServiceApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TaskServiceApplication.class, args);
+		SpringApplication.run(TaskServiceApp.class, args);
 	}
 }

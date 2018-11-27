@@ -1,4 +1,4 @@
-package com.pfe.ldb.task;
+package com.pfe.ldb.auth;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TaskServiceApplicationTests {
+public class AuthServiceAppTests {
 
 	@Test
 	public void contextLoads() {
