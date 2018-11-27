@@ -1,4 +1,4 @@
-package com.pfe.ldb.member.models;
+package com.pfe.ldb.member.dto;
 
 import javax.validation.constraints.NotNull;
 

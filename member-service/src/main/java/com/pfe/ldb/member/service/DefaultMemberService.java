@@ -1,4 +1,4 @@
-package com.pfe.ldb.member.services;
+package com.pfe.ldb.member.service;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.entities.MemberEntity;
-import com.pfe.ldb.member.models.MemberCreateDTO;
-import com.pfe.ldb.member.models.MemberDTO;
-import com.pfe.ldb.member.models.MemberUpdateDTO;
-import com.pfe.ldb.repositories.MemberRepository;
-import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
+import com.pfe.ldb.member.dao.entity.MemberEntity;
+import com.pfe.ldb.member.dao.exception.MemberEntityNotFoundException;
+import com.pfe.ldb.member.dao.exception.UserEntityNotFoundException;
+import com.pfe.ldb.member.dao.repository.MemberRepository;
+import com.pfe.ldb.member.dto.MemberCreateDTO;
+import com.pfe.ldb.member.dto.MemberDTO;
+import com.pfe.ldb.member.dto.MemberUpdateDTO;
 
 @Transactional
 @Service

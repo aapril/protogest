@@ -1,4 +1,4 @@
-package com.pfe.ldb.member.controllers;
+package com.pfe.ldb.member.controller;
 
 import java.util.List;
 
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pfe.ldb.member.models.MemberCreateDTO;
-import com.pfe.ldb.member.models.MemberDTO;
-import com.pfe.ldb.member.models.MemberUpdateDTO;
-import com.pfe.ldb.member.services.MemberService;
-import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
+import com.pfe.ldb.member.dao.exception.MemberEntityNotFoundException;
+import com.pfe.ldb.member.dao.exception.UserEntityNotFoundException;
+import com.pfe.ldb.member.dto.MemberCreateDTO;
+import com.pfe.ldb.member.dto.MemberDTO;
+import com.pfe.ldb.member.dto.MemberUpdateDTO;
+import com.pfe.ldb.member.service.MemberService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -47,7 +47,7 @@ public class MemberController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (MemberEntityNotFoundException e) {
+		} catch (final MemberEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -62,7 +62,7 @@ public class MemberController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (UserEntityNotFoundException e) {
+		} catch (final UserEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -87,7 +87,7 @@ public class MemberController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (MemberEntityNotFoundException e) {
+		} catch (final MemberEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -102,7 +102,7 @@ public class MemberController {
 
 			return ResponseEntity.ok().build();
 
-		} catch (MemberEntityNotFoundException e) {
+		} catch (final MemberEntityNotFoundException e) {
 
 			return ResponseEntity.notFound().build();
 		}

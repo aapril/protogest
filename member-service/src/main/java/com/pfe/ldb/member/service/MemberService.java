@@ -1,12 +1,12 @@
-package com.pfe.ldb.member.services;
+package com.pfe.ldb.member.service;
 
 import java.util.List;
 
-import com.pfe.ldb.member.models.MemberCreateDTO;
-import com.pfe.ldb.member.models.MemberDTO;
-import com.pfe.ldb.member.models.MemberUpdateDTO;
-import com.pfe.ldb.repositories.exceptions.MemberEntityNotFoundException;
-import com.pfe.ldb.repositories.exceptions.UserEntityNotFoundException;
+import com.pfe.ldb.member.dao.exception.MemberEntityNotFoundException;
+import com.pfe.ldb.member.dao.exception.UserEntityNotFoundException;
+import com.pfe.ldb.member.dto.MemberCreateDTO;
+import com.pfe.ldb.member.dto.MemberDTO;
+import com.pfe.ldb.member.dto.MemberUpdateDTO;
 
 public interface MemberService {
 

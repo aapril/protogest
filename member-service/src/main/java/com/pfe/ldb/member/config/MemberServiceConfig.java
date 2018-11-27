@@ -1,4 +1,4 @@
-package com.pfe.ldb.member.configurations;
+package com.pfe.ldb.member.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -7,13 +7,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import com.pfe.ldb.member.services.DefaultMemberService;
-import com.pfe.ldb.member.services.MemberService;
+import com.pfe.ldb.member.service.DefaultMemberService;
+import com.pfe.ldb.member.service.MemberService;
+
+
 @Configuration
-@EntityScan("com.pfe.ldb.entities")
-@EnableJpaRepositories("com.pfe.ldb.repositories")
+@EntityScan("com.pfe.ldb.member.dao.entity")
+@EnableJpaRepositories("com.pfe.ldb.member.dao.repository")
 @Profile({"dev", "prod"})
-public class MemberServiceConfiguration {   
+public class MemberServiceConfig {   
 
 	@Bean
 	public MemberService memberService() {
