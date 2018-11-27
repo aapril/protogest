@@ -4,8 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.JoinColumn;
 
-import org.springframework.security.core.GrantedAuthority;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -18,10 +16,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "authorities")
-public class AuthorityEntity extends AbstractEntity implements GrantedAuthority {
+public class AuthorityEntity extends AbstractEntity {
 
 	private static final long serialVersionUID = 1L;
 
 	@JoinColumn(name = "name")
-	private @NonNull String authority;
+	private @NonNull String name;
 }

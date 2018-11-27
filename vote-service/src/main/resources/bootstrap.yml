@@ -1,6 +1,6 @@
 spring:
   application:
-    name: calendar-service
+    name: vote-service
 
   profiles:
     active: dev
@@ -19,4 +19,4 @@ eureka:
       defaultZone: http://localhost:9999/eureka/
       
 server:
-  port: 9000
+  port: 52182

@@ -1,4 +1,4 @@
-package com.pfe.ldb.entities;
+package com.pfe.ldb.calendar.dao.entity;
 
 import java.util.Calendar;
 import java.util.Date;

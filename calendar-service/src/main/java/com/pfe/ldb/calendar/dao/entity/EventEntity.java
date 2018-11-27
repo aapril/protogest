@@ -1,8 +1,9 @@
-package com.pfe.ldb.entities;
+package com.pfe.ldb.calendar.dao.entity;
+
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -16,16 +17,25 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "task")
-public class TaskEntity extends AbstractEntity {
+@Table(name = "event")
+public class EventEntity extends AbstractEntity {
 
+	
 	@JoinColumn(name = "name")
 	private @NonNull String name;
-
+	
 	@JoinColumn(name = "description")
 	private @NonNull String description;
+	
+	@JoinColumn(name = "event_date")
+	private @NonNull Date eventDate;
+	
+	@JoinColumn(name = "event_group_id")
+	private @NonNull Integer eventGroupId;
 
-	@ManyToOne
-	@JoinColumn(name = "task_group_id")
-	private @NonNull TaskGroupEntity taskGroup;
+	@JoinColumn(name = "member_id")
+	private @NonNull Integer memberId;
+
+	@JoinColumn(name = "event_state_id")
+	private @NonNull Integer eventStateId;
 }
