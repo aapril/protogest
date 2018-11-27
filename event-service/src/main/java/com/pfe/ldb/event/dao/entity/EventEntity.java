@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -22,20 +23,20 @@ import lombok.Setter;
 public class EventEntity extends AbstractEntity {
 
 	
-	@JoinColumn(name = "name")
+	@Column(name = "name")
 	private @NonNull String name;
 	
-	@JoinColumn(name = "description")
+	@Column(name = "description")
 	private @NonNull String description;
 	
-	@JoinColumn(name = "event_date")
+	@Column(name = "event_date")
 	private @NonNull Date eventDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "event_group_id")
 	private @NonNull EventGroupEntity eventGroup;
 
-	@JoinColumn(name = "member_id")
+	@Column(name = "member_id")
 	private @NonNull Integer memberId;
 
 	@ManyToOne

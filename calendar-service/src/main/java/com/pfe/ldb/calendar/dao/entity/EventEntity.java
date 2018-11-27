@@ -3,7 +3,7 @@ package com.pfe.ldb.calendar.dao.entity;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.Column;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -21,21 +21,21 @@ import lombok.Setter;
 public class EventEntity extends AbstractEntity {
 
 	
-	@JoinColumn(name = "name")
+	@Column(name = "name")
 	private @NonNull String name;
 	
-	@JoinColumn(name = "description")
+	@Column(name = "description")
 	private @NonNull String description;
 	
-	@JoinColumn(name = "event_date")
+	@Column(name = "event_date")
 	private @NonNull Date eventDate;
 	
-	@JoinColumn(name = "event_group_id")
+	@Column(name = "event_group_id")
 	private @NonNull Integer eventGroupId;
 
-	@JoinColumn(name = "member_id")
+	@Column(name = "member_id")
 	private @NonNull Integer memberId;
 
-	@JoinColumn(name = "event_state_id")
+	@Column(name = "event_state_id")
 	private @NonNull Integer eventStateId;
 }

@@ -1,7 +1,7 @@
 package com.pfe.ldb.member.dao.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.Column;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -18,15 +18,15 @@ import lombok.Setter;
 @Table(name = "member")
 public class MemberEntity extends AbstractEntity {
 
-	@JoinColumn(name = "firstName")
+	@Column(name = "firstName")
 	private @NonNull String firstName;
 
-	@JoinColumn(name = "lastName")
+	@Column(name = "lastName")
 	private @NonNull String lastName;
 
-	@JoinColumn(name = "email")
+	@Column(name = "email")
 	private @NonNull String email;
 
-	@JoinColumn(name = "user_id")
+	@Column(name = "user_id")
 	private Integer userId;
 }

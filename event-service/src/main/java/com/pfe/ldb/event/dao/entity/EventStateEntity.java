@@ -3,7 +3,7 @@ package com.pfe.ldb.event.dao.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.Column;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,7 +21,7 @@ import lombok.Setter;
 @Table(name = "eventState")
 public class EventStateEntity extends AbstractEntity {
 
-	@JoinColumn(name = "name")
+	@Column(name = "name")
 	private @NonNull String name;
 	
 	@OneToMany(mappedBy = "eventState")
