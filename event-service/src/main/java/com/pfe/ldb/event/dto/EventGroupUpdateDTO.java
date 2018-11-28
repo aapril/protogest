@@ -13,11 +13,8 @@ import lombok.NoArgsConstructor;
 public class EventGroupUpdateDTO {
 
 	@ApiModelProperty(position = 0, required = true)
-	private Integer id;
-
-	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String name;
 
-	@ApiModelProperty(position = 2, required = true)
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String description;
 }

@@ -33,46 +33,6 @@ public class EventController {
 
 	private @Autowired EventService eventService;
 
-	@GetMapping("/eventGroup/all")
-	@ApiOperation(value = "Get a list of all event groups.", response = EventGroupDTO.class, responseContainer = "List")
-	public ResponseEntity<List<EventGroupDTO>> getAllEventsGroups() {
-
-		final List<EventGroupDTO> responseBody = eventService.getEventGroups();
-
-		return ResponseEntity.ok().body(responseBody);
-	}
-
-	@GetMapping("/event/all")
-	@ApiOperation(value = "Get a list of all events within a event group.", response = EventDTO.class, responseContainer = "List")
-	public ResponseEntity<List<EventDTO>> getAllEventsByEventGroupId(final @RequestParam Integer eventGroupId) {
-
-		try {
-			List<EventDTO> responseBody = eventService.getEventsByEventGroupId(eventGroupId);
-
-			return ResponseEntity.ok().body(responseBody);
-
-		} catch (final EventGroupEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
-
-	@GetMapping("/event/mine")
-	@ApiOperation(value = "Get all the event of the current authentificated user.", response = EventDTO.class, responseContainer = "List")
-	public ResponseEntity<List<EventDTO>> getAllEventsByCurrentUser() {
-
-		final List<EventDTO> responseBody = eventService.getEventsByCurrentUser();
-
-		return ResponseEntity.ok().body(responseBody);
-	}
-
-	@GetMapping("/eventState/all")
-	@ApiOperation(value = "Get a list of all event states.", response = EventStateDTO.class, responseContainer = "List")
-	public ResponseEntity<List<EventStateDTO>> getAllEventsStates() {
-
-		final List<EventStateDTO> responseBody = eventService.getEventStates();
-
-		return ResponseEntity.ok().body(responseBody);
-	}
 
 	@GetMapping("/event/{id}")
 	@ApiOperation(value = "Get a event group.", response = EventDTO.class)
@@ -87,6 +47,32 @@ public class EventController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
+
+	@GetMapping("/event/all")
+	@ApiOperation(value = "Get a list of all events within a event group.", response = EventDTO.class, responseContainer = "List")
+	public ResponseEntity<List<EventDTO>> getAllEventsByEventGroupId(final @RequestParam Integer eventGroupId) {
+
+		try {
+			List<EventDTO> responseBody = eventService.getAllEventsByEventGroupId(eventGroupId);
+
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final EventGroupEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+
+	@GetMapping("/event/mine")
+	@ApiOperation(value = "Get all the event of the current authentificated user.", response = EventDTO.class, responseContainer = "List")
+	public ResponseEntity<List<EventDTO>> getAllEventsByCurrentUser() {
+
+		final List<EventDTO> responseBody = eventService.getAllEventsByCurrentUser();
+
+		return ResponseEntity.ok().body(responseBody);
+	}
+
 
 	@GetMapping("/eventGroup/{id}")
 	@ApiOperation(value = "Get a event group.", response = EventGroupDTO.class)
@@ -103,6 +89,27 @@ public class EventController {
 
 	}
 
+
+	@GetMapping("/eventGroup/all")
+	@ApiOperation(value = "Get a list of all event groups.", response = EventGroupDTO.class, responseContainer = "List")
+	public ResponseEntity<List<EventGroupDTO>> getAllEventsGroups() {
+
+		final List<EventGroupDTO> responseBody = eventService.getAllEventGroups();
+
+		return ResponseEntity.ok().body(responseBody);
+	}
+
+
+	@GetMapping("/eventState/all")
+	@ApiOperation(value = "Get a list of all event states.", response = EventStateDTO.class, responseContainer = "List")
+	public ResponseEntity<List<EventStateDTO>> getAllEventsStates() {
+
+		final List<EventStateDTO> responseBody = eventService.getEventStates();
+
+		return ResponseEntity.ok().body(responseBody);
+	}
+
+
 	@PostMapping("/event")
 	@ApiOperation(value = "Add a event to a group event.", response = EventCreateDTO.class)
 	public ResponseEntity<EventDTO> createEvent(final @Validated @RequestBody EventCreateDTO eventCreateDTO) {
@@ -110,7 +117,7 @@ public class EventController {
 		EventDTO responseBody;
 		try {
 			responseBody = eventService.createEvent(eventCreateDTO);
-			
+
 		} catch (final EventGroupEntityNotFoundException | EventStateEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
@@ -118,37 +125,42 @@ public class EventController {
 		return ResponseEntity.ok().body(responseBody);
 	}
 
+
 	@PostMapping("/eventGroup")
 	@ApiOperation(value = "Add a event group.", response = EventGroupCreateDTO.class)
-	public ResponseEntity<EventGroupDTO> createEventGroup(
-			final @Validated @RequestBody EventGroupCreateDTO eventGroupCreateDTO) {
+	public ResponseEntity<EventGroupDTO> createEventGroup(final @Validated @RequestBody EventGroupCreateDTO eventGroupCreateDTO) {
 
 		final EventGroupDTO responseBody = eventService.createEventGroup(eventGroupCreateDTO);
 
 		return ResponseEntity.ok().body(responseBody);
 	}
 
+
 	@PutMapping("/event/{id}")
 	@ApiOperation(value = "Update a event.", response = EventUpdateDTO.class)
-	public ResponseEntity<EventDTO> updateEvent(final @Validated @RequestBody EventUpdateDTO eventUpdateDTO) {
+	public ResponseEntity<EventDTO> updateEvent(final @PathVariable Integer id,
+												final @Validated @RequestBody EventUpdateDTO eventUpdateDTO) {
 
 		try {
-			final EventDTO responseBody = eventService.updateEvent(eventUpdateDTO);
+			final EventDTO responseBody = eventService.updateEvent(id, eventUpdateDTO);
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch (final EventEntityNotFoundException e) {
+		} catch (final EventEntityNotFoundException | EventGroupEntityNotFoundException
+				| EventStateEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
+
 	@PutMapping("/eventGroup/{id}")
 	@ApiOperation(value = "Update a event group.", response = EventGroupUpdateDTO.class)
-	public ResponseEntity<EventGroupDTO> updateEventGroup(
-			final @Validated @RequestBody EventGroupUpdateDTO eventGroupUpdateDTO) {
+	public ResponseEntity<EventGroupDTO> updateEventGroup(	final @PathVariable Integer id,
+															final @Validated @RequestBody EventGroupUpdateDTO eventGroupUpdateDTO) {
 
 		try {
-			final EventGroupDTO responseBody = eventService.updateEventGroup(eventGroupUpdateDTO);
+			final EventGroupDTO responseBody = eventService.updateEventGroup(id,
+					eventGroupUpdateDTO);
 
 			return ResponseEntity.ok().body(responseBody);
 
@@ -156,6 +168,7 @@ public class EventController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
 
 	@DeleteMapping("/event/{id}")
 	@ApiOperation(value = "Delete a event.")
@@ -170,6 +183,7 @@ public class EventController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+
 
 	@DeleteMapping("/eventGroup/{id}")
 	@ApiOperation(value = "Delete a event group.")

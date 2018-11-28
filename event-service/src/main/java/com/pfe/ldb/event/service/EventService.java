@@ -20,27 +20,51 @@ import com.pfe.ldb.event.dto.EventUpdateDTO;
 @Transactional(readOnly = true)
 public interface EventService {
 
-	public EventDTO getEventById(final Integer id) throws EventEntityNotFoundException;
+	public EventDTO getEventById(final Integer id)
+			throws EventEntityNotFoundException;
 
-	public EventGroupDTO getEventGroupById(final Integer id) throws EventGroupEntityNotFoundException;
-	
-	public List<EventDTO> getEventsByEventGroupId(final Integer eventGroupId) throws EventGroupEntityNotFoundException;
-	
-	public List<EventGroupDTO> getEventGroups();
-	
+
+	public EventGroupDTO getEventGroupById(final Integer id)
+			throws EventGroupEntityNotFoundException;
+
+
+	public List<EventDTO> getAllEventsByEventGroupId(final Integer eventGroupId)
+			throws EventGroupEntityNotFoundException;
+
+
+	public List<EventGroupDTO> getAllEventGroups();
+
+
 	public List<EventStateDTO> getEventStates();
-	
-	public EventDTO createEvent(final EventCreateDTO eventCreateDTO) throws EventGroupEntityNotFoundException, EventStateEntityNotFoundException;
-	
+
+
+	public EventDTO createEvent(final EventCreateDTO eventCreateDTO)
+			throws EventGroupEntityNotFoundException,
+			EventStateEntityNotFoundException;
+
+
 	public EventGroupDTO createEventGroup(final EventGroupCreateDTO eventGroupCreateDTO);
 
-	public EventDTO updateEvent(final EventUpdateDTO eventUpdateDTO) throws EventEntityNotFoundException;
 
-	public EventGroupDTO updateEventGroup(final EventGroupUpdateDTO eventGroupUpdateDTO) throws EventGroupEntityNotFoundException;
+	public EventDTO updateEvent(final Integer id,
+								final EventUpdateDTO eventUpdateDTO)
+			throws EventEntityNotFoundException,
+			EventGroupEntityNotFoundException,
+			EventStateEntityNotFoundException;
 
-	public void deleteEventById(final Integer id) throws EventEntityNotFoundException;
 
-	public void deleteEventGroupById(final Integer id) throws EventGroupEntityNotFoundException;
+	public EventGroupDTO updateEventGroup(	final Integer id,
+											final EventGroupUpdateDTO eventGroupUpdateDTO)
+			throws EventGroupEntityNotFoundException;
 
-	public List<EventDTO> getEventsByCurrentUser();
+
+	public void deleteEventById(final Integer id)
+			throws EventEntityNotFoundException;
+
+
+	public void deleteEventGroupById(final Integer id)
+			throws EventGroupEntityNotFoundException;
+
+
+	public List<EventDTO> getAllEventsByCurrentUser();
 }
