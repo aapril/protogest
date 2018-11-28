@@ -1,7 +1,5 @@
 package com.pfe.ldb.event.dto;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotNull;
 
 import io.swagger.annotations.ApiModelProperty;

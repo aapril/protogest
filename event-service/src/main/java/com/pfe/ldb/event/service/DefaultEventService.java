@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.annotation.PostConstruct;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,11 +29,11 @@ import com.pfe.ldb.event.dto.EventGroupUpdateDTO;
 import com.pfe.ldb.event.dto.EventStateDTO;
 import com.pfe.ldb.event.dto.EventUpdateDTO;
 
-@Transactional
 @Service
+@Transactional
 public class DefaultEventService implements EventService {
 
-	private static final String EVENT_STATE_PENDING = "PENDING";
+	private static final String EVENT_STATE_PENDING = "Pending";
 
 	private @Autowired EventRepository eventRepository;
 	private @Autowired EventGroupRepository eventGroupRepository;
@@ -39,23 +41,39 @@ public class DefaultEventService implements EventService {
 
 	private @Autowired ModelMapper modelMapper;
 
+	private EventStateEntity pendingEventStateEntity;
+
+
+	@PostConstruct
+	private void findOrCreatePendingEventStateEntity() {
+
+		try {
+			pendingEventStateEntity = findEventStateEntityByName(EVENT_STATE_PENDING);
+
+		} catch(final EventStateEntityNotFoundException e) {
+			final EventStateEntity toCreate = new EventStateEntity(EVENT_STATE_PENDING);
+			pendingEventStateEntity = eventStateRepository.save(toCreate);
+		}
+	}
+
 
 	@Override
-	public EventDTO getEventById(final Integer id) throws EventEntityNotFoundException {
+	public EventDTO getEventById(final Integer id)
+		throws EventEntityNotFoundException {
 
 		return modelMapper.map(findEventEntityById(id), EventDTO.class);
 	}
 
 
 	@Override
-	public List<EventDTO> getAllEventsByEventGroupId(final Integer eventGroupId)
-			throws EventGroupEntityNotFoundException {
+	public List<EventDTO> getAllEventsByEventGroupId(final Integer id)
+		throws EventGroupEntityNotFoundException {
 
-		final EventGroupEntity eventGroupEntity = findEventGroupEntityById(eventGroupId);
+		final EventGroupEntity eventGroupEntity = findEventGroupEntityById(id);
 		final List<EventEntity> eventEntities = eventGroupEntity.getEvents();
 
 		return eventEntities.stream()
-				.map(eventEntity -> modelMapper.map(eventEntity, EventDTO.class))
+				.map(entity -> modelMapper.map(entity, EventDTO.class))
 				.collect(Collectors.toList());
 	}
 
@@ -68,14 +86,14 @@ public class DefaultEventService implements EventService {
 		final Iterable<EventEntity> eventEntities = eventRepository.findAll();
 
 		return StreamSupport.stream(eventEntities.spliterator(), true)
-				.map(eventEntity -> modelMapper.map(eventEntity, EventDTO.class))
+				.map(entity -> modelMapper.map(entity, EventDTO.class))
 				.collect(Collectors.toList());
 	}
 
 
 	@Override
 	public EventGroupDTO getEventGroupById(final Integer id)
-			throws EventGroupEntityNotFoundException {
+		throws EventGroupEntityNotFoundException {
 
 		return modelMapper.map(findEventGroupEntityById(id), EventGroupDTO.class);
 	}
@@ -84,25 +102,23 @@ public class DefaultEventService implements EventService {
 	@Override
 	public List<EventGroupDTO> getAllEventGroups() {
 
-		final Iterable<EventGroupEntity> eventGroupEntities = eventGroupRepository.findAll();
+		final Iterable<EventGroupEntity> eventGroupEntities = eventGroupRepository
+				.findAll();
 
 		return StreamSupport.stream(eventGroupEntities.spliterator(), true)
-				.map(eventGroupEntity -> modelMapper.map(eventGroupEntity, EventGroupDTO.class))
+				.map(entity -> modelMapper.map(entity, EventGroupDTO.class))
 				.collect(Collectors.toList());
 	}
 
 
 	@Override
-	public EventDTO createEvent(final EventCreateDTO eventCreateDTO)
-			throws EventGroupEntityNotFoundException, EventStateEntityNotFoundException {
+	public EventDTO createEvent(final EventCreateDTO dto)
+		throws EventGroupEntityNotFoundException,
+		EventStateEntityNotFoundException {
 
-		final Integer eventGroupId = eventCreateDTO.getEventGroupId();
-		final EventGroupEntity eventGroupEntity = findEventGroupEntityById(eventGroupId);
-		final EventStateEntity eventStateEntity = findEventStateEntityByName(EVENT_STATE_PENDING);
-
-		final EventEntity toCreate = modelMapper.map(eventCreateDTO, EventEntity.class);
-		toCreate.setEventGroup(eventGroupEntity);
-		toCreate.setEventState(eventStateEntity);
+		final EventEntity toCreate = modelMapper.map(dto, EventEntity.class);
+		toCreate.setEventGroup(findEventGroupEntityById(dto.getEventGroupId()));
+		toCreate.setEventState(pendingEventStateEntity);
 		final EventEntity saved = eventRepository.save(toCreate);
 
 		return modelMapper.map(saved, EventDTO.class);
@@ -110,10 +126,9 @@ public class DefaultEventService implements EventService {
 
 
 	@Override
-	public EventGroupDTO createEventGroup(final EventGroupCreateDTO eventGroupCreateDTO) {
+	public EventGroupDTO createEventGroup(final EventGroupCreateDTO dto) {
 
-		final EventGroupEntity toCreate = modelMapper.map(eventGroupCreateDTO,
-				EventGroupEntity.class);
+		final EventGroupEntity toCreate = modelMapper.map(dto, EventGroupEntity.class);
 		final EventGroupEntity saved = eventGroupRepository.save(toCreate);
 
 		return modelMapper.map(saved, EventGroupDTO.class);
@@ -121,20 +136,20 @@ public class DefaultEventService implements EventService {
 
 
 	@Override
-	public EventDTO updateEvent(final Integer id,
-								final EventUpdateDTO eventUpdateDTO)
-			throws EventEntityNotFoundException, EventGroupEntityNotFoundException,
-			EventStateEntityNotFoundException {
+	public EventDTO updateEvent(final Integer id, final EventUpdateDTO dto)
+		throws EventEntityNotFoundException,
+		EventGroupEntityNotFoundException,
+		EventStateEntityNotFoundException {
 
 		final EventEntity toUpdate = findEventEntityById(id);
-		modelMapper.map(eventUpdateDTO, toUpdate);
+		modelMapper.map(dto, toUpdate);
 
-		if(!isSameEventGroup(eventUpdateDTO, toUpdate)) {
-			toUpdate.setEventGroup(findEventGroupEntityById(eventUpdateDTO.getEventGroupId()));
+		if(!isSameEventGroup(dto, toUpdate)) {
+			toUpdate.setEventGroup(findEventGroupEntityById(dto.getEventGroupId()));
 		}
 
-		if(!isSameEventState(eventUpdateDTO, toUpdate)) {
-			toUpdate.setEventState(findEventStateEntityById(eventUpdateDTO.getEventStateId()));
+		if(!isSameEventState(dto, toUpdate)) {
+			toUpdate.setEventState(findEventStateEntityById(dto.getEventStateId()));
 		}
 
 		final EventEntity saved = eventRepository.save(toUpdate);
@@ -144,28 +159,28 @@ public class DefaultEventService implements EventService {
 
 
 	@Override
-	public EventGroupDTO updateEventGroup(	final Integer id,
-											final EventGroupUpdateDTO eventGroupUpdateDTO)
-			throws EventGroupEntityNotFoundException {
+	public EventGroupDTO updateEventGroup(final Integer id, final EventGroupUpdateDTO dto)
+		throws EventGroupEntityNotFoundException {
 
-		final EventGroupEntity toUpdate = findEventGroupEntityById(id);
-		modelMapper.map(eventGroupUpdateDTO, toUpdate);
+		modelMapper.map(dto, findEventGroupEntityById(id));
 
-		final EventGroupEntity saved = eventGroupRepository.save(toUpdate);
+		final EventGroupEntity saved = eventGroupRepository.save(findEventGroupEntityById(id));
 
 		return modelMapper.map(saved, EventGroupDTO.class);
 	}
 
 
 	@Override
-	public void deleteEventById(final Integer id) throws EventEntityNotFoundException {
+	public void deleteEventById(final Integer id)
+		throws EventEntityNotFoundException {
 
 		eventRepository.delete(findEventEntityById(id));
 	}
 
 
 	@Override
-	public void deleteEventGroupById(final Integer id) throws EventGroupEntityNotFoundException {
+	public void deleteEventGroupById(final Integer id)
+		throws EventGroupEntityNotFoundException {
 
 		eventGroupRepository.delete(findEventGroupEntityById(id));
 	}
@@ -177,12 +192,13 @@ public class DefaultEventService implements EventService {
 		final Iterable<EventStateEntity> eventStateEntities = eventStateRepository.findAll();
 
 		return StreamSupport.stream(eventStateEntities.spliterator(), true)
-				.map(eventStateEntity -> modelMapper.map(eventStateEntity, EventStateDTO.class))
+				.map(entity -> modelMapper.map(entity, EventStateDTO.class))
 				.collect(Collectors.toList());
 	}
 
 
-	private EventEntity findEventEntityById(final Integer id) throws EventEntityNotFoundException {
+	private EventEntity findEventEntityById(final Integer id)
+		throws EventEntityNotFoundException {
 
 		final Optional<EventEntity> eventEntity = eventRepository.findById(id);
 
@@ -195,7 +211,7 @@ public class DefaultEventService implements EventService {
 
 
 	private EventGroupEntity findEventGroupEntityById(final Integer id)
-			throws EventGroupEntityNotFoundException {
+		throws EventGroupEntityNotFoundException {
 
 		final Optional<EventGroupEntity> eventGroupEntity = eventGroupRepository.findById(id);
 
@@ -208,7 +224,7 @@ public class DefaultEventService implements EventService {
 
 
 	private EventStateEntity findEventStateEntityById(final Integer id)
-			throws EventStateEntityNotFoundException {
+		throws EventStateEntityNotFoundException {
 
 		final Optional<EventStateEntity> eventSteateEntity = eventStateRepository.findById(id);
 
@@ -221,7 +237,7 @@ public class DefaultEventService implements EventService {
 
 
 	private EventStateEntity findEventStateEntityByName(final String name)
-			throws EventStateEntityNotFoundException {
+		throws EventStateEntityNotFoundException {
 
 		final Optional<EventStateEntity> eventSteateEntity = eventStateRepository.findByName(name);
 
@@ -233,8 +249,9 @@ public class DefaultEventService implements EventService {
 	}
 
 
-	private boolean isSameEventState(	final EventUpdateDTO eventUpdateDTO,
-										final EventEntity eventEntity) {
+	private boolean isSameEventState(
+			final EventUpdateDTO eventUpdateDTO,
+			final EventEntity eventEntity) {
 
 		if(eventEntity.getEventState() == null) {
 			return false;
@@ -244,8 +261,9 @@ public class DefaultEventService implements EventService {
 	}
 
 
-	private boolean isSameEventGroup(	final EventUpdateDTO eventUpdateDTO,
-										final EventEntity eventEntity) {
+	private boolean isSameEventGroup(
+			final EventUpdateDTO eventUpdateDTO,
+			final EventEntity eventEntity) {
 
 		if(eventEntity.getEventGroup() == null) {
 			return false;
