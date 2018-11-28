@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.event.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.event.dao.exception.EventGroupEntityNotFoundException;
+import com.pfe.ldb.event.dao.exception.EventStateEntityNotFoundException;
 import com.pfe.ldb.event.dto.EventCreateDTO;
 import com.pfe.ldb.event.dto.EventDTO;
 import com.pfe.ldb.event.dto.EventGroupCreateDTO;
@@ -29,7 +30,7 @@ public interface EventService {
 	
 	public List<EventStateDTO> getEventStates();
 	
-	public EventDTO createEvent(final EventCreateDTO eventCreateDTO);
+	public EventDTO createEvent(final EventCreateDTO eventCreateDTO) throws EventGroupEntityNotFoundException, EventStateEntityNotFoundException;
 	
 	public EventGroupDTO createEventGroup(final EventGroupCreateDTO eventGroupCreateDTO);
 

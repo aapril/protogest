@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pfe.ldb.event.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.event.dao.exception.EventGroupEntityNotFoundException;
+import com.pfe.ldb.event.dao.exception.EventStateEntityNotFoundException;
 import com.pfe.ldb.event.dto.EventCreateDTO;
 import com.pfe.ldb.event.dto.EventDTO;
 import com.pfe.ldb.event.dto.EventGroupCreateDTO;
@@ -106,7 +107,13 @@ public class EventController {
 	@ApiOperation(value = "Add a event to a group event.", response = EventCreateDTO.class)
 	public ResponseEntity<EventDTO> createEvent(final @Validated @RequestBody EventCreateDTO eventCreateDTO) {
 
-		final EventDTO responseBody = eventService.createEvent(eventCreateDTO);
+		EventDTO responseBody;
+		try {
+			responseBody = eventService.createEvent(eventCreateDTO);
+			
+		} catch (final EventGroupEntityNotFoundException | EventStateEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
 
 		return ResponseEntity.ok().body(responseBody);
 	}

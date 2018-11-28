@@ -15,6 +15,7 @@ import com.pfe.ldb.event.dao.entity.EventGroupEntity;
 import com.pfe.ldb.event.dao.entity.EventStateEntity;
 import com.pfe.ldb.event.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.event.dao.exception.EventGroupEntityNotFoundException;
+import com.pfe.ldb.event.dao.exception.EventStateEntityNotFoundException;
 import com.pfe.ldb.event.dao.repository.EventGroupRepository;
 import com.pfe.ldb.event.dao.repository.EventRepository;
 import com.pfe.ldb.event.dao.repository.EventStateRepository;
@@ -30,6 +31,8 @@ import com.pfe.ldb.event.dto.EventUpdateDTO;
 @Service
 public class DefaultEventService implements EventService {
 
+	private static final String EVENT_STATE_PENDING = "PENDING";
+	
 	private @Autowired EventRepository eventRepository;
 	private @Autowired EventGroupRepository eventGroupRepository;
 	private @Autowired EventStateRepository eventStateRepository;
@@ -84,11 +87,27 @@ public class DefaultEventService implements EventService {
 	}
 
 	@Override
-	public EventDTO createEvent(final EventCreateDTO eventCreateDTO) {
+	public EventDTO createEvent(final EventCreateDTO eventCreateDTO)
+			throws EventGroupEntityNotFoundException, EventStateEntityNotFoundException {
 
-		final EventEntity toSave = modelMapper.map(eventCreateDTO, EventEntity.class);
-		toSave.setEventState(eventStateRepository.findById(1).get());
-		final EventEntity saved = eventRepository.save(toSave);
+		final Optional<EventGroupEntity> eventGroupEntity = eventGroupRepository
+				.findById(eventCreateDTO.getEventGroupId());
+
+		if (!eventGroupEntity.isPresent()) {
+			throw new EventGroupEntityNotFoundException();
+		}
+
+		final Optional<EventStateEntity> eventStateEntity = eventStateRepository
+				.findByName(EVENT_STATE_PENDING);
+
+		if (!eventStateEntity.isPresent()) {
+			throw new EventStateEntityNotFoundException();
+		}
+
+		final EventEntity toCreate = modelMapper.map(eventCreateDTO, EventEntity.class);
+		toCreate.setEventGroup(eventGroupEntity.get());
+		toCreate.setEventState(eventStateEntity.get());
+		final EventEntity saved = eventRepository.save(toCreate);
 
 		return modelMapper.map(saved, EventDTO.class);
 	}
@@ -106,7 +125,7 @@ public class DefaultEventService implements EventService {
 	public EventDTO updateEvent(final EventUpdateDTO eventUpdateDTO) throws EventEntityNotFoundException {
 
 		final Optional<EventEntity> eventEntity = eventRepository.findById(eventUpdateDTO.getId());
-		
+
 		if (!eventEntity.isPresent()) {
 			throw new EventEntityNotFoundException();
 		}
@@ -123,7 +142,7 @@ public class DefaultEventService implements EventService {
 			throws EventGroupEntityNotFoundException {
 
 		final Optional<EventGroupEntity> eventGroupEntity = eventGroupRepository.findById(eventGroupUpdateDTO.getId());
-		
+
 		if (!eventGroupEntity.isPresent()) {
 			throw new EventGroupEntityNotFoundException();
 		}
