@@ -11,17 +11,14 @@ import lombok.NoArgsConstructor;
 public class MemberUpdateDTO {
 
 	@ApiModelProperty(position = 0, required = true)
-	private Integer id;
-
-	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String firstName;
 
-	@ApiModelProperty(position = 2, required = true)
+	@ApiModelProperty(position = 1, required = true)
 	private @NotNull String lastName;
 
-	@ApiModelProperty(position = 3, required = true)
+	@ApiModelProperty(position = 2, required = true)
 	private @NotNull String email;
 
-	@ApiModelProperty(position = 4, required = true)
+	@ApiModelProperty(position = 3, required = true)
 	private @NotNull Integer userId;
 }
