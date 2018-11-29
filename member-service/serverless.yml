@@ -1,0 +1,32 @@
+service: member-service
+
+provider:
+  name: aws
+  runtime: java8
+  
+package:
+  artifact: target/member-service-0.0.1-SNAPSHOT.jar
+
+functions:
+  member:
+    handler: com.pfe.ldb.member.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: /member/all
+          method: get
+      - http:
+          path: /member/{id}
+          method: get
+      - http:
+          path: /member/
+          method: get
+      - http:
+          path: /member
+          method: post
+      - http:
+          path: /member/{id}
+          method: put
+      - http:
+          path: /member/{id}
+          method: delete
+    timeout: 30

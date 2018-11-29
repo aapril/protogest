@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.pfe.ldb.vote</groupId>
+	<groupId>com.pfe.ldb.member</groupId>
 	<artifactId>member-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -26,7 +26,6 @@
 		<spring-cloud.version>Finchley.RC2</spring-cloud.version>
 		<entity-management.version>0.0.1-SNAPSHOT</entity-management.version>
 		<protogest-core.version>0.0.1-SNAPSHOT</protogest-core.version>
-
 	</properties>
 
 	<dependencies>
@@ -77,6 +76,20 @@
         	<groupId>mysql</groupId>
         	<artifactId>mysql-connector-java</artifactId>
     	</dependency>
+    	<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-function-adapter-aws</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-lambda-java-core</artifactId>
+			<version>1.1.0</version>			
+		</dependency>
+		<dependency>
+    		<groupId>com.amazonaws.serverless</groupId>
+    		<artifactId>aws-serverless-java-container-spring</artifactId>
+    		<version>1.2</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -97,6 +110,28 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <configuration>
+          <createDependencyReducedPom>false</createDependencyReducedPom>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+                        <artifactSet>
+                            <excludes>
+                                <exclude>org.apache.tomcat.embed:*</exclude>
+                            </excludes>
+                        </artifactSet>
+                    </configuration>
+          </execution>
+        </executions>
+      </plugin>
 		</plugins>
 	</build>
 
