@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pfe.ldb.task.dao.entity.EventEntity;
 import com.pfe.ldb.task.dao.entity.TaskEntity;
 import com.pfe.ldb.task.dao.entity.TaskGroupEntity;
+import com.pfe.ldb.task.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
+import com.pfe.ldb.task.dao.repository.EventRepository;
 import com.pfe.ldb.task.dao.repository.TaskGroupRepository;
 import com.pfe.ldb.task.dao.repository.TaskRepository;
 import com.pfe.ldb.task.dto.TaskCreateDTO;
@@ -29,129 +32,176 @@ public class DefaultTaskService implements TaskService {
 
 	private @Autowired TaskRepository taskRepository;
 	private @Autowired TaskGroupRepository taskGroupRepository;
+	private @Autowired EventRepository eventRepository;
 
 	private @Autowired ModelMapper modelMapper;
+
 
 	@Override
 	public TaskDTO getTaskById(final Integer id) throws TaskEntityNotFoundException {
 
-		final Optional<TaskEntity> taskEntity = taskRepository.findById(id);
-
-		if (!taskEntity.isPresent()) {
-			throw new TaskEntityNotFoundException();
-		}
-
-		return modelMapper.map(taskEntity.get(), TaskDTO.class);
+		return modelMapper.map(findTaskEntityById(id), TaskDTO.class);
 	}
+
+
+	@Override
+	public List<TaskDTO> getAllTasksByTaskGroupId(final Integer id)
+		throws TaskGroupEntityNotFoundException {
+
+		final List<TaskEntity> taskEntities = findTaskGroupEntityById(id).getTasks();
+
+		return StreamSupport.stream(taskEntities.spliterator(), true)
+				.map(taskEntity -> modelMapper.map(taskEntity, TaskDTO.class))
+				.collect(Collectors.toList());
+	}
+
 
 	@Override
 	public TaskGroupDTO getTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException {
 
-		final Optional<TaskGroupEntity> taskGroupEntity = taskGroupRepository.findById(id);
-
-		if (!taskGroupEntity.isPresent()) {
-			throw new TaskGroupEntityNotFoundException();
-		}
-
-		return modelMapper.map(taskGroupEntity.get(), TaskGroupDTO.class);
+		return modelMapper.map(findTaskGroupEntityById(id), TaskGroupDTO.class);
 	}
 
+
 	@Override
-	public List<TaskDTO> getTasksByTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException {
+	public List<TaskGroupDTO> getAllTaskGroupsByEventId(final Integer id)
+		throws EventEntityNotFoundException {
 
-		final Optional<TaskGroupEntity> taskGroupEntity = taskGroupRepository.findById(taskGroupId);
+		final EventEntity eventEntity = findEventEntityById(id);
+		final List<TaskGroupEntity> taskGroupEntities = eventEntity.getTaskGroups();
 
-		if (!taskGroupEntity.isPresent()) {
-			throw new TaskGroupEntityNotFoundException();
-		}
-
-		final List<TaskEntity> taskEntities = taskGroupEntity.get().getTasks();
-
-		return StreamSupport.stream(taskEntities.spliterator(), true)
-				.map(taskEntity -> modelMapper.map(taskEntity, TaskDTO.class)).collect(Collectors.toList());
+		return taskGroupEntities.stream()
+				.map(taskGroupEntity -> modelMapper.map(taskGroupEntity, TaskGroupDTO.class))
+				.collect(Collectors.toList());
 	}
 
-	@Override
-	public TaskDTO createTask(final TaskCreateDTO taskCreateDTO) {
 
-		final TaskEntity toSave = modelMapper.map(taskCreateDTO, TaskEntity.class);
-		final TaskEntity saved = taskRepository.save(toSave);
+	@Override
+	public TaskDTO createTask(final TaskCreateDTO dto) throws TaskGroupEntityNotFoundException {
+
+		final TaskEntity toCreate = modelMapper.map(dto, TaskEntity.class);
+		toCreate.setTaskGroup(findTaskGroupEntityById(dto.getTaskGroupId()));
+		final TaskEntity saved = taskRepository.save(toCreate);
 
 		return modelMapper.map(saved, TaskDTO.class);
 	}
 
-	@Override
-	public TaskGroupDTO createTaskGroup(final TaskGroupCreateDTO taskGroupCreateDTO) {
 
-		TaskGroupEntity toSave = modelMapper.map(taskGroupCreateDTO, TaskGroupEntity.class);
-		final TaskGroupEntity saved = taskGroupRepository.save(toSave);
+	@Override
+	public TaskGroupDTO createTaskGroup(final TaskGroupCreateDTO dto)
+		throws EventEntityNotFoundException {
+
+		TaskGroupEntity toCreate = modelMapper.map(dto, TaskGroupEntity.class);
+		toCreate.setEvent(findEventEntityById(dto.getEventId()));
+		final TaskGroupEntity saved = taskGroupRepository.save(toCreate);
 
 		return modelMapper.map(saved, TaskGroupDTO.class);
 	}
 
+
 	@Override
-	public TaskDTO updateTask(final TaskUpdateDTO taskUpdateDTO) throws TaskEntityNotFoundException {
+	public TaskDTO updateTask(final Integer id, final TaskUpdateDTO dto)
+		throws TaskEntityNotFoundException,
+		TaskGroupEntityNotFoundException {
 
-		final Optional<TaskEntity> taskEntity = taskRepository.findById(taskUpdateDTO.getId());
+		final TaskEntity toUpdate = findTaskEntityById(id);
+		modelMapper.map(dto, toUpdate);
 
-		if (!taskEntity.isPresent()) {
-			throw new TaskEntityNotFoundException();
+		if(!isSameTaskGroup(dto, toUpdate)) {
+			toUpdate.setTaskGroup(findTaskGroupEntityById(dto.getTaskGroupId()));
 		}
 
-		final TaskEntity toUpdate = taskEntity.get();
-		modelMapper.map(taskUpdateDTO, toUpdate);
 		final TaskEntity saved = taskRepository.save(toUpdate);
 
 		return modelMapper.map(saved, TaskDTO.class);
 	}
 
+
 	@Override
-	public TaskGroupDTO updateTaskGroup(final TaskGroupUpdateDTO taskGroupUpdateDTO)
-			throws TaskGroupEntityNotFoundException {
+	public TaskGroupDTO updateTaskGroup(final Integer id, final TaskGroupUpdateDTO dto)
+		throws TaskGroupEntityNotFoundException,
+		EventEntityNotFoundException {
 
-		final Optional<TaskGroupEntity> taskGroupEntity = taskGroupRepository.findById(taskGroupUpdateDTO.getId());
+		final TaskGroupEntity toUpdate = findTaskGroupEntityById(id);
+		modelMapper.map(dto, toUpdate);
 
-		if (!taskGroupEntity.isPresent()) {
-			throw new TaskGroupEntityNotFoundException();
+		if(!isSameEvent(dto, toUpdate)) {
+			toUpdate.setEvent(findEventEntityById(dto.getEventId()));
 		}
 
-		final TaskGroupEntity toUpdate = taskGroupEntity.get();
-		modelMapper.map(taskGroupUpdateDTO, toUpdate);
 		final TaskGroupEntity saved = taskGroupRepository.save(toUpdate);
 
 		return modelMapper.map(saved, TaskGroupDTO.class);
 	}
 
+
 	@Override
 	public void deleteTaskById(final Integer id) throws TaskEntityNotFoundException {
 
-		final Optional<TaskEntity> taskEntity = taskRepository.findById(id);
-
-		if (!taskEntity.isPresent()) {
-			throw new TaskEntityNotFoundException();
-		}
-
-		taskRepository.delete(taskEntity.get());
+		taskRepository.delete(findTaskEntityById(id));
 	}
+
 
 	@Override
 	public void deleteTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException {
 
+		taskGroupRepository.delete(findTaskGroupEntityById(id));
+	}
+
+
+	private TaskEntity findTaskEntityById(final Integer id) throws TaskEntityNotFoundException {
+
+		final Optional<TaskEntity> taskEntity = taskRepository.findById(id);
+
+		if(!taskEntity.isPresent()) {
+			throw new TaskEntityNotFoundException();
+		}
+
+		return taskEntity.get();
+	}
+
+
+	private TaskGroupEntity findTaskGroupEntityById(final Integer id)
+		throws TaskGroupEntityNotFoundException {
+
 		final Optional<TaskGroupEntity> taskGroupEntity = taskGroupRepository.findById(id);
 
-		if (!taskGroupEntity.isPresent()) {
+		if(!taskGroupEntity.isPresent()) {
 			throw new TaskGroupEntityNotFoundException();
 		}
 
-		taskGroupRepository.delete(taskGroupEntity.get());
+		return taskGroupEntity.get();
 	}
 
-	@Override
-	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId) {
 
-		final List<TaskGroupEntity> taskGroupEntities = taskGroupRepository.findByEventId(eventId);
+	private EventEntity findEventEntityById(final Integer id) throws EventEntityNotFoundException {
 
-		return taskGroupEntities.stream().map(taskGroupEntity -> modelMapper.map(taskGroupEntity, TaskGroupDTO.class))
-				.collect(Collectors.toList());
+		final Optional<EventEntity> eventEntity = eventRepository.findById(id);
+
+		if(!eventEntity.isPresent()) {
+			throw new EventEntityNotFoundException();
+		}
+
+		return eventEntity.get();
+	}
+
+
+	private boolean isSameTaskGroup(final TaskUpdateDTO dto, final TaskEntity entity) {
+
+		if(entity.getTaskGroup() == null) {
+			return false;
+		}
+
+		return entity.getTaskGroup().getId().equals(dto.getTaskGroupId());
+	}
+
+
+	private boolean isSameEvent(final TaskGroupUpdateDTO dto, final TaskGroupEntity entity) {
+
+		if(entity.getEvent() == null) {
+			return false;
+		}
+
+		return entity.getEvent().getId().equals(dto.getEventId());
 	}
 }
