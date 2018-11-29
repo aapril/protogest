@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pfe.ldb.member.dao.entity.MemberEntity;
+import com.pfe.ldb.member.dao.entity.UserEntity;
 import com.pfe.ldb.member.dao.exception.MemberEntityNotFoundException;
 import com.pfe.ldb.member.dao.exception.UserEntityNotFoundException;
 import com.pfe.ldb.member.dao.repository.MemberRepository;
+import com.pfe.ldb.member.dao.repository.UserRepository;
 import com.pfe.ldb.member.dto.MemberCreateDTO;
 import com.pfe.ldb.member.dto.MemberDTO;
 import com.pfe.ldb.member.dto.MemberUpdateDTO;
@@ -23,8 +25,26 @@ import com.pfe.ldb.member.dto.MemberUpdateDTO;
 public class DefaultMemberService implements MemberService {
 
 	private @Autowired MemberRepository memberRepository;
+	private @Autowired UserRepository userRepository;
 
 	private @Autowired ModelMapper modelMapper;
+
+
+	@Override
+	public MemberDTO getMemberById(final Integer id) throws MemberEntityNotFoundException {
+
+		return modelMapper.map(findMemberEntityById(id), MemberDTO.class);
+	}
+
+
+	@Override
+	public MemberDTO getMemberByUserId(final Integer id) throws UserEntityNotFoundException {
+
+		final UserEntity userEntity = findUserEntityById(id);
+
+		return modelMapper.map(userEntity.getMember(), MemberDTO.class);
+	}
+
 
 	@Override
 	public List<MemberDTO> getAllMembers() {
@@ -36,62 +56,75 @@ public class DefaultMemberService implements MemberService {
 				.collect(Collectors.toList());
 	}
 
+
 	@Override
-	public MemberDTO getMemberById(final Integer id) throws MemberEntityNotFoundException {
+	public MemberDTO createMember(final MemberCreateDTO dto) throws UserEntityNotFoundException {
 
-		if (!memberRepository.existsById(id)) {
-			throw new MemberEntityNotFoundException();
-		}
+		MemberEntity toCreate = modelMapper.map(dto, MemberEntity.class);
+		toCreate.setUser(findUserEntityById(dto.getUserId()));
+		final MemberEntity saved = memberRepository.save(toCreate);
 
-		final MemberEntity memberEntity = memberRepository.findById(id).get();
-
-		return modelMapper.map(memberEntity, MemberDTO.class);
+		return modelMapper.map(saved, MemberDTO.class);
 	}
 
-	@Override
-	public MemberDTO getMemberByUserId(final Integer id) throws UserEntityNotFoundException {
 
-		final Optional<MemberEntity> memberEntity = memberRepository.findByUserId(id);
-		
-		if (!memberEntity.isPresent()) {
-			throw new UserEntityNotFoundException();
+	@Override
+	public MemberDTO updateMember(final Integer id, final MemberUpdateDTO dto)
+		throws MemberEntityNotFoundException,
+		UserEntityNotFoundException {
+
+		final MemberEntity toUpdate = findMemberEntityById(id);
+		modelMapper.map(dto, toUpdate);
+
+		if(!isSameUser(dto, toUpdate)) {
+			toUpdate.setUser(findUserEntityById(dto.getUserId()));
 		}
 
-		return modelMapper.map(memberEntity.get(), MemberDTO.class);
-	}
-
-	@Override
-	public MemberDTO createMember(final MemberCreateDTO memberCreateDTO) {
-
-		MemberEntity memberEntityToSave = modelMapper.map(memberCreateDTO, MemberEntity.class);
-		final MemberEntity memberEntity = memberRepository.save(memberEntityToSave);
-
-		return modelMapper.map(memberEntity, MemberDTO.class);
-	}
-
-	@Override
-	public MemberDTO updateMember(final MemberUpdateDTO memberUpdateDTO) throws MemberEntityNotFoundException {
-
-		final Optional<MemberEntity> memberEntity = memberRepository.findById(memberUpdateDTO.getId());
-
-		if (!memberEntity.isPresent()) {
-			throw new MemberEntityNotFoundException();
-		}
-
-		final MemberEntity toUpdate = memberEntity.get();
-		modelMapper.map(memberUpdateDTO, toUpdate);
 		final MemberEntity saved = memberRepository.save(toUpdate);
 
 		return modelMapper.map(saved, MemberDTO.class);
 	}
 
+
 	@Override
 	public void deleteMemberById(final Integer id) throws MemberEntityNotFoundException {
 
-		if (!memberRepository.existsById(id)) {
+		memberRepository.delete(findMemberEntityById(id));
+	}
+
+
+	private MemberEntity findMemberEntityById(final Integer id)
+		throws MemberEntityNotFoundException {
+
+		final Optional<MemberEntity> memberEntity = memberRepository.findById(id);
+
+		if(!memberEntity.isPresent()) {
 			throw new MemberEntityNotFoundException();
 		}
 
-		memberRepository.deleteById(id);
+		return memberEntity.get();
+	}
+
+
+	private UserEntity findUserEntityById(final Integer id)
+		throws UserEntityNotFoundException {
+
+		final Optional<UserEntity> userEntity = userRepository.findById(id);
+
+		if(!userEntity.isPresent()) {
+			throw new UserEntityNotFoundException();
+		}
+
+		return userEntity.get();
+	}
+
+
+	private boolean isSameUser(final MemberUpdateDTO dto, final MemberEntity entity) {
+
+		if(entity.getUser() == null) {
+			return false;
+		}
+
+		return entity.getUser().getId().equals(dto.getUserId());
 	}
 }
