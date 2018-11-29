@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.pfe.ldb.task.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
 import com.pfe.ldb.task.dto.TaskCreateDTO;
@@ -20,21 +21,33 @@ public interface TaskService {
 
 	public TaskDTO getTaskById(final Integer id) throws TaskEntityNotFoundException;
 
+
+	public List<TaskDTO> getAllTasksByTaskGroupId(final Integer id)
+		throws TaskGroupEntityNotFoundException;
+
+
 	public TaskGroupDTO getTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
-	
-	public List<TaskDTO> getTasksByTaskGroupId(final Integer taskGroupId) throws TaskGroupEntityNotFoundException;
-	
-	public TaskDTO createTask(final TaskCreateDTO taskCreateDTO);
-	
-	public TaskGroupDTO createTaskGroup(final TaskGroupCreateDTO taskGroupCreateDTO);
 
-	public TaskDTO updateTask(final TaskUpdateDTO taskUpdateDTO) throws TaskEntityNotFoundException;
 
-	public TaskGroupDTO updateTaskGroup(final TaskGroupUpdateDTO taskGroupUpdateDTO) throws TaskGroupEntityNotFoundException;
+	public List<TaskGroupDTO> getAllTaskGroupsByEventId(final Integer id) throws EventEntityNotFoundException;
+
+
+	public TaskDTO createTask(final TaskCreateDTO dto) throws TaskGroupEntityNotFoundException;
+
+
+	public TaskGroupDTO createTaskGroup(final TaskGroupCreateDTO dto) throws EventEntityNotFoundException;
+
+
+	public TaskDTO updateTask(final Integer id, final TaskUpdateDTO dto)
+		throws TaskEntityNotFoundException, TaskGroupEntityNotFoundException;
+
+
+	public TaskGroupDTO updateTaskGroup(final Integer id, final TaskGroupUpdateDTO dto)
+		throws TaskGroupEntityNotFoundException, EventEntityNotFoundException;
+
 
 	public void deleteTaskById(final Integer id) throws TaskEntityNotFoundException;
 
-	public void deleteTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
 
-	public List<TaskGroupDTO> getTaskGroupsByEventId(final Integer eventId);
+	public void deleteTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
 }

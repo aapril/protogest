@@ -1,12 +1,11 @@
 package com.pfe.ldb.task.dao.entity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Column;
 import javax.persistence.OneToMany;
+import javax.persistence.Column;
 import javax.persistence.Table;
 
 import lombok.Getter;
@@ -20,8 +19,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-@Table(name = "taskGroup")
-public class TaskGroupEntity extends AbstractEntity {
+@Table(name = "event")
+public class EventEntity extends AbstractEntity {
 
 	@Column(name = "name")
 	private @NonNull String name;
@@ -29,10 +28,12 @@ public class TaskGroupEntity extends AbstractEntity {
 	@Column(name = "description")
 	private @NonNull String description;
 
-	@ManyToOne
-	@JoinColumn(name = "event_id")
-	private EventEntity event;
+	@Column(name = "event_date")
+	private @NonNull Date eventDate;
 
-	@OneToMany(mappedBy = "taskGroup")
-	private List<TaskEntity> tasks;
+	@Column(name = "member_id")
+	private @NonNull Integer memberId;
+
+	@OneToMany(mappedBy = "event")
+	private List<TaskGroupEntity> taskGroups;
 }
