@@ -1,32 +1,30 @@
-service: member-service
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS Serverless member service
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
 
-provider:
-  name: aws
-  runtime: java8
-  
-package:
-  artifact: target/member-service-0.0.1-SNAPSHOT.jar
+Resources:
+  MemberServiceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: com.pfe.ldb.member.StreamLambdaHandler::handleRequest
+      Runtime: java8
+      CodeUri: target/member-service-0.0.1-SNAPSHOT.jar
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Timeout: 30
+      Events:
+        GetResource:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: any
 
-functions:
-  member:
-    handler: com.pfe.ldb.member.StreamLambdaHandler::handleRequest
-    events:
-      - http:
-          path: /member/all
-          method: get
-      - http:
-          path: /member/{id}
-          method: get
-      - http:
-          path: /member/
-          method: get
-      - http:
-          path: /member
-          method: post
-      - http:
-          path: /member/{id}
-          method: put
-      - http:
-          path: /member/{id}
-          method: delete
-    timeout: 30
+Outputs:
+  MemberServiceApi:
+    Description: URL for application
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'
+    Export:
+      Name: MemberServiceApi

@@ -4,9 +4,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.Import;
+
+import com.pfe.ldb.member.controller.MemberController;
 
 @SpringBootApplication
 @EnableEurekaClient
+@Import({ MemberController.class })
 public class MemberServiceApp extends SpringBootServletInitializer{
 
 	public static void main(String[] args) {
