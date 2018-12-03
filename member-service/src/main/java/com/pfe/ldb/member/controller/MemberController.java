@@ -28,71 +28,73 @@ public class MemberController {
 
 	private @Autowired MemberService memberService;
 
-	@GetMapping("/member/all")
-	@ApiOperation(value = "Get a list of all members.", response = MemberDTO.class, responseContainer = "List")
-	public ResponseEntity<List<MemberDTO>> getAllMembers() {
 
-		List<MemberDTO> responseBody = memberService.getAllMembers();
-
-		return ResponseEntity.ok().body(responseBody);
-	}
-
-	
 	@GetMapping("/member/{id}")
 	@ApiOperation(value = "Get a member by id.", response = MemberDTO.class)
 	public ResponseEntity<MemberDTO> getMemberById(final @PathVariable Integer id) {
 
 		try {
-			final MemberDTO responseBody = memberService.getMemberById(id);
+			return ResponseEntity.ok().body(memberService.getMemberById(id));
 
-			return ResponseEntity.ok().body(responseBody);
-
-		} catch (final MemberEntityNotFoundException e) {
+		} catch(final MemberEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
-	
+
 	@GetMapping("/member/")
 	@ApiOperation(value = "Get a member by a user id.", response = MemberDTO.class)
 	public ResponseEntity<MemberDTO> getMemberByUserId(final @RequestParam Integer userId) {
 
 		try {
-			final MemberDTO responseBody = memberService.getMemberByUserId(userId);
+			return ResponseEntity.ok().body(memberService.getMemberByUserId(userId));
 
-			return ResponseEntity.ok().body(responseBody);
-
-		} catch (final UserEntityNotFoundException e) {
+		} catch(final UserEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
-	
+
+	@GetMapping("/member/all")
+	@ApiOperation(
+			value = "Get a list of all members.",
+			response = MemberDTO.class,
+			responseContainer = "List")
+	public ResponseEntity<List<MemberDTO>> getAllMembers() {
+
+		return ResponseEntity.ok().body(memberService.getAllMembers());
+	}
+
+
 	@PostMapping("/member")
 	@ApiOperation(value = "Add a member.", response = MemberCreateDTO.class)
-	public ResponseEntity<MemberDTO> createMember(final @Validated @RequestBody MemberCreateDTO memberCreateDTO) {
-
-		final MemberDTO responseBody = memberService.createMember(memberCreateDTO);
-
-		return ResponseEntity.ok().body(responseBody);
-	}
-
-	
-	@PutMapping("/member/{id}")
-	@ApiOperation(value = "Update a member.", response = MemberUpdateDTO.class)
-	public ResponseEntity<MemberDTO> updateMember(final @Validated @RequestBody MemberUpdateDTO memberUpdateDTO) {
+	public ResponseEntity<MemberDTO> createMember(
+			final @Validated @RequestBody MemberCreateDTO dto) {
 
 		try {
-			final MemberDTO responseBody = memberService.updateMember(memberUpdateDTO);
+			return ResponseEntity.ok().body(memberService.createMember(dto));
 
-			return ResponseEntity.ok().body(responseBody);
-
-		} catch (final MemberEntityNotFoundException e) {
+		} catch(UserEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
-	
+
+	@PutMapping("/member/{id}")
+	@ApiOperation(value = "Update a member.", response = MemberUpdateDTO.class)
+	public ResponseEntity<MemberDTO> updateMember(
+			final @PathVariable Integer id,
+			final @Validated @RequestBody MemberUpdateDTO dto) {
+
+		try {
+			return ResponseEntity.ok().body(memberService.updateMember(id, dto));
+
+		} catch(final MemberEntityNotFoundException | UserEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+
 	@DeleteMapping("/member/{id}")
 	@ApiOperation(value = "Delete a member.")
 	public ResponseEntity<?> deleteMember(final @PathVariable Integer id) {
@@ -102,8 +104,7 @@ public class MemberController {
 
 			return ResponseEntity.ok().build();
 
-		} catch (final MemberEntityNotFoundException e) {
-
+		} catch(final MemberEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}

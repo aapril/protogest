@@ -54,11 +54,10 @@ public class EventController {
 			response = EventDTO.class,
 			responseContainer = "List")
 	public ResponseEntity<List<EventDTO>> getAllEventsByEventGroupId(
-			final @RequestParam Integer eventGroupId) {
+			final @RequestParam("EventGroupId") Integer id) {
 
 		try {
-			return ResponseEntity.ok().body(
-					eventService.getAllEventsByEventGroupId(eventGroupId));
+			return ResponseEntity.ok().body(eventService.getAllEventsByEventGroupId(id));
 
 		} catch(final EventGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
@@ -73,8 +72,7 @@ public class EventController {
 			responseContainer = "List")
 	public ResponseEntity<List<EventDTO>> getAllEventsByCurrentUser() {
 
-		return ResponseEntity.ok()
-				.body(eventService.getAllEventsByCurrentUser());
+		return ResponseEntity.ok().body(eventService.getAllEventsByCurrentUser());
 	}
 
 
@@ -123,11 +121,9 @@ public class EventController {
 			final @Validated @RequestBody EventCreateDTO eventCreateDTO) {
 
 		try {
-			return ResponseEntity.ok()
-					.body(eventService.createEvent(eventCreateDTO));
+			return ResponseEntity.ok().body(eventService.createEvent(eventCreateDTO));
 
-		} catch(final EventGroupEntityNotFoundException
-				| EventStateEntityNotFoundException e) {
+		} catch(final EventGroupEntityNotFoundException | EventStateEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 
@@ -139,10 +135,9 @@ public class EventController {
 			value = "Add a event group.",
 			response = EventGroupCreateDTO.class)
 	public ResponseEntity<EventGroupDTO> createEventGroup(
-			final @Validated @RequestBody EventGroupCreateDTO eventGroupCreateDTO) {
+			final @Validated @RequestBody EventGroupCreateDTO dto) {
 
-		return ResponseEntity.ok()
-				.body(eventService.createEventGroup(eventGroupCreateDTO));
+		return ResponseEntity.ok().body(eventService.createEventGroup(dto));
 	}
 
 
@@ -150,11 +145,10 @@ public class EventController {
 	@ApiOperation(value = "Update a event.", response = EventUpdateDTO.class)
 	public ResponseEntity<EventDTO> updateEvent(
 			final @PathVariable Integer id,
-			final @Validated @RequestBody EventUpdateDTO eventUpdateDTO) {
+			final @Validated @RequestBody EventUpdateDTO dto) {
 
 		try {
-			return ResponseEntity.ok()
-					.body(eventService.updateEvent(id, eventUpdateDTO));
+			return ResponseEntity.ok().body(eventService.updateEvent(id, dto));
 
 		} catch(final EventEntityNotFoundException
 				| EventGroupEntityNotFoundException
@@ -170,11 +164,10 @@ public class EventController {
 			response = EventGroupUpdateDTO.class)
 	public ResponseEntity<EventGroupDTO> updateEventGroup(
 			final @PathVariable Integer id,
-			final @Validated @RequestBody EventGroupUpdateDTO eventGroupUpdateDTO) {
+			final @Validated @RequestBody EventGroupUpdateDTO dto) {
 
 		try {
-			return ResponseEntity.ok().body(
-					eventService.updateEventGroup(id, eventGroupUpdateDTO));
+			return ResponseEntity.ok().body(eventService.updateEventGroup(id, dto));
 
 		} catch(final EventGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
