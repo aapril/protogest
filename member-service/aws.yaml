@@ -13,7 +13,7 @@ Outputs:
 Resources:
   MemberServiceFunction:
     Properties:
-      CodeUri: s3://proto-member-service-dev/1e5346aa179b3b93cfd242eff99c598f
+      CodeUri: s3://proto-member-service-dev/53c8c7c548df42fe752a8c3fa2df2ca8
       Events:
         GetResource:
           Properties:
@@ -21,9 +21,9 @@ Resources:
             Path: /{proxy+}
           Type: Api
       Handler: com.pfe.ldb.member.StreamLambdaHandler::handleRequest
-      MemorySize: 1536
+      MemorySize: 1512
       Policies: AWSLambdaBasicExecutionRole
       Runtime: java8
-      Timeout: 60
+      Timeout: 120
     Type: AWS::Serverless::Function
 Transform: AWS::Serverless-2016-10-31

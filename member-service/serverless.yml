@@ -12,9 +12,9 @@ Resources:
       Handler: com.pfe.ldb.member.StreamLambdaHandler::handleRequest
       Runtime: java8
       CodeUri: target/member-service-0.0.1-SNAPSHOT.jar
-      MemorySize: 1536
+      MemorySize: 1512
       Policies: AWSLambdaBasicExecutionRole
-      Timeout: 60
+      Timeout: 120
       Events:
         GetResource:
           Type: Api
