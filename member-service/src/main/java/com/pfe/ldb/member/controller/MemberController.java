@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -33,8 +31,7 @@ public class MemberController {
 	private @Autowired MemberService memberService;
 
 
-	//@GetMapping("/member/{id}")
-	@RequestMapping(path = "/member/{id}", method = RequestMethod.GET)
+	@GetMapping("/member/{id}")
 	@ApiOperation(value = "Get a member by id.", response = MemberDTO.class)
 	public ResponseEntity<MemberDTO> getMemberById(final @PathVariable Integer id) {
 
@@ -47,8 +44,7 @@ public class MemberController {
 	}
 
 
-	//@GetMapping("/member/")
-	@RequestMapping(path = "/member/", method = RequestMethod.GET)
+	@GetMapping("/member/")
 	@ApiOperation(value = "Get a member by a user id.", response = MemberDTO.class)
 	public ResponseEntity<MemberDTO> getMemberByUserId(final @RequestParam Integer userId) {
 
@@ -61,8 +57,7 @@ public class MemberController {
 	}
 
 
-	//@GetMapping("/member/all")
-	@RequestMapping(path = "/member/all", method = RequestMethod.GET)
+	@GetMapping("/member/all")
 	@ApiOperation(
 			value = "Get a list of all members.",
 			response = MemberDTO.class,
@@ -73,8 +68,7 @@ public class MemberController {
 	}
 
 
-	//@PostMapping("/member")
-	@RequestMapping(path = "/member", method = RequestMethod.POST)
+	@PostMapping("/member")
 	@ApiOperation(value = "Add a member.", response = MemberCreateDTO.class)
 	public ResponseEntity<MemberDTO> createMember(
 			final @Validated @RequestBody MemberCreateDTO dto) {
@@ -88,8 +82,7 @@ public class MemberController {
 	}
 
 
-	//@PutMapping("/member/{id}")
-	@RequestMapping(path = "/member/{id}", method = RequestMethod.PUT)
+	@PutMapping("/member/{id}")
 	@ApiOperation(value = "Update a member.", response = MemberUpdateDTO.class)
 	public ResponseEntity<MemberDTO> updateMember(
 			final @PathVariable Integer id,
@@ -104,8 +97,7 @@ public class MemberController {
 	}
 
 
-	//@DeleteMapping("/member/{id}")
-	@RequestMapping(path = "/member/{id}", method = RequestMethod.DELETE)
+	@DeleteMapping("/member/{id}")
 	@ApiOperation(value = "Delete a member.")
 	public ResponseEntity<?> deleteMember(final @PathVariable Integer id) {
 
