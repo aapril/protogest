@@ -26,6 +26,8 @@
 		<spring-cloud.version>Finchley.RC2</spring-cloud.version>
 		<entity-management.version>0.0.1-SNAPSHOT</entity-management.version>
 		<protogest-core.version>0.0.1-SNAPSHOT</protogest-core.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
@@ -78,6 +80,11 @@
 			<artifactId>aws-serverless-java-container-spring</artifactId>
 			<version>1.2</version>
 		</dependency>
+		<dependency>
+            <groupId>io.symphonia</groupId>
+            <artifactId>lambda-logging</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 	</dependencies>
 
 	<build>

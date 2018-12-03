@@ -10,14 +10,15 @@ import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
 import com.amazonaws.serverless.proxy.spring.SpringLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
+import com.pfe.ldb.member.config.MemberServiceConfig;
 import com.amazonaws.services.lambda.runtime.Context;
 
 public class StreamLambdaHandler implements RequestStreamHandler{
-	private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
+	private static SpringLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
 
     static {
         try {        	
-            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(MemberServiceApp.class);            
+            handler = SpringLambdaContainerHandler.getAwsProxyHandler(MemberServiceConfig.class);            
         } catch (ContainerInitializationException e) {
             // if we fail here. We re-throw the exception to force another cold start
             e.printStackTrace();
