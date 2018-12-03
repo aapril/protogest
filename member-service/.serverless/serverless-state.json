@@ -106,7 +106,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/member-service/dev/1543458904147-2018-11-29T02:35:04.147Z/target/member-service-0.0.1-SNAPSHOT.jar"
+                "S3Key": "serverless/member-service/dev/1543791201788-2018-12-02T22:53:21.788Z/target/member-service-0.0.1-SNAPSHOT.jar"
               },
               "FunctionName": "member-service-dev-member",
               "Handler": "com.pfe.ldb.member.StreamLambdaHandler::handleRequest",
@@ -125,14 +125,14 @@
               "IamRoleLambdaExecution"
             ]
           },
-          "MemberLambdaVersionNGgAqGr7RN3i70oalwVaBjLQZ7CZePZKgKBIbw": {
+          "MemberLambdaVersionsenfHnsMBQDlEESSR3rI7L9SiUc16KhVChImtRtLI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "MemberLambdaFunction"
               },
-              "CodeSha256": "K3vD80sMGZyqI1+o8tmddi+PCOs5ykfThiMQNxx/qaU="
+              "CodeSha256": "NIBASKaPlXKyvt/QtGXCSjDKcxgnUA5nJo9IXQsN1po="
             }
           },
           "ApiGatewayRestApi": {
@@ -443,7 +443,7 @@
               "MethodResponses": []
             }
           },
-          "ApiGatewayDeployment1543458905102": {
+          "ApiGatewayDeployment1543791202219": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -517,7 +517,7 @@
           "MemberLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "MemberLambdaVersionNGgAqGr7RN3i70oalwVaBjLQZ7CZePZKgKBIbw"
+              "Ref": "MemberLambdaVersionsenfHnsMBQDlEESSR3rI7L9SiUc16KhVChImtRtLI"
             }
           },
           "ServiceEndpoint": {
@@ -614,10 +614,11 @@
         "runtime": "java8",
         "vpc": {}
       }
-    }
+    },
+    "layers": {}
   },
   "package": {
-    "artifactDirectoryName": "serverless/member-service/dev/1543458904147-2018-11-29T02:35:04.147Z",
+    "artifactDirectoryName": "serverless/member-service/dev/1543791201788-2018-12-02T22:53:21.788Z",
     "artifact": "target/member-service-0.0.1-SNAPSHOT.jar"
   }
 }

@@ -20,11 +20,6 @@ spring:
     url: jdbc:mysql://lawyerdev.coh0yeelrta5.us-east-1.rds.amazonaws.com:3306/lawyer_db
     username: root
     password: 4PROTOdb   
-    
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:9999/eureka/
       
 server:
   port: 52175

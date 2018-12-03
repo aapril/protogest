@@ -1,0 +1,29 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS Serverless member service
+Globals:
+  Api:
+    EndpointConfiguration: REGIONAL
+Outputs:
+  MemberServiceApi:
+    Description: URL for application
+    Export:
+      Name: MemberServiceApi
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/
+Resources:
+  MemberServiceFunction:
+    Properties:
+      CodeUri: s3://proto-member-service-dev/1c999f453f12271ce8f6320f96ae6096
+      Events:
+        GetResource:
+          Properties:
+            Method: any
+            Path: /{proxy+}
+          Type: Api
+      Handler: com.pfe.ldb.member.StreamLambdaHandler::handleRequest
+      MemorySize: 1536
+      Policies: AWSLambdaBasicExecutionRole
+      Runtime: java8
+      Timeout: 60
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
