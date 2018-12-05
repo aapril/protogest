@@ -1,8 +1,6 @@
 package com.pfe.ldb.member.dao.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Column;
 import javax.persistence.Table;
 
@@ -29,7 +27,6 @@ public class MemberEntity extends AbstractEntity {
 	@Column(name = "email")
 	private @NonNull String email;
 
-	@OneToOne
-	@JoinColumn(name = "user_id")
-	private UserEntity user;
+	@Column(name = "user_id")
+	private Integer userId;
 }

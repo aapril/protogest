@@ -24,66 +24,71 @@ import io.swagger.annotations.ApiResponses;
 @RestController
 public class UserController {
 
-	private @Autowired UserService userService;
-
+	@Autowired
+	private UserService userService;
 
 	@PostMapping("/user/signIn")
 	@ApiOperation(value = "Allow a user to signIn.", response = String.class)
-	@ApiResponses(
-			value = { @ApiResponse(code = 200, message = "Token"),
-					@ApiResponse(code = 422, message = "Invalid username/password supplied.") })
-	public ResponseEntity<UserDTO> signIn(final @RequestBody SignInDTO dto) {
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Token"),
+			@ApiResponse(code = 422, message = "Invalid username/password supplied.") })
+	public ResponseEntity<UserDTO> signIn(final @RequestBody SignInDTO signInDTO) {
 
 		try {
-			return ResponseEntity.ok().body(userService.signIn(dto));
+			final UserDTO responseBody = userService.signIn(signInDTO);
 
-		} catch(final InvalidUsernamePasswordException e) {
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final InvalidUsernamePasswordException e) {
 			return ResponseEntity.status(422).build();
-
-		} catch(final UserEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
+			
+		} catch (final UserEntityNotFoundException e) {
+			return ResponseEntity.status(404).build();
 		}
 	}
-
 
 	@PostMapping("/user/signUp")
 	@ApiOperation(value = "Allow a user to signUp.", response = UserDTO.class)
 	@ApiResponses(value = { @ApiResponse(code = 422, message = "Username is already in use.") })
-	public ResponseEntity<UserDTO> signup(final @RequestBody SignUpDTO dto) {
+	public ResponseEntity<UserDTO> signup(final @RequestBody SignUpDTO signUpDTO) {
 
 		try {
-			return ResponseEntity.ok().body(userService.signUp(dto));
+			final UserDTO responseBody = userService.signUp(signUpDTO);
 
-		} catch(final UsernameAlreadyExistsException e) {
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final UsernameAlreadyExistsException e) {
 			return ResponseEntity.status(422).build();
 		}
 	}
 
-
 	@DeleteMapping(value = "/user/")
 	@ApiOperation(value = "Delete a user account.")
-	public ResponseEntity<?> delete(final @RequestParam Integer id) {
+	@ApiResponses(value = { @ApiResponse(code = 404, message = "The user doesn't exist.") })
+	public ResponseEntity<?> delete(final @RequestParam Integer userId) {
 
 		try {
-			userService.deleteById(id);
+			userService.deleteById(userId);
 
-			return ResponseEntity.ok().build();
-
-		} catch(final UserEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
+		} catch (final UserEntityNotFoundException e) {
+			return ResponseEntity.status(404).build();
+			
 		}
-	}
 
+		return ResponseEntity.ok().build();
+	}
 
 	@GetMapping(value = "/user/")
 	@ApiOperation(value = "Search a user by username.", response = UserDTO.class)
+	@ApiResponses(value = { @ApiResponse(code = 404, message = "The user doesn't exist.") })
 	public ResponseEntity<UserDTO> search(final @RequestParam String username) {
 
 		try {
-			return ResponseEntity.ok().body(userService.searchByUsername(username));
+			final UserDTO responseBody = userService.searchByUsername(username);
 
-		} catch(final UserEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final UserEntityNotFoundException e) {
+			return ResponseEntity.status(404).build();
 		}
 	}
 }

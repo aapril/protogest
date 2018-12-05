@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pfe.ldb.task.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
 import com.pfe.ldb.task.dto.TaskCreateDTO;
@@ -32,6 +31,28 @@ public class TaskController {
 
 	private @Autowired TaskService taskService;
 
+	@GetMapping("/taskGroup/all")
+	@ApiOperation(value = "Get a list of all task groups.", response = TaskGroupDTO.class, responseContainer = "List")
+	public ResponseEntity<List<TaskGroupDTO>> getAllTasksGroups(final @RequestParam Integer eventId) {
+
+		List<TaskGroupDTO> responseBody = taskService.getTaskGroupsByEventId(eventId);
+
+		return ResponseEntity.ok().body(responseBody);
+	}
+
+	@GetMapping("/task/all")
+	@ApiOperation(value = "Get a list of all tasks within a task group.", response = TaskDTO.class, responseContainer = "List")
+	public ResponseEntity<List<TaskDTO>> getAllTasksByTaskGroupId(final @RequestParam Integer taskGroupId) {
+
+		try {
+			List<TaskDTO> responseBody = taskService.getTasksByTaskGroupId(taskGroupId);
+
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final TaskGroupEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 	@GetMapping("/task/{id}")
 	@ApiOperation(value = "Get a task.", response = TaskDTO.class)
@@ -42,119 +63,73 @@ public class TaskController {
 
 			return ResponseEntity.ok().body(responseBody);
 
-		} catch(final TaskEntityNotFoundException e) {
+		} catch (final TaskEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
-
-	@GetMapping("/task/all")
-	@ApiOperation(
-			value = "Get a list of all tasks within a task group.",
-			response = TaskDTO.class,
-			responseContainer = "List")
-	public ResponseEntity<List<TaskDTO>> getAllTasksByTaskGroupId(
-			final @RequestParam("taskGroupId") Integer id) {
-
-		try {
-			List<TaskDTO> responseBody = taskService.getAllTasksByTaskGroupId(id);
-
-			return ResponseEntity.ok().body(responseBody);
-
-		} catch(final TaskGroupEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
-
 
 	@GetMapping("/taskGroup/{id}")
 	@ApiOperation(value = "Get a task group.", response = TaskGroupDTO.class)
 	public ResponseEntity<TaskGroupDTO> getTaskGroupById(final @PathVariable Integer id) {
 
 		try {
-			return ResponseEntity.ok().body(taskService.getTaskGroupById(id));
+			final TaskGroupDTO responseBody = taskService.getTaskGroupById(id);
 
-		} catch(final TaskGroupEntityNotFoundException e) {
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final TaskGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 
 	}
-
-
-	@GetMapping("/taskGroup/all")
-	@ApiOperation(
-			value = "Get a list of all task groups.",
-			response = TaskGroupDTO.class,
-			responseContainer = "List")
-	public ResponseEntity<List<TaskGroupDTO>> getAllTasksGroups(
-			final @RequestParam("eventId") Integer id) {
-
-		try {
-			return ResponseEntity.ok().body(taskService.getAllTaskGroupsByEventId(id));
-
-		} catch(final EventEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
-
-	}
-
 
 	@PostMapping("/task")
 	@ApiOperation(value = "Add a task to a group task.", response = TaskCreateDTO.class)
-	public ResponseEntity<TaskDTO> createTask(final @Validated @RequestBody TaskCreateDTO dto) {
+	public ResponseEntity<TaskDTO> createTask(final @Validated @RequestBody TaskCreateDTO taskCreateDTO) {
 
-		try {
-			return ResponseEntity.ok().body(taskService.createTask(dto));
+		final TaskDTO responseBody = taskService.createTask(taskCreateDTO);
 
-		} catch(final TaskGroupEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.ok().body(responseBody);
 	}
-
 
 	@PostMapping("/taskGroup")
 	@ApiOperation(value = "Add a task group.", response = TaskGroupCreateDTO.class)
 	public ResponseEntity<TaskGroupDTO> createTaskGroup(
-			final @Validated @RequestBody TaskGroupCreateDTO dto) {
+			final @Validated @RequestBody TaskGroupCreateDTO taskGroupCreateDTO) {
 
-		try {
-			return ResponseEntity.ok().body(taskService.createTaskGroup(dto));
+		final TaskGroupDTO responseBody = taskService.createTaskGroup(taskGroupCreateDTO);
 
-		} catch(EventEntityNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.ok().body(responseBody);
 	}
-
 
 	@PutMapping("/task/{id}")
 	@ApiOperation(value = "Update a task.", response = TaskUpdateDTO.class)
-	public ResponseEntity<TaskDTO> updateTask(
-			final @PathVariable Integer id,
-			final @Validated @RequestBody TaskUpdateDTO dto) {
+	public ResponseEntity<TaskDTO> updateTask(final @Validated @RequestBody TaskUpdateDTO taskUpdateDTO) {
 
 		try {
-			return ResponseEntity.ok().body(taskService.updateTask(id, dto));
+			final TaskDTO responseBody = taskService.updateTask(taskUpdateDTO);
 
-		} catch(final TaskEntityNotFoundException | TaskGroupEntityNotFoundException e) {
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final TaskEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
 
 	@PutMapping("/taskGroup/{id}")
 	@ApiOperation(value = "Update a task group.", response = TaskGroupUpdateDTO.class)
 	public ResponseEntity<TaskGroupDTO> updateTaskGroup(
-			final @PathVariable Integer id,
-			final @Validated @RequestBody TaskGroupUpdateDTO dto) {
+			final @Validated @RequestBody TaskGroupUpdateDTO taskGroupUpdateDTO) {
 
 		try {
-			return ResponseEntity.ok().body(taskService.updateTaskGroup(id, dto));
+			final TaskGroupDTO responseBody = taskService.updateTaskGroup(taskGroupUpdateDTO);
 
-		} catch(final TaskGroupEntityNotFoundException | EventEntityNotFoundException e) {
+			return ResponseEntity.ok().body(responseBody);
+
+		} catch (final TaskGroupEntityNotFoundException e) {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
 
 	@DeleteMapping("/task/{id}")
 	@ApiOperation(value = "Delete a task.")
@@ -165,11 +140,11 @@ public class TaskController {
 
 			return ResponseEntity.ok().build();
 
-		} catch(final TaskEntityNotFoundException e) {
+		} catch (final TaskEntityNotFoundException e) {
+
 			return ResponseEntity.notFound().build();
 		}
 	}
-
 
 	@DeleteMapping("/taskGroup/{id}")
 	@ApiOperation(value = "Delete a task group.")
@@ -180,7 +155,8 @@ public class TaskController {
 
 			return ResponseEntity.ok().build();
 
-		} catch(final TaskGroupEntityNotFoundException e) {
+		} catch (final TaskGroupEntityNotFoundException e) {
+
 			return ResponseEntity.notFound().build();
 		}
 	}

@@ -249,22 +249,26 @@ public class DefaultEventService implements EventService {
 	}
 
 
-	private boolean isSameEventState(final EventUpdateDTO dto, final EventEntity entity) {
+	private boolean isSameEventState(
+			final EventUpdateDTO eventUpdateDTO,
+			final EventEntity eventEntity) {
 
-		if(entity.getEventState() == null) {
+		if(eventEntity.getEventState() == null) {
 			return false;
 		}
 
-		return entity.getEventState().getId().equals(dto.getEventStateId());
+		return eventEntity.getEventState().getId().equals(eventUpdateDTO.getEventStateId());
 	}
 
 
-	private boolean isSameEventGroup(final EventUpdateDTO dto, final EventEntity entity) {
+	private boolean isSameEventGroup(
+			final EventUpdateDTO eventUpdateDTO,
+			final EventEntity eventEntity) {
 
-		if(entity.getEventGroup() == null) {
+		if(eventEntity.getEventGroup() == null) {
 			return false;
 		}
 
-		return entity.getEventGroup().getId().equals(dto.getEventGroupId());
+		return eventEntity.getEventGroup().getId().equals(eventUpdateDTO.getEventGroupId());
 	}
 }

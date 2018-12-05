@@ -10,23 +10,15 @@ import com.pfe.ldb.member.dto.MemberUpdateDTO;
 
 public interface MemberService {
 
-	MemberDTO getMemberById(final Integer id) throws MemberEntityNotFoundException;
-
-
-	MemberDTO getMemberByUserId(final Integer userId) throws UserEntityNotFoundException;
-
-
 	List<MemberDTO> getAllMembers();
 
+	MemberDTO getMemberById(final Integer id) throws MemberEntityNotFoundException;
 
-	MemberDTO createMember(final MemberCreateDTO memberCreateDTO)
-		throws UserEntityNotFoundException;
+	MemberDTO createMember(final MemberCreateDTO memberCreateDTO);
 
-
-	MemberDTO updateMember(final Integer id, final MemberUpdateDTO memberUpdateDTO)
-		throws MemberEntityNotFoundException,
-		UserEntityNotFoundException;
-
+	MemberDTO updateMember(final MemberUpdateDTO memberUpdateDTO) throws MemberEntityNotFoundException;
 
 	void deleteMemberById(final Integer id) throws MemberEntityNotFoundException;
+
+	MemberDTO getMemberByUserId(final Integer userId) throws UserEntityNotFoundException;
 }
