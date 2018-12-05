@@ -1,6 +1,6 @@
 spring:
   application: 
-    name: zuul-service
+    name: gateway-service
   
   profiles:
     active: dev
@@ -12,6 +12,7 @@ eureka:
  
 
 server:
+  connection-timeout: 60000
   port: 5555
   
 zuul:
@@ -25,10 +26,6 @@ zuul:
     task-service:
       path: /task-service/**
       serviceId: task-service 
-      
-    calendar-service:
-      path: /calendar-service/**
-      serviceId: calendar-service 
       
     event-service:
       path: /event-service/**
