@@ -8,7 +8,6 @@ import com.amazonaws.serverless.exceptions.ContainerInitializationException;
 import com.amazonaws.serverless.proxy.model.AwsProxyRequest;
 import com.amazonaws.serverless.proxy.model.AwsProxyResponse;
 import com.amazonaws.serverless.proxy.spring.SpringBootLambdaContainerHandler;
-import com.amazonaws.serverless.proxy.spring.SpringLambdaContainerHandler;
 import com.amazonaws.services.lambda.runtime.RequestStreamHandler;
 import com.amazonaws.services.lambda.runtime.Context;
 
@@ -16,8 +15,8 @@ public class StreamLambdaHandler implements RequestStreamHandler{
 	private static SpringBootLambdaContainerHandler<AwsProxyRequest, AwsProxyResponse> handler;
 
     static {
-        try {        	
-            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(MemberServiceApp.class);            
+        try {
+            handler = SpringBootLambdaContainerHandler.getAwsProxyHandler(MemberServiceApp.class);
         } catch (ContainerInitializationException e) {
             // if we fail here. We re-throw the exception to force another cold start
             e.printStackTrace();
@@ -31,6 +30,6 @@ public class StreamLambdaHandler implements RequestStreamHandler{
         handler.proxyStream(inputStream, outputStream, context);
 
         // just in case it wasn't closed by the mapper
-        // outputStream.close();
+        outputStream.close();
     }
 }

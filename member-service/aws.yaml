@@ -13,7 +13,7 @@ Outputs:
 Resources:
   MemberServiceFunction:
     Properties:
-      CodeUri: s3://proto-member-service-dev/1e5346aa179b3b93cfd242eff99c598f
+      CodeUri: s3://proto-member-service-dev/1c999f453f12271ce8f6320f96ae6096
       Events:
         GetResource:
           Properties:
