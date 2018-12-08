@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.mail.MailSenderAutoConfiguration;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.mail.MailSender;
@@ -31,7 +30,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 
 @SpringBootApplication
-@EnableEurekaClient
 @ComponentScan(basePackages = { "com.pfe.ldb.email"})
 public class EmailServiceApplication {
 
