@@ -5,23 +5,13 @@ spring:
   profiles:
     active: dev
   
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        
   datasource:
-    platform: h2
+    platform: mysql
     continue-on-error: false
-    initialization-mode: always
-    url: jdbc:h2:tcp://localhost:9091/mem:lawyer-db;
-    username: sa
-    password: null
-    driver-class-name: org.h2.Driver
-    
+    initialization-mode: never
+    url: jdbc:mysql://lawyerdev.coh0yeelrta5.us-east-1.rds.amazonaws.com:3306/lawyer_db
+    username: root
+    password: 4PROTOdb      
     
 eureka:
   client:
@@ -29,4 +19,5 @@ eureka:
       defaultZone: http://localhost:9999/eureka/
       
 server:
+  connection-timeout: 60000
   port: 52172

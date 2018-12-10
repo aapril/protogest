@@ -1,51 +1,111 @@
 package com.pfe.ldb.member.controller;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pfe.ldb.core.protogest.user.User;
-import com.pfe.ldb.member.controller.path.PathURI;
-import com.pfe.ldb.member.iservice.ISecurityService;
-import com.pfe.ldb.member.iservice.IUserService;
-import com.pfe.ldb.member.security.JwtUser;
+import com.pfe.ldb.member.dao.exception.MemberEntityNotFoundException;
+import com.pfe.ldb.member.dao.exception.UserEntityNotFoundException;
+import com.pfe.ldb.member.dto.MemberCreateDTO;
+import com.pfe.ldb.member.dto.MemberDTO;
+import com.pfe.ldb.member.dto.MemberUpdateDTO;
+import com.pfe.ldb.member.service.MemberService;
 
-
-/**
- *  @createdBy: Walid Bezzaoui , 2018
- *  
- * Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-	Unless required by applicable law or agreed to in writing, software
-	distributed under the License is distributed on an "AS IS" BASIS,
-	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-	See the License for the specific language governing permissions and
-	limitations under the License.
- **/
-
+import io.swagger.annotations.ApiOperation;
 
 @RestController
 public class MemberController {
 
-	@Autowired
-	private IUserService userService;
+	private @Autowired MemberService memberService;
 
-	@CrossOrigin(origins="http://localhost:3001")
-	@RequestMapping(method = RequestMethod.POST, value = PathURI.USER_REGISTER)
-    public String registration(@RequestBody(required = true) final User user) throws Exception {
-        userService.save(user);
-        return "Success";
-    }
 
-	
+	@GetMapping("/member/{id}")
+	@ApiOperation(value = "Get a member by id.", response = MemberDTO.class)
+	public ResponseEntity<MemberDTO> getMemberById(final @PathVariable Integer id) {
 
+		try {
+			return ResponseEntity.ok().body(memberService.getMemberById(id));
+
+		} catch(final MemberEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+
+	@GetMapping("/member/")
+	@ApiOperation(value = "Get a member by a user id.", response = MemberDTO.class)
+	public ResponseEntity<MemberDTO> getMemberByUserId(final @RequestParam Integer userId) {
+
+		try {
+			return ResponseEntity.ok().body(memberService.getMemberByUserId(userId));
+
+		} catch(final UserEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+
+	@GetMapping("/member/all")
+	@ApiOperation(
+			value = "Get a list of all members.",
+			response = MemberDTO.class,
+			responseContainer = "List")
+	public ResponseEntity<List<MemberDTO>> getAllMembers() {
+
+		return ResponseEntity.ok().body(memberService.getAllMembers());
+	}
+
+
+	@PostMapping("/member")
+	@ApiOperation(value = "Add a member.", response = MemberCreateDTO.class)
+	public ResponseEntity<MemberDTO> createMember(
+			final @Validated @RequestBody MemberCreateDTO dto) {
+
+		try {
+			return ResponseEntity.ok().body(memberService.createMember(dto));
+
+		} catch(UserEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+
+	@PutMapping("/member/{id}")
+	@ApiOperation(value = "Update a member.", response = MemberUpdateDTO.class)
+	public ResponseEntity<MemberDTO> updateMember(
+			final @PathVariable Integer id,
+			final @Validated @RequestBody MemberUpdateDTO dto) {
+
+		try {
+			return ResponseEntity.ok().body(memberService.updateMember(id, dto));
+
+		} catch(final MemberEntityNotFoundException | UserEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+
+	@DeleteMapping("/member/{id}")
+	@ApiOperation(value = "Delete a member.")
+	public ResponseEntity<?> deleteMember(final @PathVariable Integer id) {
+
+		try {
+			memberService.deleteMemberById(id);
+
+			return ResponseEntity.ok().build();
+
+		} catch(final MemberEntityNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
 }

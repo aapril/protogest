@@ -1,60 +1,53 @@
 package com.pfe.ldb.task.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.core.protogest.task.Task;
-import com.pfe.ldb.core.protogest.task.TaskGroup;
-import com.pfe.ldb.entity.TaskEntity;
-import com.pfe.ldb.entity.TaskGroupEntity;
-import com.pfe.ldb.task.imapper.IMapper;
-import com.pfe.ldb.task.iservice.ITaskService;
-import com.pfe.ldb.task.mapper.TaskGroupMapper;
-import com.pfe.ldb.task.mapper.TaskMapper;
-import com.pfe.ldb.task.repository.TaskGroupRepository;
-import com.pfe.ldb.task.repository.TaskRepository;
+import com.pfe.ldb.task.dao.exception.EventEntityNotFoundException;
+import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
+import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;
+import com.pfe.ldb.task.dto.TaskCreateDTO;
+import com.pfe.ldb.task.dto.TaskDTO;
+import com.pfe.ldb.task.dto.TaskGroupCreateDTO;
+import com.pfe.ldb.task.dto.TaskGroupDTO;
+import com.pfe.ldb.task.dto.TaskGroupUpdateDTO;
+import com.pfe.ldb.task.dto.TaskUpdateDTO;
 
 @Service
-public class TaskService implements ITaskService {
+@Transactional
+public interface TaskService {
 
-	@Autowired
-	private TaskRepository taskRepository;
-
-	@Autowired
-	private TaskGroupRepository taskGroupRepository;
-
-	@Autowired
-	private  TaskMapper taskMapper;
-	
-	@Autowired
-	private  TaskGroupMapper taskGroupMapper ;
+	public TaskDTO getTaskById(final Integer id) throws TaskEntityNotFoundException;
 
 
-	@Override
-	public List<Task> loadTasks() {
-		List<Task> tasks = new ArrayList<>();
-		for (TaskEntity task : taskRepository.findAll()) {
-			tasks.add((Task) taskMapper.convertToDTO(task));
-		}
-		return tasks;
-	}
+	public List<TaskDTO> getAllTasksByTaskGroupId(final Integer id)
+		throws TaskGroupEntityNotFoundException;
 
-	@Override
-	public List<Task> loadTasksByGroup(Integer groupId) {
-		return null;
-	}
 
-	@Override
-	public List<TaskGroup> loadTaskGroup() {
+	public TaskGroupDTO getTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
 
-		List<TaskGroup> taskGroups = new ArrayList<>();
-		for (TaskGroupEntity taskGroupEntity : taskGroupRepository.findAll()) {
-			taskGroups.add((TaskGroup)taskGroupMapper.convertToDTO(taskGroupEntity));
-		}
-		return taskGroups;
-	}
 
+	public List<TaskGroupDTO> getAllTaskGroupsByEventId(final Integer id) throws EventEntityNotFoundException;
+
+
+	public TaskDTO createTask(final TaskCreateDTO dto) throws TaskGroupEntityNotFoundException;
+
+
+	public TaskGroupDTO createTaskGroup(final TaskGroupCreateDTO dto) throws EventEntityNotFoundException;
+
+
+	public TaskDTO updateTask(final Integer id, final TaskUpdateDTO dto)
+		throws TaskEntityNotFoundException, TaskGroupEntityNotFoundException;
+
+
+	public TaskGroupDTO updateTaskGroup(final Integer id, final TaskGroupUpdateDTO dto)
+		throws TaskGroupEntityNotFoundException, EventEntityNotFoundException;
+
+
+	public void deleteTaskById(final Integer id) throws TaskEntityNotFoundException;
+
+
+	public void deleteTaskGroupById(final Integer id) throws TaskGroupEntityNotFoundException;
 }
