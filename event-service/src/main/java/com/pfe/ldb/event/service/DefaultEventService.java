@@ -7,14 +7,14 @@ import java.util.stream.StreamSupport;
 
 import javax.annotation.PostConstruct;
 
+import model.EventEntity;
+import model.EventGroupEntity;
+import model.EventStateEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.event.dao.entity.EventEntity;
-import com.pfe.ldb.event.dao.entity.EventGroupEntity;
-import com.pfe.ldb.event.dao.entity.EventStateEntity;
 import com.pfe.ldb.event.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.event.dao.exception.EventGroupEntityNotFoundException;
 import com.pfe.ldb.event.dao.exception.EventStateEntityNotFoundException;

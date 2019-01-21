@@ -1,12 +1,11 @@
 package com.pfe.ldb.calendar.service;
 
+import model.EventEntity;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
-import com.google.api.services.calendar.model.Event;
-import com.pfe.ldb.calendar.dao.entity.EventEntity;
 
 public class DefaultCalendarService implements CalendarService {
 

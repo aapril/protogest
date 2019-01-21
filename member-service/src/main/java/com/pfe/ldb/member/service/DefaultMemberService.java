@@ -5,13 +5,13 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import model.MemberEntity;
+import model.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.member.dao.entity.MemberEntity;
-import com.pfe.ldb.member.dao.entity.UserEntity;
 import com.pfe.ldb.member.dao.exception.MemberEntityNotFoundException;
 import com.pfe.ldb.member.dao.exception.UserEntityNotFoundException;
 import com.pfe.ldb.member.dao.repository.MemberRepository;

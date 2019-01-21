@@ -77,6 +77,11 @@
         	<groupId>mysql</groupId>
         	<artifactId>mysql-connector-java</artifactId>
     	</dependency>
+		<dependency>
+			<groupId>com.pfe.ldb</groupId>
+			<artifactId>entity</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

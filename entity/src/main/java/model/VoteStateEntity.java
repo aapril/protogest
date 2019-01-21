@@ -1,14 +1,10 @@
-package com.pfe.ldb.vote.dao.entity;
+package model;
 
+import lombok.*;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.persistence.Column;
-
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter

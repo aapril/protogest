@@ -5,14 +5,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import model.EventEntity;
+import model.TaskEntity;
+import model.TaskGroupEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.task.dao.entity.EventEntity;
-import com.pfe.ldb.task.dao.entity.TaskEntity;
-import com.pfe.ldb.task.dao.entity.TaskGroupEntity;
 import com.pfe.ldb.task.dao.exception.EventEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskEntityNotFoundException;
 import com.pfe.ldb.task.dao.exception.TaskGroupEntityNotFoundException;

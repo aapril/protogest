@@ -2,12 +2,12 @@ package com.pfe.ldb.auth.service;
 
 import java.util.Optional;
 
+import model.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.pfe.ldb.auth.dao.entity.UserEntity;
 import com.pfe.ldb.auth.dao.exception.InvalidUsernamePasswordException;
 import com.pfe.ldb.auth.dao.exception.UserEntityNotFoundException;
 import com.pfe.ldb.auth.dao.exception.UsernameAlreadyExistsException;

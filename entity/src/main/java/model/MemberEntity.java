@@ -1,16 +1,8 @@
-package com.pfe.ldb.member.dao.entity;
+package model;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Column;
-import javax.persistence.Table;
+import lombok.*;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import javax.persistence.*;
 
 @Entity
 @Getter

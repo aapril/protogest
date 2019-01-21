@@ -1,17 +1,10 @@
-package com.pfe.ldb.member.dao.entity;
-
-import java.util.Calendar;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+package model;
 
 import lombok.Getter;
+
+import javax.persistence.*;
+import java.util.Calendar;
+import java.util.Date;
 
 @Getter
 @MappedSuperclass
