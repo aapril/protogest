@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: protogest-service
+    security.basic.enable: false
+  
+  datasource:
+    platform: mysql
+    continue-on-error: true
+    initialization-mode: never
+    url: jdbc:mysql://aakuvru87j7v5n.cekgxrohijq7.us-east-1.rds.amazonaws.com:3306/ebdb
+    username: ebroot
+    password: protogest
+
+#datasource:
+#  platform: mysql
+#  continue-on-error: true
+#  initialization-mode: never
+#  url: jdbc:mysql://aakuvru87j7v5n.cekgxrohijq7.us-east-1.rds.amazonaws.com:3306/ebdb
+#  username: ebroot
+#  password: protogest
+
+server:
+  connection-timeout: 60000
+  port: 5000
