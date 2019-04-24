@@ -7,17 +7,14 @@ spring:
     platform: mysql
     continue-on-error: true
     initialization-mode: never
-    url: jdbc:mysql://aakuvru87j7v5n.cekgxrohijq7.us-east-1.rds.amazonaws.com:3306/ebdb
-    username: ebroot
-    password: protogest
+    url: jdbc:mysql://host:3306/protogest
+    username: mysqlUser
+    password: mysqlPass
 
-#datasource:
-#  platform: mysql
-#  continue-on-error: true
-#  initialization-mode: never
-#  url: jdbc:mysql://aakuvru87j7v5n.cekgxrohijq7.us-east-1.rds.amazonaws.com:3306/ebdb
-#  username: ebroot
-#  password: protogest
+
+  #jpa:
+    #hibernate:
+      #ddl-auto: create
 
 server:
   connection-timeout: 60000

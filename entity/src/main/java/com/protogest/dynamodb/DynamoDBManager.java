@@ -12,9 +12,8 @@ package com.protogest.dynamodb;
 // express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.document.DynamoDB;
 import com.amazonaws.services.dynamodbv2.document.Table;
@@ -25,15 +24,18 @@ public class DynamoDBManager {
     private static volatile DynamoDBManager instance;
 
     private static DynamoDBMapper mapper;
-    AmazonDynamoDBClient client;
-    DynamoDB dynamoDB;
+    private AmazonDynamoDB client;
+    private DynamoDB dynamoDB;
 
     private DynamoDBManager() {
 
-        client = new AmazonDynamoDBClient();
-        client.setRegion(Region.getRegion(Regions.US_EAST_1));
+        client = AmazonDynamoDBClientBuilder.defaultClient();
+        System.out.println("Out: Region: "+AmazonDynamoDBClientBuilder.standard().getRegion());
+        System.out.flush();
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
+        dynamoDB.listTables().forEach(table -> System.out.println("Out: Table: "+ table.getTableName()));
+        System.out.flush();
     }
 
     public Table getTable(String tableName) {

@@ -36,7 +36,9 @@ public class ProtocoleInstanceController {
     private @Autowired CalendarService calendarService;
 
     @GetMapping("/test")
-    public ResponseEntity test() {
+    public ResponseEntity test()
+    {
+        protoService.getByUUID("test");
         return ResponseEntity.ok("ok!");
     }
     @GetMapping("/auth")
