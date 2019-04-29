@@ -7,9 +7,9 @@ spring:
     platform: mysql
     continue-on-error: true
     initialization-mode: never
-    url: jdbc:mysql://host:3306/protogest
-    username: mysqlUser
-    password: mysqlPass
+    url: jdbc:mysql://db.protogest.net:3306/protogest
+    username: user
+    password: pass
 
 
   #jpa:
@@ -18,4 +18,10 @@ spring:
 
 server:
   connection-timeout: 60000
-  port: 5000
+  port: 80
+
+
+protogest:
+  email:
+    from: noreply@protogest.net
+    regsion: US_EAST_1

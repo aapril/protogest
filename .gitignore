@@ -86,3 +86,9 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+.idea/aws.xml
+ProtogestService/.aws-sam
+ProtogestService/sam-app
+target
+ProtogestService/target
+ProtogestService/sam-app
