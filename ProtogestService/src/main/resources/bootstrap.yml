@@ -2,15 +2,6 @@ spring:
   application:
     name: protogest-service
     security.basic.enable: false
-  
-  datasource:
-    platform: mysql
-    continue-on-error: true
-    initialization-mode: never
-    url: jdbc:mysql://db.protogest.net:3306/protogest
-    username: prod
-    password: Ly&.&EL75?tQa5U
-
 
   #jpa:
     #hibernate:
