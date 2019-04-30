@@ -8,8 +8,8 @@ spring:
     continue-on-error: true
     initialization-mode: never
     url: jdbc:mysql://db.protogest.net:3306/protogest
-    username: user
-    password: pass
+    username: prod
+    password: Ly&.&EL75?tQa5U
 
 
   #jpa:

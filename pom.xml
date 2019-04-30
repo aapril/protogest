@@ -20,7 +20,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <spring-cloud.version>Finchley.RC2</spring-cloud.version>
         <entity-management.version>0.0.1-SNAPSHOT</entity-management.version>
         <protogest-core.version>0.0.1-SNAPSHOT</protogest-core.version>
     </properties>
@@ -29,11 +28,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-            <version>2.0.2.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
