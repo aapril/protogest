@@ -6,6 +6,15 @@ spring:
   #jpa:
     #hibernate:
       #ddl-auto: create
+  jpa:
+    properties:
+      hibernate:
+        cache:
+          use_second_level_cache: false
+          use_query_cache: false
+
+  jmx:
+    enabled:false
 
 server:
   connection-timeout: 60000
