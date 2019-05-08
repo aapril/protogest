@@ -5,7 +5,7 @@ import com.protogest.model.form.EFieldType;
 
 import java.util.*;
 
-@DynamoDBTable(tableName = "formulaire_v2")
+@DynamoDBTable(tableName = "formulaire_dev")
 public class ProtocoleInstance {
 
     @DynamoDBHashKey(attributeName = "FormUUID")

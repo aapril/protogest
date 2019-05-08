@@ -51,7 +51,7 @@ public class AuthorizeController {
             }
         }
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("http://protogest-frontend-2019.s3-website-us-east-1.amazonaws.com/create-protocol");
+        redirectView.setUrl("https://dev.protogest.net/create-protocol");
         redirectView.addStaticAttribute("dates", String.join(", ", result));
         return redirectView;
     }

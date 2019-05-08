@@ -30,8 +30,6 @@ public class DynamoDBManager {
     private DynamoDBManager() {
 
         client = AmazonDynamoDBClientBuilder.defaultClient();
-        System.out.println("Out: Region: "+AmazonDynamoDBClientBuilder.standard().getRegion());
-        System.out.flush();
         dynamoDB = new DynamoDB(client);
         mapper = new DynamoDBMapper(client);
         dynamoDB.listTables().forEach(table -> System.out.println("Out: Table: "+ table.getTableName()));
