@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,15 +26,17 @@ public class AuthorizeController {
     @RequestMapping(value = "/authorize", method = RequestMethod.POST)
     public RedirectView authorize(
             @RequestParam("code") String code,
-            @RequestParam("id_token") String idToken) {
+            @RequestParam("id_token") String idToken,
+            HttpServletRequest request) {
 
+        String urlBase = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length()) + request.getContextPath() + "/";
         // Make sure that the state query parameter returned matches
         // the expected state
         List<String> result = new ArrayList<>();
         IdToken idTokenObj = IdToken.parseEncodedToken(idToken);
         if (idTokenObj != null) {
 
-            OutlookService outlookService = getOutlookService(getTokenFromAuthCode(code, idTokenObj.getTenantId()).getAccessToken());
+            OutlookService outlookService = getOutlookService(getTokenFromAuthCode(code, idTokenObj.getTenantId(), urlBase).getAccessToken());
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String startDateTime = format.format(calendar.getTime());

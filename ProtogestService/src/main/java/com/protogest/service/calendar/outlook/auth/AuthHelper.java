@@ -88,7 +88,7 @@ public class AuthHelper {
         }
     }
 
-    public static Token getTokenFromAuthCode(String authCode, String tenantId) {
+    public static Token getTokenFromAuthCode(String authCode, String tenantId, String urlBase) {
         // Create a logging interceptor to log request and responses
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -106,9 +106,11 @@ public class AuthHelper {
         // Generate the token service
         TokenService tokenService = retrofit.create(TokenService.class);
 
+        String redirectUrl = urlBase + getRedirectUrl();
+
         try {
             return tokenService.getAccessTokenFromAuthCode(tenantId, getAppId(), getAppPassword(),
-                    "authorization_code", authCode, getRedirectUrl()).execute().body();
+                    "authorization_code", authCode, redirectUrl).execute().body();
         } catch (IOException e) {
             Token error = new Token();
             error.setError("IOException");
