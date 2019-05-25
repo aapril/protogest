@@ -34,6 +34,7 @@ ProtogestService/target
 .idea/**/shelf
 
 # Generated files
+*.iml
 .idea/**/contentModel.xml
 
 # Sensitive or high-churn files

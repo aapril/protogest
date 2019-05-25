@@ -4,6 +4,8 @@ import com.protogest.service.calendar.outlook.auth.IdToken;
 import com.protogest.service.calendar.outlook.service.Event;
 import com.protogest.service.calendar.outlook.service.OutlookService;
 import com.protogest.service.calendar.outlook.service.PagedResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,6 +24,9 @@ import static com.protogest.service.calendar.outlook.service.OutlookServiceBuild
 
 @Controller
 public class AuthorizeController {
+
+    @Autowired
+    private Environment env;
 
     @RequestMapping(value = "/authorize", method = RequestMethod.POST)
     public RedirectView authorize(
