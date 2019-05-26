@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: dev
+
+msAuth:
+  appId: 5d37e0ba-cfa1-4a0a-b45c-a22ddfabd011
+  appPassword: depgvzVMP8715)_+cIWCL5^
