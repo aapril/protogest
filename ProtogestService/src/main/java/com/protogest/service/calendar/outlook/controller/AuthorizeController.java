@@ -35,13 +35,14 @@ public class AuthorizeController {
             HttpServletRequest request) {
 
         String urlBase = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+
         // Make sure that the state query parameter returned matches
         // the expected state
         List<String> result = new ArrayList<>();
         IdToken idTokenObj = IdToken.parseEncodedToken(idToken);
         if (idTokenObj != null) {
 
-            OutlookService outlookService = getOutlookService(getTokenFromAuthCode(code, idTokenObj.getTenantId(), urlBase).getAccessToken());
+            OutlookService outlookService = getOutlookService(getTokenFromAuthCode(code, idTokenObj.getTenantId(), urlBase, env).getAccessToken());
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String startDateTime = format.format(calendar.getTime());
@@ -59,7 +60,7 @@ public class AuthorizeController {
             }
         }
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("https://dev.protogest.net/create-protocol");
+        redirectView.setUrl(env.getProperty("msAuth.redirectUrl"));
         redirectView.addStaticAttribute("dates", String.join(", ", result));
         return redirectView;
     }

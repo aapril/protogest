@@ -1,0 +1,5 @@
+server:
+  address: localhost
+
+msAuth:
+  redirectUrl: http://localhost:4200/create-protocol

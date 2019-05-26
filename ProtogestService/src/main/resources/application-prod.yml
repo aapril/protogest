@@ -2,4 +2,4 @@ server:
   address: dev.protogest.net
 
 msAuth:
-  redirectUrl: http://https://${server.address}/create-protocol
+  redirectUrl: https://dev.protogest.net/create-protocol

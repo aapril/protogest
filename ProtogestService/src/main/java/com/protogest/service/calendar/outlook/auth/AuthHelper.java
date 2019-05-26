@@ -2,17 +2,23 @@ package com.protogest.service.calendar.outlook.auth;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+import javax.annotation.PostConstruct;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@Component
 public class AuthHelper {
     private static final String authority = "https://login.microsoftonline.com";
     private static final String authorizeUrl = authority + "/common/oauth2/v2.0/authorize";
+
 
     private static String[] scopes = {
             "openid",
@@ -24,41 +30,17 @@ public class AuthHelper {
             "Contacts.Read"
     };
 
-    private static String appId = null;
-    private static String appPassword = null;
-    private static String redirectUrl = null;
 
-    private static String getAppId() {
-        if (appId == null) {
-            try {
-                loadConfig();
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return appId;
+    private static String getAppId(Environment env) {
+        return env.getProperty("msAuth.appId");
     }
 
-    private static String getAppPassword() {
-        if (appPassword == null) {
-            try {
-                loadConfig();
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return appPassword;
+    private static String getAppPassword(Environment env) {
+        return env.getProperty("msAuth.appPassword");
     }
 
-    private static String getRedirectUrl() {
-        if (redirectUrl == null) {
-            try {
-                loadConfig();
-            } catch (Exception e) {
-                return null;
-            }
-        }
-        return redirectUrl;
+    private static String getRedirectUrl(Environment env) {
+        return env.getProperty("msAuth.redirectUrl");
     }
 
     private static String getScopes() {
@@ -69,26 +51,7 @@ public class AuthHelper {
         return sb.toString().trim();
     }
 
-    private static void loadConfig() throws IOException {
-        String authConfigFile = "auth.properties";
-        InputStream authConfigStream = AuthHelper.class.getClassLoader().getResourceAsStream(authConfigFile);
-
-        if (authConfigStream != null) {
-            Properties authProps = new Properties();
-            try {
-                authProps.load(authConfigStream);
-                appId = authProps.getProperty("appId");
-                appPassword = authProps.getProperty("appPassword");
-                redirectUrl = authProps.getProperty("redirectUrl");
-            } finally {
-                authConfigStream.close();
-            }
-        } else {
-            throw new FileNotFoundException("Property file '" + authConfigFile + "' not found in the classpath.");
-        }
-    }
-
-    public static Token getTokenFromAuthCode(String authCode, String tenantId, String urlBase) {
+    public static Token getTokenFromAuthCode(String authCode, String tenantId, String urlBase, Environment environment) {
         // Create a logging interceptor to log request and responses
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -106,10 +69,10 @@ public class AuthHelper {
         // Generate the token service
         TokenService tokenService = retrofit.create(TokenService.class);
 
-        String redirectUrl = urlBase + getRedirectUrl();
+        String redirectUrl = urlBase + "authorize";
 
         try {
-            return tokenService.getAccessTokenFromAuthCode(tenantId, getAppId(), getAppPassword(),
+            return tokenService.getAccessTokenFromAuthCode(tenantId, getAppId(environment), getAppPassword(environment),
                     "authorization_code", authCode, redirectUrl).execute().body();
         } catch (IOException e) {
             Token error = new Token();
