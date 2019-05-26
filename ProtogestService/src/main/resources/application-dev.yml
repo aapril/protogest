@@ -2,4 +2,4 @@ server:
   address: localhost
 
 msAuth:
-  redirectUrl: http://localhost:4200/create-protocol
+  redirectUrl: http://${server.address}:4200/create-protocol
