@@ -17,7 +17,7 @@ public class ProtocoleInstanceRepository {
         p.setUserID("asiudyiua2873287");
 
         List<ProtocoleInstance.FormField> fields = new ArrayList<>();
-        fields.add(new ProtocoleInstance.FormField("1a", "Test", EFieldType.STRING));
+        fields.add(new ProtocoleInstance.FormField("1a", "Test", "Test Description", EFieldType.STRING));
         p.setFields(fields);
         save(p);
 

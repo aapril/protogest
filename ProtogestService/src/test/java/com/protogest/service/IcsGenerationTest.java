@@ -27,7 +27,7 @@ public class IcsGenerationTest {
         calendarService = new CalendarService();
 
         ProtocoleInstance protocole = new ProtocoleInstance();
-        protocole.setFields(asList(new ProtocoleInstance.FormField("999", "2019-01-01", EFieldType.DATE)));
+        protocole.setFields(asList(new ProtocoleInstance.FormField("999", "2019-01-01", "Test Description", EFieldType.DATE)));
         Calendar calendar = calendarService.createCalendarFromProtocol(protocole);
         VEvent event = (VEvent) calendar.getComponents().get(0);
         assertThat(event.getProperty("summary").getValue(), is("Événement de protocole d'instance"));
@@ -40,8 +40,8 @@ public class IcsGenerationTest {
         calendarService = new CalendarService();
 
         ProtocoleInstance protocole = new ProtocoleInstance();
-        protocole.setFields(asList(new ProtocoleInstance.FormField("1", "2019-01-01", EFieldType.DATE),
-                new ProtocoleInstance.FormField("1", "2019-01-01", EFieldType.DATE)));
+        protocole.setFields(asList(new ProtocoleInstance.FormField("1", "2019-01-01", "Test Description", EFieldType.DATE),
+                new ProtocoleInstance.FormField("1", "2019-01-01", "Test Description", EFieldType.DATE)));
         Calendar calendar = calendarService.createCalendarFromProtocol(protocole);
         assertThat(calendar.getComponents().size(), is(2));
 
@@ -51,7 +51,7 @@ public class IcsGenerationTest {
     public void createsIcsFile() {
         calendarService = new CalendarService();
         ProtocoleInstance protocole = new ProtocoleInstance();
-        protocole.setFields(asList(new ProtocoleInstance.FormField("1", "2019-01-01", EFieldType.DATE)));
+        protocole.setFields(asList(new ProtocoleInstance.FormField("1", "2019-01-01", "Test Description", EFieldType.DATE)));
 
         new MockUp<ProtocoleInstanceRepository>() {
             @Mock

@@ -23,16 +23,18 @@ public class ProtocoleInstance {
     public static class FormField {
         private String id;
         private String value;
+        private String desc;
         private EFieldType type;
 
         public FormField() {
             // ctor for DynamoDBMapper
         }
 
-        public FormField(String id, String value, EFieldType type) {
+        public FormField(String id, String value, String desc, EFieldType type) {
             this.id = id;
             this.value = value;
             this.type = type;
+            this.desc = desc;
         }
 
         @DynamoDBAttribute(attributeName = "Id")
@@ -42,6 +44,10 @@ public class ProtocoleInstance {
         @DynamoDBAttribute(attributeName = "Value")
         public String getValue() { return value; }
         public void setValue(String value) { this.value = value; }
+
+        @DynamoDBAttribute(attributeName = "Desc")
+        public String getDesc() { return desc; }
+        public void setDesc(String desc) { this.desc = desc; }
 
         @DynamoDBTypeConvertedEnum
         @DynamoDBAttribute(attributeName = "Type")
