@@ -3,3 +3,6 @@ server:
 
 msAuth:
   redirectUrl: https://${server.address}/create-protocol
+
+cognito:
+  userPoolId: ca-central-1_ZBpO9AVc6

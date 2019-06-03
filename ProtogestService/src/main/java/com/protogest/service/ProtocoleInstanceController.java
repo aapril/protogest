@@ -9,6 +9,7 @@ import com.protogest.service.notification.EmailNotifier;
 import com.protogest.service.security.cognito.CognitoUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +22,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 public class ProtocoleInstanceController {
@@ -34,6 +32,7 @@ public class ProtocoleInstanceController {
     private @Autowired FieldApprobationService fieldApprobationService;
     private @Autowired ValidationFieldService validationFieldService;
     private @Autowired CalendarService calendarService;
+    private @Autowired Environment env;
 
     @GetMapping("/test")
     public ResponseEntity test()
@@ -43,7 +42,7 @@ public class ProtocoleInstanceController {
     }
     @GetMapping("/auth")
     public ResponseEntity auth(@RequestHeader("Authentification") String authToken) {
-        return ResponseEntity.ok(CognitoUtils.getUserEmail(authToken));
+        return ResponseEntity.ok(CognitoUtils.getUserId(authToken));
     }
 
 
@@ -55,7 +54,7 @@ public class ProtocoleInstanceController {
     @GetMapping("/my/to-validate")
     public ResponseEntity<Map<String, List<FieldApprobation>>> getFieldsToValidate(
             @RequestHeader("Authentification") String authToken) {
-        return ResponseEntity.ok(fieldApprobationService.getFieldsToApproveForUser(CognitoUtils.getUserEmail(authToken)));
+        return ResponseEntity.ok(fieldApprobationService.getFieldsToApproveForUser(CognitoUtils.getUserId(authToken)));
     }
 
 
@@ -64,7 +63,7 @@ public class ProtocoleInstanceController {
     public ResponseEntity<ProtocoleInstance> addProtocol(@RequestHeader("Authentification") String authToken,
             final @Validated @RequestBody ProtocolCreation proto) throws Exception {
 
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = CognitoUtils.getUserId(authToken);
         proto.getProtocol().setUserID(userMail);
         String formUUID = protoService.create(proto.getProtocol(), userMail, proto.getRelatedUserId());
         if(proto.getRelatedUserId() != null) {
@@ -81,7 +80,7 @@ public class ProtocoleInstanceController {
     public ResponseEntity<ProtocoleInstance> updateProtocol(
             @RequestHeader("Authentification") String authToken,
             final @PathVariable String formUUID) {
-        CognitoUtils.getUserEmail(authToken);
+        CognitoUtils.getUserId(authToken);
 
         return ResponseEntity.ok(protoService.getByUUID(formUUID));
     }
@@ -93,7 +92,7 @@ public class ProtocoleInstanceController {
             final @PathVariable String formUUID,
             final @Validated @RequestBody ProtocolCreation proto) throws URISyntaxException {
 
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = CognitoUtils.getUserId(authToken);
         proto.getProtocol().setUserID(userMail);
 
         //TODO validate form belongs to user
@@ -105,7 +104,7 @@ public class ProtocoleInstanceController {
     @ApiOperation(value = "List protocols.", response = ProtocoleInstance[].class)
     public ResponseEntity<List<ProtocoleInstance>> listProtocols(@RequestHeader("Authentification") String authToken) {
 
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = CognitoUtils.getUserId(authToken);
 
         List<ProtocoleInstance> protocols = protoService.list(userMail);
         return ResponseEntity.ok(protocols);
@@ -114,7 +113,7 @@ public class ProtocoleInstanceController {
     @GetMapping("/my/related-protocols")
     @ApiOperation(value = "List protocols.", response = ProtocoleInstance[].class)
     public ResponseEntity<List<ProtocoleInstance>> listRelatedProtocols(@RequestHeader("Authentification") String authToken) {
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = CognitoUtils.getUserId(authToken);
 
         List<String> formUUIDs = protoService.getRelatedFormIds(userMail);
         List<ProtocoleInstance> protocoleInstances = ProtocoleInstanceRepository.list(formUUIDs);
@@ -129,7 +128,7 @@ public class ProtocoleInstanceController {
     public void acceptField(@RequestHeader("Authentification") String authToken,
                             final @PathVariable String fieldId,
                             final @PathVariable String formUUID) {
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = CognitoUtils.getUserId(authToken);
 
         fieldApprobationService.accept(formUUID, fieldId, userMail);
     }
@@ -142,7 +141,7 @@ public class ProtocoleInstanceController {
                             final @PathVariable String fieldId,
                             final @PathVariable String formUUID,
                             final @Validated @RequestBody RefuseField refuseField) {
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = CognitoUtils.getUserId(authToken);
 
         ValidationField validationField = new ValidationField();
         validationField.setProposedValue(refuseField.getProposedValue());
@@ -164,5 +163,12 @@ public class ProtocoleInstanceController {
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
+    }
+
+    @DeleteMapping(value = "/user")
+    @ApiOperation(value = "Deletes a user from Cognito")
+    public void deleteUser(@RequestHeader("Authentification") String authToken) {
+        String userId = CognitoUtils.getUserId(authToken);
+        CognitoUtils.deleteUser(userId, env.getProperty("cognito.userPoolId"));
     }
 }
