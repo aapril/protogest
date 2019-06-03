@@ -4,6 +4,8 @@ import com.protogest.service.calendar.outlook.auth.IdToken;
 import com.protogest.service.calendar.outlook.service.Event;
 import com.protogest.service.calendar.outlook.service.OutlookService;
 import com.protogest.service.calendar.outlook.service.PagedResult;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +25,9 @@ import static com.protogest.service.calendar.outlook.service.OutlookServiceBuild
 @Controller
 public class AuthorizeController {
 
+    @Autowired
+    private Environment env;
+
     @RequestMapping(value = "/authorize", method = RequestMethod.POST)
     public RedirectView authorize(
             @RequestParam("code") String code,
@@ -30,13 +35,14 @@ public class AuthorizeController {
             HttpServletRequest request) {
 
         String urlBase = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getRequestURI().length()) + request.getContextPath() + "/";
+
         // Make sure that the state query parameter returned matches
         // the expected state
         List<String> result = new ArrayList<>();
         IdToken idTokenObj = IdToken.parseEncodedToken(idToken);
         if (idTokenObj != null) {
 
-            OutlookService outlookService = getOutlookService(getTokenFromAuthCode(code, idTokenObj.getTenantId(), urlBase).getAccessToken());
+            OutlookService outlookService = getOutlookService(getTokenFromAuthCode(code, idTokenObj.getTenantId(), urlBase, env).getAccessToken());
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String startDateTime = format.format(calendar.getTime());
@@ -54,7 +60,7 @@ public class AuthorizeController {
             }
         }
         RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("https://dev.protogest.net/create-protocol");
+        redirectView.setUrl(env.getProperty("msAuth.redirectUrl"));
         redirectView.addStaticAttribute("dates", String.join(", ", result));
         return redirectView;
     }
