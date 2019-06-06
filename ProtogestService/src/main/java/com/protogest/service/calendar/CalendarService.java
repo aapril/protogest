@@ -14,6 +14,7 @@ import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.util.UidGenerator;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import static com.protogest.service.Constants.CourSuperieurFieldDescriptions;
 
+@Service
 public class CalendarService {
 
 
