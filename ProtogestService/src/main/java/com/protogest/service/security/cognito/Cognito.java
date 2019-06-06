@@ -7,10 +7,10 @@ import com.amazonaws.services.cognitoidp.model.GetUserResult;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CognitoUtils {
+public class Cognito {
     private final AWSCognitoIdentityProvider cognitoClient;
 
-    public CognitoUtils(AWSCognitoIdentityProvider cognitoClient) {
+    public Cognito(AWSCognitoIdentityProvider cognitoClient) {
         this.cognitoClient = cognitoClient;
     }
 

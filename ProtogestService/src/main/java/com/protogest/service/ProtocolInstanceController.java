@@ -2,13 +2,11 @@ package com.protogest.service;
 
 import com.protogest.model.form.FieldApprobation;
 import com.protogest.model.form.ValidationField;
-import com.protogest.repository.ProtocoleInstanceRepository;
 import com.protogest.service.calendar.CalendarService;
 import com.protogest.service.database.models.ProtocolInstance;
 import com.protogest.service.notification.EmailNotifier;
-import com.protogest.service.security.cognito.CognitoUtils;
+import com.protogest.service.security.cognito.Cognito;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,16 +22,21 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-public class ProtocoleInstanceController {
+public class ProtocolInstanceController {
+    
+    private final ProtoService protoService;
+    private final FieldApprobationService fieldApprobationService;
+    private final ValidationFieldService validationFieldService;
+    private final CalendarService calendarService;
+    private final Cognito cognito;
 
-    private @Autowired
-    ProtoService protoService;
-    private @Autowired
-    FieldApprobationService fieldApprobationService;
-    private @Autowired
-    ValidationFieldService validationFieldService;
-    private @Autowired
-    CalendarService calendarService;
+    public ProtocolInstanceController(ProtoService protoService, FieldApprobationService fieldApprobationService, ValidationFieldService validationFieldService, CalendarService calendarService, Cognito cognito) {
+        this.protoService = protoService;
+        this.fieldApprobationService = fieldApprobationService;
+        this.validationFieldService = validationFieldService;
+        this.calendarService = calendarService;
+        this.cognito = cognito;
+    }
 
     @GetMapping("/test")
     public ResponseEntity test() {
@@ -43,7 +46,7 @@ public class ProtocoleInstanceController {
 
     @GetMapping("/auth")
     public ResponseEntity auth(@RequestHeader("Authentification") String authToken) {
-        return ResponseEntity.ok(CognitoUtils.getUserEmail(authToken));
+        return ResponseEntity.ok(cognito.getUserEmail(authToken));
     }
 
 
@@ -55,7 +58,7 @@ public class ProtocoleInstanceController {
     @GetMapping("/my/to-validate")
     public ResponseEntity<Map<String, List<FieldApprobation>>> getFieldsToValidate(
             @RequestHeader("Authentification") String authToken) {
-        return ResponseEntity.ok(fieldApprobationService.getFieldsToApproveForUser(CognitoUtils.getUserEmail(authToken)));
+        return ResponseEntity.ok(fieldApprobationService.getFieldsToApproveForUser(cognito.getUserEmail(authToken)));
     }
 
 
@@ -63,7 +66,7 @@ public class ProtocoleInstanceController {
     @ApiOperation(value = "Create protocol.", response = ProtocolInstance.class)
     public ResponseEntity<ProtocolInstance> addProtocol(@RequestHeader("Authentification") String authToken,
                                                         final @Validated @RequestBody ProtocolCreation proto) throws Exception {
-        final String userMail = CognitoUtils.getUserEmail(authToken);
+        final String userMail = cognito.getUserEmail(authToken);
         String formUUID = protoService.create(proto.getProtocol(), userMail, proto.getRelatedUserId());
         if (proto.getRelatedUserId() != null) {
             EmailNotifier.senInvitationEmailTo(proto.getRelatedUserId());
@@ -78,7 +81,7 @@ public class ProtocoleInstanceController {
     public ResponseEntity<ProtocolInstance> updateProtocol(
             @RequestHeader("Authentification") String authToken,
             final @PathVariable String formUUID) {
-        CognitoUtils.getUserEmail(authToken);
+        cognito.getUserEmail(authToken);
 
         return ResponseEntity.ok(protoService.getByUUID(formUUID));
     }
@@ -90,7 +93,7 @@ public class ProtocoleInstanceController {
             final @PathVariable String formUUID,
             final @Validated @RequestBody ProtocolCreation proto) throws URISyntaxException {
 
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = cognito.getUserEmail(authToken);
         proto.getProtocol().setUserEmail(userMail);
 
         //TODO validate form belongs to user
@@ -101,7 +104,7 @@ public class ProtocoleInstanceController {
     @GetMapping("/my/protocols")
     @ApiOperation(value = "List protocols.", response = ProtocolInstance[].class)
     public ResponseEntity<List<ProtocolInstance>> listProtocols(@RequestHeader("Authentification") String authToken) {
-        String email = CognitoUtils.getUserEmail(authToken);
+        String email = cognito.getUserEmail(authToken);
         List<ProtocolInstance> protocols = protoService.list(email);
         return ResponseEntity.ok(protocols);
     }
@@ -109,7 +112,7 @@ public class ProtocoleInstanceController {
     @GetMapping("/my/related-protocols")
     @ApiOperation(value = "List protocols.", response = ProtocolInstance[].class)
     public ResponseEntity<List<ProtocolInstance>> listRelatedProtocols(@RequestHeader("Authentification") String authToken) {
-        String email = CognitoUtils.getUserEmail(authToken);
+        String email = cognito.getUserEmail(authToken);
         List<ProtocolInstance> protocols = protoService.getInvitedProtocolInstances(email);
         return ResponseEntity.ok(protocols);
     }
@@ -120,7 +123,7 @@ public class ProtocoleInstanceController {
     public void acceptField(@RequestHeader("Authentification") String authToken,
                             final @PathVariable String fieldId,
                             final @PathVariable String formUUID) {
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = cognito.getUserEmail(authToken);
 
         fieldApprobationService.accept(formUUID, fieldId, userMail);
     }
@@ -132,7 +135,7 @@ public class ProtocoleInstanceController {
                             final @PathVariable String fieldId,
                             final @PathVariable String formUUID,
                             final @Validated @RequestBody RefuseField refuseField) {
-        String userMail = CognitoUtils.getUserEmail(authToken);
+        String userMail = cognito.getUserEmail(authToken);
 
         ValidationField validationField = new ValidationField();
         validationField.setProposedValue(refuseField.getProposedValue());
