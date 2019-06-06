@@ -1,9 +1,7 @@
 package com.protogest.service.security.cognito;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
-import com.amazonaws.services.cognitoidp.model.AttributeType;
-import com.amazonaws.services.cognitoidp.model.GetUserRequest;
-import com.amazonaws.services.cognitoidp.model.GetUserResult;
+import com.amazonaws.services.cognitoidp.model.*;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,6 +19,8 @@ public class Cognito {
         return result.getUserAttributes().stream().filter(attributeType -> attributeType.getName().contentEquals("email"))
                 .findFirst().map(AttributeType::getValue).orElse(null);
     }
+
+
 
     public static void deleteUser(String userId, String userPoolId) {
         AdminDeleteUserRequest request = new AdminDeleteUserRequest();
