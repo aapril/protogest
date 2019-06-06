@@ -17,29 +17,18 @@ import java.util.List;
 public class Database {
     private static final Logger logger = LoggerFactory.getLogger(Database.class);
 
-    private final static List<Class<?>> models = Arrays.asList(new Class<?>[]{TestTable.class, ValidationField.class});
+    private final static List<Class<?>> models = Arrays.asList(new Class<?>[]{ProtocolInstance.class});
 
 
     public Database(AmazonDynamoDB dynamoDB, DynamoDBMapper mapper) {
         setupTables(dynamoDB, mapper);
-
-        ValidationField from = ValidationField.from(new ProtocoleInstance.FormField("test", "testingvalue", EFieldType.STRING));
-        UserForm userForm = new UserForm();
-        userForm.setStatus("test-status");
-        from.setUserForm(userForm);
-        for (int i = 0; i < 10; i++) {
-            from.addAppobation(new FieldApprobation(i + "",
-                    (i % 2)== 0 ?EValidationStatus.PENDING:EValidationStatus.APPROVED
-                    , "user" + i));
-        }
-        mapper.save(from);
-        List<ValidationField> fields = mapper.scan(ValidationField.class, new DynamoDBScanExpression());
-        int r = 0;
     }
 
     private void setupTables(AmazonDynamoDB dynamoDB, DynamoDBMapper mapper) {
         for (Class<?> model : models) {
-            CreateTableRequest tableRequest = createTableRequest(mapper, model);
+            logger.info("Setting up dynamoDB table `{}`", model.getCanonicalName());
+            CreateTableRequest tableRequest = createTableRequest(mapper, model)
+                    .withProvisionedThroughput(new ProvisionedThroughput(1L, 1L));
             TableUtils.createTableIfNotExists(dynamoDB, tableRequest);
             try {
                 TableUtils.waitUntilExists(dynamoDB, tableRequest.getTableName());
@@ -47,7 +36,6 @@ public class Database {
                 e.printStackTrace();
             }
         }
-
     }
 
     private CreateTableRequest createTableRequest(DynamoDBMapper mapper, Class<?> klass) {
