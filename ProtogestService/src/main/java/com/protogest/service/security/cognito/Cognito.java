@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class Cognito {
     private final AWSCognitoIdentityProvider cognitoClient;
 
-    public CognitoUtils(AWSCognitoIdentityProvider cognitoClient) {
+    public Cognito(AWSCognitoIdentityProvider cognitoClient) {
         this.cognitoClient = cognitoClient;
     }
 
@@ -20,9 +20,16 @@ public class Cognito {
                 .findFirst().map(AttributeType::getValue).orElse(null);
     }
 
+    public String getUserId(String token) {
+        GetUserRequest request = new GetUserRequest();
+        request.setAccessToken(token);
 
+        GetUserResult result = cognitoClient.getUser(request);
 
-    public static void deleteUser(String userId, String userPoolId) {
+        return result.getUsername();
+    }
+
+    public void deleteUser(String userId, String userPoolId) {
         AdminDeleteUserRequest request = new AdminDeleteUserRequest();
         request.setUsername(userId);
         request.setUserPoolId(userPoolId);

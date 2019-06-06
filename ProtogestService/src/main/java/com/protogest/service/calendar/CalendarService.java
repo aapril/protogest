@@ -1,9 +1,7 @@
 package com.protogest.service.calendar;
 
-import com.protogest.model.form.EFieldType;
-import com.protogest.model.form.nosql.ProtocoleInstance;
-import com.protogest.repository.ProtocoleInstanceRepository;
 import com.protogest.service.Constants.CourSuperieurDuQuebecDateFields;
+import com.protogest.service.database.models.ProtocolInstance;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Date;
@@ -26,8 +24,6 @@ import static com.protogest.service.Constants.CourSuperieurFieldDescriptions;
 
 @Service
 public class CalendarService {
-
-
     public DatesRecommendation getDatesForCourSuperieureDuQuebec(List<DateTime> occupiedDates) {
         DatesRecommendation dates = new DatesRecommendation();
         DateTime currentDate = new DateTime();
@@ -46,7 +42,7 @@ public class CalendarService {
         return dates;
     }
 
-    public Calendar createCalendarFromProtocol(ProtocoleInstance protocole) {
+    public Calendar createCalendarFromProtocol(ProtocolInstance protocol) {
         Calendar calendar = new Calendar();
         calendar.getProperties().add(new ProdId("Protogest"));
         calendar.getProperties().add(Version.VERSION_2_0);
@@ -59,8 +55,8 @@ public class CalendarService {
         }
 
         UidGenerator finalUg = ug;
-        protocole.getFields().stream().filter(f -> f.getType().equals(EFieldType.DATE)).forEach(f -> {
-            VEvent a = new VEvent(new Date(new DateTime(f.getValue()).toDate()), CourSuperieurFieldDescriptions.getOrDefault(f.getId(), "Événement de protocole d'instance"));
+        protocol.getFields().stream().filter(f -> f.getType().equals(ProtocolInstance.EFieldType.DATE)).forEach(f -> {
+            VEvent a = new VEvent(new Date(new DateTime(f.getValue()).toDate()), CourSuperieurFieldDescriptions.getOrDefault(f.getId(), "Événement de protocol d'instance"));
             a.getProperties().add(finalUg.generateUid());
             calendar.getComponents().add(a);
 
@@ -70,9 +66,8 @@ public class CalendarService {
         return calendar;
     }
 
-    public File createIcsFromProtocol(String protoId) {
-        ProtocoleInstance protocole = ProtocoleInstanceRepository.get(protoId);
-        Calendar calendar = createCalendarFromProtocol(protocole);
+    public File createIcsFromProtocol(ProtocolInstance protocol) {
+        Calendar calendar = createCalendarFromProtocol(protocol);
         try {
             File file = new File("calendar.ics");
             Writer writer;

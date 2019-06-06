@@ -1,6 +1,7 @@
 package com.protogest.service;
 
-import com.protogest.model.form.EFieldType;
+
+import com.protogest.service.database.models.ProtocolInstance.EFieldType;
 
 public class RefuseField {
     /*
