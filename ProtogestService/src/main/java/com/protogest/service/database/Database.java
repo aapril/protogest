@@ -2,14 +2,10 @@ package com.protogest.service.database;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
 import com.amazonaws.services.dynamodbv2.model.ProvisionedThroughput;
-import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.util.TableUtils;
-import com.protogest.model.form.EFieldType;
-import com.protogest.model.form.nosql.ProtocoleInstance;
-import com.protogest.service.database.models.*;
+import com.protogest.service.database.models.ProtocolInstance;
 import edu.emory.mathcs.backport.java.util.Arrays;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
