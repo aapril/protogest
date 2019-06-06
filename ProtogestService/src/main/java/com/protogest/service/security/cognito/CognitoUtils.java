@@ -1,20 +1,24 @@
 package com.protogest.service.security.cognito;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
-import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
+import com.amazonaws.services.cognitoidp.model.AttributeType;
 import com.amazonaws.services.cognitoidp.model.GetUserRequest;
 import com.amazonaws.services.cognitoidp.model.GetUserResult;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CognitoUtils {
-    static AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.defaultClient();
+    private final AWSCognitoIdentityProvider cognitoClient;
 
-    public static String getUserEmail(String token)
-    {
-        GetUserRequest request = new GetUserRequest();
+    public CognitoUtils(AWSCognitoIdentityProvider cognitoClient) {
+        this.cognitoClient = cognitoClient;
+    }
+
+    public String getUserEmail(String token) {
+        final GetUserRequest request = new GetUserRequest();
         request.setAccessToken(token);
-
-        GetUserResult result = cognitoClient.getUser(request);
-
-        return result.getUsername();
+        final GetUserResult result = this.cognitoClient.getUser(request);
+        return result.getUserAttributes().stream().filter(attributeType -> attributeType.getName().contentEquals("email"))
+                .findFirst().map(AttributeType::getValue).orElse(null);
     }
 }
