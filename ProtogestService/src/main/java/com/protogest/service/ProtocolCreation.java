@@ -1,17 +1,18 @@
 package com.protogest.service;
 
-import com.protogest.model.form.nosql.ProtocoleInstance;
+
+import com.protogest.service.database.models.ProtocolInstance;
 
 public class ProtocolCreation {
 
-    private ProtocoleInstance protocol;
+    private ProtocolInstance protocol;
     private String relatedUserId;
 
-    public ProtocoleInstance getProtocol() {
+    public ProtocolInstance getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(ProtocoleInstance protocol) {
+    public void setProtocol(ProtocolInstance protocol) {
         this.protocol = protocol;
     }
 
