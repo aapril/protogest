@@ -2,7 +2,9 @@ package com.protogest.service.security.cognito;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
+import com.amazonaws.services.cognitoidp.model.ConfirmSignUpRequest;
 import com.amazonaws.services.cognitoidp.model.SignUpRequest;
+import com.amazonaws.services.cognitoidp.model.SignUpResult;
 import com.protogest.model.SignupAttemptRequest;
 import com.protogest.model.SignupAttemptResponse;
 import io.swagger.annotations.ApiOperation;
@@ -29,14 +31,11 @@ public class CognitoSignup {
         System.out.println("Registered email : " + signupRequest.email);
         System.out.println("Registered pwd : " + signupRequest.password);
 
-//        SignUpRequest request = new SignUpRequest();
-//        request.setUsername(username);
-//        request.setPassword(password);
-//        request.setClientId(Environment.CLIENT_ID);
-//
-//        cognitoClient.signUp(request);
+        SignUpResult result = cognitoClient.signUp(new SignUpRequest()
+                .withClientId(Environment.CLIENT_ID)
+                .withUsername(signupRequest.email)
+                .withPassword(signupRequest.password));
 
-        //return ResponseEntity.ok(response)
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.ok().body(response);
     }
 }
