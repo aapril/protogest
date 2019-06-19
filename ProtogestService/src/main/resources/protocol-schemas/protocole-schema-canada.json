@@ -1,0 +1,356 @@
+{
+  "description": "Protocole d'instance du Canada",
+  "protocol_fields": [
+    {
+      "sectionID": "1",
+      "sectionName": "Preliminary exceptions",
+      "subSection": [
+        {
+          "num": 7,
+          "desc": "Declinary exceptions",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 8,
+              "desc": "Referral to competent court or dismissal (C.C.P., a. 167)",
+              "type": "date"
+            },
+            {
+              "num": 9,
+              "desc": "Other exception (with a reference to the C.C.P. article)",
+              "type": "date"
+            },
+            {
+              "num": 10,
+              "desc": "Submitted by (enter the name of the party)",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 11,
+          "desc": "Exceptions to dismiss",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 12,
+              "desc": "Dismissal (C.C.P., a. 168)",
+              "type": "date"
+            },
+            {
+              "num": 13,
+              "desc": "Submitted by (enter the name of the party)",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 14,
+          "desc": "Other preliminary exceptions",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 15,
+              "desc": "Clarifications regarding (C.C.P., a. 169)",
+              "type": "date"
+            },
+            {
+              "num": 16,
+              "desc": "Disclosure of documents (C.C.P., a. 169))",
+              "type": "date"
+            },
+            {
+              "num": 17,
+              "desc": "Striking of immaterial allegations (C.C.P., a. 169)",
+              "type": "date"
+            },
+            {
+              "num": 18,
+              "desc": "Requirement to provide suretyship (C.C.P., a. 492)",
+              "type": "date"
+            },
+            {
+              "num": 19,
+              "desc": "Other exception (indicate its nature)",
+              "type": "string"
+            },
+            {
+              "num": 20,
+              "desc": "Submitted by (enter the name of the party)",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 21,
+          "desc": "Application under article 51 C.C.P.",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 22,
+              "desc": "Application under article 51 C.C.P.",
+              "type": "date"
+            },
+            {
+              "num": 23,
+              "desc": "Submitted by (enter the name of the party)",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "2",
+      "sectionName": "Other proceedings",
+      "subSection": [
+        {
+          "num": 24,
+          "desc": "Safeguard measures (C.C.P., a. 169 1st para.)",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 25,
+              "desc": "Application for safeguard measures",
+              "type": "date"
+            },
+            {
+              "num": 26,
+              "desc": "Submitted by (enter the name of the party)",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 27,
+          "desc": "Other incidental procedures",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 28,
+              "desc": "Amendment of a pleading",
+              "type": "date"
+            },
+            {
+              "num": 29,
+              "desc": "Determination of an issue of law",
+              "type": "date"
+            },
+            {
+              "num": 30,
+              "desc": "Declaration of disqualification",
+              "type": "date"
+            },
+            {
+              "num": 31,
+              "desc": "Other (indicate its nature)",
+              "type": "date"
+            },
+            {
+              "num": 32,
+              "desc": "Submitted by (enter the name of the party)",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "3",
+      "sectionName": "Defence",
+      "subSection": [
+        {
+          "num": 33,
+          "desc": "Under article 171 C.C.P., the case is subject to the rules of oral defence. Despite this, all parties are applying for authorization from the court for the case to the subject to the rules of written defence, on the following ground",
+          "type": "bool"
+        },
+        {
+          "num": 34,
+          "desc": "The defendant intends to file a cross-application",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 35,
+              "desc": "Deadline for filling the cross-application",
+              "type": "date"
+            },
+            {
+              "num": 36,
+              "desc": "Deadline for filling the defence to the cross-application",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": 38,
+          "desc": "Third person intervention or impleading (C.C.P, aa. 151 and 158(4))",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 39,
+              "desc": "Deadline for the intervention or impleading of a third person",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "4",
+      "sectionName": "Expert opinions",
+      "subSection": [
+        {
+          "num": "40a",
+          "desc": "Joint expert opinion(C.C.P. a. 232)",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": "40b",
+              "desc": "Deadline for filling joint expert opinion",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": "41a",
+          "desc": "Expert opinion for the plaintiff (not more than one per area or matter of expertise) (C.C.P. a. 232)",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": "41b",
+              "desc": "Deadline for filling an expert opinion for paintliff",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": "42a",
+          "desc": "Expert opinion for the defendant (not more than one per area or matter of expertise) (C.C.P. a. 232)",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": "42b",
+              "desc": "Deadline for filling an expert opinion for defendant",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": "43a",
+          "desc": "Expert opinion for third person or impleaded person (not more than one per area or matter of expertise) (C.C.P. a. 232)",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": "43b",
+              "desc": "Deadline for filling an expert opinion for third person or impleaded person",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "5",
+      "sectionName": "Examinations",
+      "subSection": [
+        {
+          "num": 4,
+          "desc": "Pre-trial examination(s) by either party (C.C.P.,aa. 148(3), 158(3) and 221)",
+          "type": "bool"
+        },
+        {
+          "num": 45,
+          "desc": "Value of the subject matter of the dispute is less than $100 000(C.C.P., a.229)",
+          "type": "bool"
+        },
+        {
+          "num": 46,
+          "desc": "The parties intend to submit their anticipated objections before pre-trial examination(C.C.P., a.228)",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 52,
+              "desc": "Deadline for filling transcripts for the paintliff (C.C.P,a. 227)",
+              "type": "date"
+            },
+            {
+              "num": 53,
+              "desc": "Deadline for filling transcripts for the defendant (C.C.P,a. 227)",
+              "type": "date"
+            },
+            {
+              "num": 54,
+              "desc": "Deadline for filling transcripts for the impleaded person (C.C.P,a. 227)",
+              "type": "date"
+            },
+            {
+              "num": 55,
+              "desc": "Deadline for presenting the objections set forth in the second paragraph of article 228 C.C.P., which were raised during the pre-trial examination for the paintliff",
+              "type": "date"
+            },
+            {
+              "num": 56,
+              "desc": "Deadline for presenting the objections set forth in the second paragraph of article 228 C.C.P., which were raised during the pre-trial examination for the defendant",
+              "type": "date"
+            },
+            {
+              "num": 57,
+              "desc": "Deadline for disclosure of all the undertakings made during the pre-trial examinations for the paintliff",
+              "type": "date"
+            },
+            {
+              "num": 58,
+              "desc": "Deadline for disclosure of all the undertakings made during the pre-trial examinations for the defendant",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "6",
+      "sectionName": "Exhibits",
+      "subSection": [
+        {
+          "num": "",
+          "desc": "Exhibits and other evidence (C.C.P., aa. 145 and 158)",
+          "type": "none",
+          "dateSection": [
+            {
+              "num": 59,
+              "desc": "Filling of exhibits for the paintliff",
+              "type": "date"
+            },
+            {
+              "num": 60,
+              "desc": "Filling of exhibits for the defendant",
+              "type": "date"
+            },
+            {
+              "num": 61,
+              "desc": "Filling of exhibits for the third person, impleaded person or intervening person",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": "",
+          "desc": "Filling of affidavits in lieu of testimony",
+          "type": "none",
+          "dateSection": [
+            {
+              "num": 64,
+              "desc": "Filling of affidavits for paintliff",
+              "type": "date"
+            },
+            {
+              "num": 65,
+              "desc": "Filling of affidavits for defendant",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

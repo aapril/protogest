@@ -1,0 +1,328 @@
+{
+  "description": "Protocole d'instance du Quebec",
+  "protocol_fields": [
+    {
+      "sectionID": "1",
+      "sectionName": "Moyens Preliminaires",
+      "subSection": [
+        {
+          "num": 7,
+          "desc": "Moyens declinatoires",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 8,
+              "desc": "Renvoi au tribunal competent ou rejet (art. 177 C.p.c.)",
+              "type": "date"
+            },
+            {
+              "num": 9,
+              "desc": "Autre (avec reference a l'article C.p.c)",
+              "type": "date"
+            },
+            {
+              "num": 10,
+              "desc": "Soumis par ( inscrire le nom de la partie ) ",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 11,
+          "desc": "Moyens d'irrecevabilite",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 12,
+              "desc": "En rejet (art. 168 C.p.c.)",
+              "type": "date"
+            },
+            {
+              "num": 13,
+              "desc": "Soumis par ( inscrire le nom de la partie ) ",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 14,
+          "desc": "Autres Moyens preliminaires",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 15,
+              "desc": "Precision sur  (art. 1779 C.p.c.)",
+              "type": "date"
+            },
+            {
+              "num": 16,
+              "desc": "Communication de documents (art. 169 C.p.c)",
+              "type": "date"
+            },
+            {
+              "num": 17,
+              "desc": "Radiation d'allegations non pertinentes (art. 169 C.p.c)",
+              "type": "date"
+            },
+            {
+              "num": 18,
+              "desc": "Requete pour cautionnement (art. 492 C.p.c)",
+              "type": "date"
+            },
+            {
+              "num": 19,
+              "desc": "Autre (indiquer la nature)",
+              "type": "string"
+            },
+            {
+              "num": 20,
+              "desc": "Soumis par ( inscrire le nom de la partie ) ",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 21,
+          "desc": "Demande en vertu de l'article 51 C.p.c.",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 22,
+              "desc": "Demande en vertu de l'article 51 C.p.c.",
+              "type": "date"
+            },
+            {
+              "num": 23,
+              "desc": "Soumis par ( inscrire le nom de la partie ) ",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "2",
+      "sectionName": "Autres Procedures",
+      "subSection": [
+        {
+          "num": 24,
+          "desc": "Mesures de sauvegarde ( art. 169 al. 1 C.p.c. )",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 25,
+              "desc": "Demande pour mesure de sauvegarde",
+              "type": "date"
+            },
+            {
+              "num": 26,
+              "desc": "Soumis par ( inscrire le nom de la partie ) ",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "num": 27,
+          "desc": "Autres incidents proceduraux",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 28,
+              "desc": "Modification d'un acte de procedure",
+              "type": "date"
+            },
+            {
+              "num": 29,
+              "desc": "Decision sur un point de droit",
+              "type": "date"
+            },
+            {
+              "num": 30,
+              "desc": "Declaratio d'inhabilite",
+              "type": "date"
+            },
+            {
+              "num": 31,
+              "desc": "Autre ( indiquer la nature )",
+              "type": "date"
+            },
+            {
+              "num": 32,
+              "desc": "Soumis par ( inscrire le nom de la partie ) ",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "3",
+      "sectionName": "Defense",
+      "subSection": [
+        {
+          "num": 33,
+          "desc": ".........",
+          "type": "bool"
+        },
+        {
+          "num": 34,
+          "desc": "Le defendeur entend produire une demande reconventionnelle",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 35,
+              "desc": "Date limite pour le depot de la demande reconventionnelle",
+              "type": "date"
+            },
+            {
+              "num": 36,
+              "desc": "Date limite pour le depot de la defense reconventionnelle",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": 38,
+          "desc": "Intervention ou mise en cause d'un tiers ( art.151 et 158 al. 4 C.p.c. )",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 39,
+              "desc": "Date limite pour l'intervention ou la mise en cause d'un tiers",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "4",
+      "sectionName": "Expertises",
+      "subSection": [
+        {
+          "num": 40,
+          "desc": "Expertise(s) commune(s)",
+          "type": "bool"
+        },
+        {
+          "num": 41,
+          "desc": "Expertise(s) en demande",
+          "type": "bool"
+        },
+        {
+          "num": 42,
+          "desc": "Expertise(s) en defense",
+          "type": "bool"
+        },
+        {
+          "num": 43,
+          "desc": "Expertise(s) du tiers ou mis en cause",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "sectionID": "5",
+      "sectionName": "Interrogatoires",
+      "subSection": [
+        {
+          "num": 4,
+          "desc": "Interrogatoire(s) prealable(s) a l'instruction par l'une ou l'autre des parties ( art. 148 al.3, 158 al.3 et 221 C.p.c.)",
+          "type": "bool"
+        },
+        {
+          "num": 45,
+          "desc": "Valeur de l'objet du litige inferieure a 100 000 $ ( art. 229 C.p.c.)",
+          "type": "bool"
+        },
+        {
+          "num": 46,
+          "desc": "Les parties entendent soumettre avant l'interrogatoire les objections qu'elles anticipent ( art. 228 C.p.c.) ",
+          "type": "bool",
+          "dateSection": [
+            {
+              "num": 52,
+              "desc": "Date limite pour le depot des transcription en demande (art 227 C.p.c.)",
+              "type": "date"
+            },
+            {
+              "num": 53,
+              "desc": "Date limite pour le depot des transcriptions en defense ( art. 227 C.p.c.)",
+              "type": "date"
+            },
+            {
+              "num": 54,
+              "desc": "Date limite pour le depot des transcriptions par le mis en cause ( art. 227 C.p.c.)",
+              "type": "date"
+            },
+            {
+              "num": 55,
+              "desc": "Date limite pour soumettre les objections enoncees a l'article 228 al. 2 C.p.c. soulevees lors des interrogatoires prealables en demande",
+              "type": "date"
+            },
+            {
+              "num": 56,
+              "desc": "Date limite pour soumettre les objections enoncees a l'article 228 al. 2 C.p.c. soulevees lors des interrogatoires prealables en defense",
+              "type": "date"
+            },
+            {
+              "num": 57,
+              "desc": "Date limite pour la communication de tous les engagements souscrits lors des interrogatoires prealables en demande.",
+              "type": "date"
+            },
+            {
+              "num": 58,
+              "desc": "Date limite pour la communication de tous les engagements souscrits lors des interrogatoires prealables en defense.",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "sectionID": "6",
+      "sectionName": "Pieces",
+      "subSection": [
+        {
+          "num": "",
+          "desc": "Pieces et autres elements de preuve",
+          "type": "none",
+          "dateSection": [
+            {
+              "num": 59,
+              "desc": "Depot des pieces en demande",
+              "type": "date"
+            },
+            {
+              "num": 60,
+              "desc": "Depot des pieces en defense",
+              "type": "date"
+            },
+            {
+              "num": 61,
+              "desc": "Depot des pieces par le tiers,le mis en cause ou l'intervenant.",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "num": "",
+          "desc": "Depot des declarations ecrites pour valoir temoignage",
+          "type": "none",
+          "dateSection": [
+            {
+              "num": 64,
+              "desc": "Depot des declarations ecrites en demande",
+              "type": "date"
+            },
+            {
+              "num": 65,
+              "desc": "Depot des declarations ecrites pour en defense",
+              "type": "date"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
