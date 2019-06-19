@@ -1,6 +1,7 @@
 package com.protogest.service.database.models;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
+import com.google.gson.annotations.SerializedName;
 
 @DynamoDBTable(tableName = "protocol_schema")
 public class ProtocolSchema {
@@ -12,6 +13,7 @@ public class ProtocolSchema {
     private Long id;
 
     @DynamoDBAttribute(attributeName = "protocol_fields")
+    @SerializedName("protocol_fields")
     private ProtocolFields[] protocolFields;
 
     @DynamoDBAttribute
@@ -124,5 +126,49 @@ public class ProtocolSchema {
         public void setDesc(String desc) {
             this.desc = desc;
         }
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ProtocolFields[] getProtocolFields() {
+        return protocolFields;
+    }
+
+    public void setProtocolFields(ProtocolFields[] protocolFields) {
+        this.protocolFields = protocolFields;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public static ProtocolSchema validate(ProtocolSchema protocol) {
+        if (protocol.protocolFields == null) {
+            throw new RuntimeException("Protocol Schema has no fields.");
+        }
+
+        if (protocol.description == null) {
+            throw new RuntimeException("A description must be attached to a protocol schema.");
+        }
+
+        return protocol;
     }
 }
