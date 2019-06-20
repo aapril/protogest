@@ -1,15 +1,20 @@
-package com.protogest.service.security.cognito;
+package com.protogest.service.users;
 
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.*;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
-public class Cognito {
+import java.util.HashMap;
+import java.util.Map;
+
+@Service
+public class CognitoService {
     private final AWSCognitoIdentityProvider cognitoClient;
+    private final CognitoCredentials cognitoCredentials;
 
-    public Cognito(AWSCognitoIdentityProvider cognitoClient) {
+    public CognitoService(AWSCognitoIdentityProvider cognitoClient, CognitoCredentials cognitoCredentials) {
         this.cognitoClient = cognitoClient;
+        this.cognitoCredentials = cognitoCredentials;
     }
 
     public String getUserEmail(String token) {
