@@ -53,4 +53,39 @@ public class CognitoService {
             return new CognitoRequestResult(false, e.getErrorMessage());
         }
     }
+
+    public CognitoRequestResult signIn(String email, String password) {
+        final Map<String, String> parameters = new HashMap<>(2);
+        parameters.put("USERNAME", email);
+        parameters.put("PASSWORD", password);
+
+        try {
+            final AdminInitiateAuthResult result = this.cognitoClient.adminInitiateAuth(
+                    new AdminInitiateAuthRequest()
+                            .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
+                            .withAuthParameters(parameters)
+                            .withUserPoolId(this.cognitoCredentials.getUserPoolId())
+                            .withClientId(this.cognitoCredentials.getClientId())
+            );
+
+
+            if (result.getChallengeName() == null || result.getChallengeName().isEmpty()) {
+                final AuthenticationResultType auth = result.getAuthenticationResult();
+                final HashMap<String, String> payload = new HashMap<>(5);
+
+                payload.put("ACCESS_TOKEN", auth.getAccessToken());
+                payload.put("REFRESH_TOKEN", auth.getRefreshToken());
+                payload.put("ID_TOKEN", auth.getIdToken());
+                payload.put("TOKEN_TYPE", auth.getTokenType());
+                payload.put("EXPIRES_IN", String.valueOf(auth.getExpiresIn()));
+
+
+                return new CognitoRequestResult<Map>(true, "Logged in successfully", payload);
+            } else {
+                return new CognitoRequestResult(false, "Need to reset password");
+            }
+        } catch (AWSCognitoIdentityProviderException e) {
+            return new CognitoRequestResult(true, e.getErrorMessage());
+        }
+    }
 }
