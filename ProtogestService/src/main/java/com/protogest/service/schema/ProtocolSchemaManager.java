@@ -1,4 +1,4 @@
-package com.protogest.service;
+package com.protogest.service.schema;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
