@@ -1,4 +1,4 @@
-package com.protogest.service.security.cognito;
+package com.protogest.service.users;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -16,11 +16,13 @@ public class CognitoConfig {
     @Value("${dynamodb.secret}")
     private String secret;
 
-//    @Value("${dynamodb.end-point}")
-//    private String endPoint;
-
     @Value("${dynamodb.region}")
     private String region;
+    @Value(value = "${cognito.user-pool-id}")
+    private String userPoolId;
+
+    @Value(value = "${cognito.client-id}")
+    private String clientId;
 
     @Bean
     AWSCognitoIdentityProvider getIdentityIdentifier() {
@@ -28,5 +30,10 @@ public class CognitoConfig {
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.accessKey, this.secret)))
                 .withRegion(this.region)
                 .build();
+    }
+
+    @Bean
+    CognitoCredentials getCredentials() {
+        return new CognitoCredentials(this.userPoolId, this.clientId);
     }
 }
