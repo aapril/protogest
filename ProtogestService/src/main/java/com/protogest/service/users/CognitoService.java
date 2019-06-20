@@ -41,4 +41,16 @@ public class CognitoService {
 
         AdminDeleteUserResult result = cognitoClient.adminDeleteUser(request);
     }
+
+    public CognitoRequestResult signUp(String email, String password) {
+        try {
+            final SignUpResult result = this.cognitoClient.signUp(new SignUpRequest()
+                    .withClientId(this.cognitoCredentials.getClientId())
+                    .withUsername(email)
+                    .withPassword(password));
+            return new CognitoRequestResult(true, result.getCodeDeliveryDetails().toString());
+        } catch (AWSCognitoIdentityProviderException e) {
+            return new CognitoRequestResult(false, e.getErrorMessage());
+        }
+    }
 }
