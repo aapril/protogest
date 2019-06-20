@@ -3,7 +3,7 @@ package com.protogest.service;
 import com.protogest.service.calendar.CalendarService;
 import com.protogest.service.database.models.ProtocolInstance;
 import com.protogest.service.notification.EmailNotifier;
-import com.protogest.service.security.cognito.Cognito;
+import com.protogest.service.users.CognitoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
@@ -25,9 +25,9 @@ public class ProtocolInstanceController {
     private final ProtoService protoService;
     private final CalendarService calendarService;
     private final Environment env;
-    private final Cognito cognito;
+    private final CognitoService cognito;
 
-    public ProtocolInstanceController(ProtoService protoService, CalendarService calendarService, Environment env, Cognito cognito) {
+    public ProtocolInstanceController(ProtoService protoService, CalendarService calendarService, Environment env, CognitoService cognito) {
         this.protoService = protoService;
         this.calendarService = calendarService;
         this.env = env;
