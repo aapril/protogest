@@ -64,6 +64,7 @@ public class ProtocolInstanceController {
     public ResponseEntity<ProtocolInstance> addProtocol(@RequestHeader("Authentification") String authToken,
                                                         final @Validated @RequestBody ProtocolCreation proto) throws Exception {
         final String userMail = cognito.getUserEmail(authToken);
+
         String formUUID = protoService.create(proto.getProtocol(), userMail, proto.getRelatedUserId());
         if (proto.getRelatedUserId() != null) {
             EmailNotifier.senInvitationEmailTo(proto.getRelatedUserId());

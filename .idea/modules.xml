@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/entity/entity.iml" filepath="$PROJECT_DIR$/entity/entity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/entity/entity.iml" filepath="$PROJECT_DIR$/entity/entity.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/protogest.iml" filepath="$PROJECT_DIR$/.idea/protogest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProtogestService/service.iml" filepath="$PROJECT_DIR$/ProtogestService/service.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProtogestService/service.iml" filepath="$PROJECT_DIR$/ProtogestService/service.iml" />
     </modules>
   </component>

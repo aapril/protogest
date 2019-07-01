@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.protogest.service.database.models.ProtocolInstance;
+import com.protogest.service.database.models.ProtocolSchema;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
