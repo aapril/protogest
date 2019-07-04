@@ -63,7 +63,7 @@ public class CognitoService {
                     .withConfirmationCode(code));
             return new CognitoRequestResult(true, String.format("Account `%s` is confirmed.", email));
         } catch (AWSCognitoIdentityProviderException e) {
-            return new CognitoRequestResult(false, e.getMessage(), e.getErrorCode());
+            return new CognitoRequestResult(false, e.getErrorMessage(), e.getErrorCode());
         }
     }
 
