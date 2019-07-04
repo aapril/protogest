@@ -50,7 +50,7 @@ public class CognitoService {
                     .withPassword(password));
             return new CognitoRequestResult(true, result.getCodeDeliveryDetails().toString());
         } catch (AWSCognitoIdentityProviderException e) {
-            return new CognitoRequestResult(false, e.getErrorMessage());
+            return new CognitoRequestResult(false, e.getErrorMessage(), e.getErrorCode());
         }
     }
 
@@ -80,12 +80,12 @@ public class CognitoService {
                 payload.put("EXPIRES_IN", String.valueOf(auth.getExpiresIn()));
 
 
-                return new CognitoRequestResult<Map>(true, "Logged in successfully", payload);
+                return new CognitoRequestResult<Map>(true, "Logged in successfully.", payload);
             } else {
-                return new CognitoRequestResult(false, "Need to reset password");
+                return new CognitoRequestResult(false, "Need to reset password.", null);
             }
         } catch (AWSCognitoIdentityProviderException e) {
-            return new CognitoRequestResult(true, e.getErrorMessage());
+            return new CognitoRequestResult(false, e.getErrorMessage(), e.getErrorCode());
         }
     }
 }
