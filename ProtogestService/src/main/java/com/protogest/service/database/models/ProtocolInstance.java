@@ -19,6 +19,12 @@ public class ProtocolInstance {
     @DynamoDBAttribute
     private String invitedUserEmail;
 
+    @DynamoDBAttribute
+    private String creationDate;
+
+    @DynamoDBAttribute
+    private String protocolUuid;
+
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute
     private Status status = Status.PENDING;
@@ -123,6 +129,22 @@ public class ProtocolInstance {
 
     public void setInvitedUserEmail(String invitedUserEmail) {
         this.invitedUserEmail = invitedUserEmail;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getProtocolUuid() {
+        return protocolUuid;
+    }
+
+    public void setProtocolUuid(String protocolUuid) {
+        this.protocolUuid = protocolUuid;
     }
 }
 

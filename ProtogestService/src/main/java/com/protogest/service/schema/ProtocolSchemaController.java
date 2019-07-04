@@ -21,4 +21,5 @@ public class ProtocolSchemaController {
     List<ProtocolSchema> getAllProtocolsSchemas() {
         return protocolSchemaService.getAllProtocolSchemas();
     }
+
 }
