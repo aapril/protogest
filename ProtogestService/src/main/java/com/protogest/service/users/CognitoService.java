@@ -54,6 +54,19 @@ public class CognitoService {
         }
     }
 
+    public CognitoRequestResult confirmSignUp(String email, String code) {
+        try {
+
+            this.cognitoClient.confirmSignUp(new ConfirmSignUpRequest()
+                    .withClientId(this.cognitoCredentials.getClientId())
+                    .withUsername(email)
+                    .withConfirmationCode(code));
+            return new CognitoRequestResult(true, String.format("Account `%s` is confirmed.", email));
+        } catch (AWSCognitoIdentityProviderException e) {
+            return new CognitoRequestResult(false, e.getMessage(), e.getErrorCode());
+        }
+    }
+
     public CognitoRequestResult signIn(String email, String password) {
         final Map<String, String> parameters = new HashMap<>(2);
         parameters.put("USERNAME", email);
