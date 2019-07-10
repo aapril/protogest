@@ -2,14 +2,6 @@ spring:
   application:
     name: protogest-service
     security.basic.enable: false
-  
-  datasource:
-    platform: mysql
-    continue-on-error: true
-    initialization-mode: never
-    url: jdbc:mysql://db.protogest.net:3306/protogest_dev
-    username: dev
-    password: 8U=%F`7~f>Z;Cv8A
 
 server:
   connection-timeout: 60000
