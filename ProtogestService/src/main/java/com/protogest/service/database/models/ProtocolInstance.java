@@ -33,7 +33,8 @@ public class ProtocolInstance {
     public enum Status {
         PENDING,
         REJECTED,
-        APPROVED
+        APPROVED,
+        ARCHIVE
     }
 
     public enum EFieldType {
