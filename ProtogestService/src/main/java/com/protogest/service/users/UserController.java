@@ -93,11 +93,20 @@ public class UserController {
     }
 
     @PostMapping("/user/forgotPassword")
-    @ApiOperation(value = "change password from Cognito")
+    @ApiOperation(value = "forgot password from Cognito")
     public void forgotPassword(@RequestHeader(value = "Authentification", required=false) String authToken,
                                final @RequestBody Map<String,String> attributeBody) {
-
+        System.out.print(attributeBody.get("userName"));
         this.cognitoService.forgotPassword(attributeBody.get("userName"));
+    }
+
+    @PostMapping("/user/resetPasswordCode")
+    @ApiOperation(value = "reset password with code from Cognito")
+    public void resetPasswordCode(@RequestHeader(value = "Authentification", required=false) String authToken,
+                               final @RequestBody Map<String,String> attributeBody) {
+        System.out.print(attributeBody.get("password"));
+        System.out.print(attributeBody.get("code"));
+        this.cognitoService.resetPasswordCode(attributeBody.get("password"), attributeBody.get("code"), attributeBody.get("userName"));
     }
 
 

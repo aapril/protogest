@@ -155,9 +155,24 @@ public class CognitoService {
 
     public void forgotPassword(String userName) {
 
-        ForgotPasswordRequest  forgotpasswordRequest = new ForgotPasswordRequest().withUsername(userName);
+        ForgotPasswordRequest  forgotpasswordRequest = new ForgotPasswordRequest()
+                .withUsername(userName)
+                .withClientId(this.cognitoCredentials.getClientId());
 
         cognitoClient.forgotPassword(forgotpasswordRequest);
+
+
+    }
+
+    public void resetPasswordCode(String password, String code,String userName) {
+
+        ConfirmForgotPasswordRequest  forgotpasswordRequest = new ConfirmForgotPasswordRequest()
+                .withConfirmationCode(code)
+                .withPassword(password)
+                .withClientId(this.cognitoCredentials.getClientId())
+                .withUsername(userName);
+
+        cognitoClient.confirmForgotPassword(forgotpasswordRequest);
 
 
     }
@@ -183,6 +198,5 @@ public class CognitoService {
         AdminResetUserPasswordRequest request = new AdminResetUserPasswordRequest();
         request.setUsername(userId);
         request.setUserPoolId(userPoolId);
-        System.out.print(userId);
     }
 }
