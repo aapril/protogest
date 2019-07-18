@@ -74,6 +74,16 @@ public class ProtocolInstanceController {
         return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(proto.getProtocol());
     }
 
+    @PostMapping("my/protocols/edit")
+    @ApiOperation(value = "Edit protocol.", response = ProtocolInstance.class)
+    public @ResponseBody
+    String editProtocol(
+            @RequestHeader("Authentification") String authToken,
+            final @PathVariable String formUUID,
+            final @Validated @RequestBody ProtocolCreation proto) throws URISyntaxException {
+        return "Edit function not implemented yet.";
+    }
+
     @GetMapping("/my/protocols/{formUUID}")
     @ApiOperation(value = "Read protocol.", response = ProtocolInstance.class)
     public ResponseEntity<ProtocolInstance> updateProtocol(
