@@ -4,7 +4,7 @@ public class CognitoRequestResult<Payload> {
     final boolean success;
     final String message;
     final String code;
-    final Payload payload;
+    Payload payload;
 
     public CognitoRequestResult(boolean success, String message, Payload payload) {
         this.success = success;
@@ -37,6 +37,10 @@ public class CognitoRequestResult<Payload> {
 
     public Payload getPayload() {
         return payload;
+    }
+
+    public void setPayload(Payload payload) {
+        this.payload = payload;
     }
 
     public String getCode() {
