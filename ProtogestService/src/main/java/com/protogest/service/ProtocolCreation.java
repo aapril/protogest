@@ -4,9 +4,8 @@ package com.protogest.service;
 import com.protogest.service.database.models.ProtocolInstance;
 
 public class ProtocolCreation {
-
     private ProtocolInstance protocol;
-    private String relatedUserId;
+    private String[] invitedEmails;
 
     public ProtocolInstance getProtocol() {
         return protocol;
@@ -16,11 +15,11 @@ public class ProtocolCreation {
         this.protocol = protocol;
     }
 
-    public String getRelatedUserId() {
-        return relatedUserId;
+    public String[] getInvitedEmails() {
+        return invitedEmails;
     }
 
-    public void setRelatedUserId(String relatedUserId) {
-        this.relatedUserId = relatedUserId;
+    public void setInvitedEmails(String[] invitedEmails) {
+        this.invitedEmails = invitedEmails;
     }
 }
