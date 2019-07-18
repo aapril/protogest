@@ -21,9 +21,7 @@ public class ProtoService {
     }
 
     public String create(ProtocolInstance protocolInstance, String userEmail) {
-        if (!userEmail.contentEquals(protocolInstance.getUserEmail())) {
-            // Throw an exception, not enabled yet. (Waiting for frontend
-        }
+        protocolInstance.setUserEmail(userEmail);
         protocolInstance.setStatus(ProtocolInstance.Status.PENDING);
 
         mapper.save(protocolInstance);
@@ -36,24 +34,40 @@ public class ProtoService {
     }
 
 
-    public List<ProtocolInstance> list(String userMail) {
-        return getProtocolsByAttribute("userEmail", userMail);
+    public List<ProtocolInstance> getUserProtocols(String userMail) {
+        return getProtocolsByAttribute(new ScanRequest("userEmail", userMail, false));
     }
 
     public List<ProtocolInstance> getInvitedProtocolInstances(String userMail) {
-        return getProtocolsByAttribute("invitedUserEmail", userMail);
+        return getProtocolsByAttribute(new ScanRequest("invitedEmails", userMail, true));
     }
 
-    private List<ProtocolInstance> getProtocolsByAttribute(String attributeName, String attributeValue) {
+    private List<ProtocolInstance> getProtocolsByAttribute(ScanRequest scanRequest) {
         final Map<String, AttributeValue> values = new HashMap<>();
-        values.put(String.format(":%s", attributeName), new AttributeValue().withS(attributeValue));
-        return this.mapper.scan(ProtocolInstance.class, new DynamoDBScanExpression()
-                .withFilterExpression(String.format("%s = :%s", attributeName, attributeName))
-                .withExpressionAttributeValues(values));
+        values.put(String.format(":%s", scanRequest.attribute), new AttributeValue().withS(scanRequest.value));
+        final DynamoDBScanExpression expression = new DynamoDBScanExpression();
+        if (scanRequest.useContains) {
+            expression.withFilterExpression(String.format("contains(%s, :%s)", scanRequest.attribute, scanRequest.attribute));
+        } else {
+            expression.withFilterExpression(String.format("%s = :%s", scanRequest.attribute, scanRequest.attribute));
+        }
+        return this.mapper.scan(ProtocolInstance.class, expression.withExpressionAttributeValues(values));
     }
 
 
     public void update(String formUUID, ProtocolInstance protocol) {
         // wasn't working
+    }
+
+    private class ScanRequest {
+        final String attribute;
+        final String value;
+        final boolean useContains;
+
+        public ScanRequest(String attribute, String value, boolean useContains) {
+            this.attribute = attribute;
+            this.value = value;
+            this.useContains = useContains;
+        }
     }
 }
