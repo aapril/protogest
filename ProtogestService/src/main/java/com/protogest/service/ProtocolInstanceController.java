@@ -3,6 +3,7 @@ package com.protogest.service;
 import com.protogest.service.calendar.CalendarService;
 import com.protogest.service.database.models.ProtocolInstance;
 import com.protogest.service.notification.EmailNotifier;
+import com.protogest.service.users.CognitoRequestResult;
 import com.protogest.service.users.CognitoService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.core.env.Environment;
@@ -61,11 +62,13 @@ public class ProtocolInstanceController {
 
     @PostMapping("/my/protocols")
     @ApiOperation(value = "Create protocol.", response = ProtocolInstance.class)
-    public ResponseEntity<ProtocolInstance> addProtocol(@RequestHeader("Authentification") String authToken,
-                                                        final @Validated @RequestBody ProtocolInstance protocol) throws Exception {
-        final String userMail = cognito.getUserEmail(authToken);
-
-        String formUUID = protoService.create(protocol, userMail);
+    public ResponseEntity addProtocol(@RequestHeader("Authentification") String authToken,
+                                      final @Validated @RequestBody ProtocolInstance protocol) throws Exception {
+        final CognitoRequestResult<String> emailResult = cognito.getUserEmail(authToken);
+        if (!emailResult.isSuccess()) {
+            return ResponseEntity.badRequest().body(emailResult);
+        }
+        final String formUUID = protoService.create(protocol, emailResult.getPayload());
         if (protocol.getInvitedEmails() != null && protocol.getInvitedEmails().size() > 0) {
             protocol.getInvitedEmails().forEach(EmailNotifier::senInvitationEmailTo);
         } else {
@@ -96,13 +99,17 @@ public class ProtocolInstanceController {
 
     @PutMapping("/my/protocols/{formUUID}")
     @ApiOperation(value = "Update protocol.", response = ProtocolInstance.class)
-    public ResponseEntity<ProtocolInstance> updateProtocol(
+    public ResponseEntity updateProtocol(
             @RequestHeader("Authentification") String authToken,
             final @PathVariable String formUUID,
             final @Validated @RequestBody ProtocolCreation proto) throws URISyntaxException {
 
-        String userMail = cognito.getUserEmail(authToken);
-        proto.getProtocol().setUserEmail(userMail);
+        final CognitoRequestResult<String> emailResult = cognito.getUserEmail(authToken);
+        if (!emailResult.isSuccess()) {
+            return ResponseEntity.badRequest().body(emailResult);
+        }
+        final String email = emailResult.getPayload();
+        proto.getProtocol().setUserEmail(email);
 
         //TODO validate form belongs to user
         protoService.update(formUUID, proto.getProtocol());
@@ -111,16 +118,25 @@ public class ProtocolInstanceController {
 
     @GetMapping("/my/protocols")
     @ApiOperation(value = "List protocols.", response = ProtocolInstance[].class)
-    public ResponseEntity<List<ProtocolInstance>> listProtocols(@RequestHeader("Authentification") String authToken) {
-        String email = cognito.getUserEmail(authToken);
-        List<ProtocolInstance> protocols = protoService.list(email);
+    public ResponseEntity listProtocols(@RequestHeader("Authentification") String authToken) {
+        final CognitoRequestResult<String> emailResult = cognito.getUserEmail(authToken);
+        if (!emailResult.isSuccess()) {
+            return ResponseEntity.badRequest().body(emailResult);
+        }
+        final String email = emailResult.getPayload();
+
+        final List<ProtocolInstance> protocols = protoService.getUserProtocols(email);
         return ResponseEntity.ok(protocols);
     }
 
     @GetMapping("/my/related-protocols")
     @ApiOperation(value = "List protocols.", response = ProtocolInstance[].class)
-    public ResponseEntity<List<ProtocolInstance>> listRelatedProtocols(@RequestHeader("Authentification") String authToken) {
-        String email = cognito.getUserEmail(authToken);
+    public ResponseEntity listRelatedProtocols(@RequestHeader("Authentification") String authToken) {
+        final CognitoRequestResult<String> emailResult = cognito.getUserEmail(authToken);
+        if (!emailResult.isSuccess()) {
+            return ResponseEntity.badRequest().body(emailResult);
+        }
+        final String email = emailResult.getPayload();
         List<ProtocolInstance> protocols = protoService.getInvitedProtocolInstances(email);
         return ResponseEntity.ok(protocols);
     }
@@ -131,7 +147,7 @@ public class ProtocolInstanceController {
     public void acceptField(@RequestHeader("Authentification") String authToken,
                             final @PathVariable String fieldId,
                             final @PathVariable String formUUID) {
-//        String userMail = cognito.getUserEmail(authToken);
+//        String userMail = cognito.getInvitedEmails(authToken);
 //
 //        fieldApprobationService.accept(formUUID, fieldId, userMail);
     }

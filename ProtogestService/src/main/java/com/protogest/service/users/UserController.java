@@ -1,18 +1,16 @@
 package com.protogest.service.users;
 
-import com.protogest.service.database.models.ProtocolInstance;
 import com.protogest.service.database.models.Session;
 import io.swagger.annotations.ApiOperation;
 import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 @RestController
@@ -51,10 +49,14 @@ public class UserController {
 
     @PostMapping("/store/session")
     @ApiOperation(value = "Create user session.", response = Session.class)
-    public ResponseEntity<Session> storeSession(@RequestHeader("Authentification") String authToken,
-                                final @Validated @RequestBody UserCreation user) throws Exception {
-        final String userMail = cognito.getUserEmail(authToken);
-        String sessionUUID = this.userSession.create(user.getSession(), authToken, userMail);
+    public ResponseEntity storeSession(@RequestHeader("Authentification") String authToken,
+                                       final @Validated @RequestBody UserCreation user) throws Exception {
+        final CognitoRequestResult<String> emailResult = cognito.getUserEmail(authToken);
+        if (!emailResult.isSuccess()) {
+            return ResponseEntity.badRequest().body(emailResult);
+        }
+        final String email = emailResult.getPayload();
+        String sessionUUID = this.userSession.create(user.getSession(), authToken, email);
 
         return ResponseEntity.created(new URI("/protocole-instance/" + sessionUUID)).body(user.getSession());
     }
