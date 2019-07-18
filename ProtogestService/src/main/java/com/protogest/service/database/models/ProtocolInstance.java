@@ -17,7 +17,10 @@ public class ProtocolInstance {
     private String userEmail;
 
     @DynamoDBAttribute
-    private String invitedUserEmail;
+    private List<String> invitedEmails;
+
+    @DynamoDBAttribute
+    private List<String> collaboratorsEmails;
 
     @DynamoDBAttribute
     private String creationDate;
@@ -94,7 +97,6 @@ public class ProtocolInstance {
         return uuid;
     }
 
-
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
@@ -115,21 +117,20 @@ public class ProtocolInstance {
         this.userEmail = userEmail;
     }
 
-
-    public Status getStatus() {
-        return status;
+    public List<String> getInvitedEmails() {
+        return invitedEmails;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setInvitedEmails(List<String> invitedEmails) {
+        this.invitedEmails = invitedEmails;
     }
 
-    public String getInvitedUserEmail() {
-        return invitedUserEmail;
+    public List<String> getCollaboratorsEmails() {
+        return collaboratorsEmails;
     }
 
-    public void setInvitedUserEmail(String invitedUserEmail) {
-        this.invitedUserEmail = invitedUserEmail;
+    public void setCollaboratorsEmails(List<String> collaboratorsEmails) {
+        this.collaboratorsEmails = collaboratorsEmails;
     }
 
     public String getCreationDate() {
@@ -146,6 +147,14 @@ public class ProtocolInstance {
 
     public void setProtocolUuid(String protocolUuid) {
         this.protocolUuid = protocolUuid;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }
 
