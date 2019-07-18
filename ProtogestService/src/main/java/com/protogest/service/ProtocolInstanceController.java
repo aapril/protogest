@@ -54,7 +54,7 @@ public class ProtocolInstanceController {
     @GetMapping("/my/to-validate")
     public ResponseEntity<String> getFieldsToValidate(
             @RequestHeader("Authentification") String authToken) {
-//        return ResponseEntity.ok(fieldApprobationService.getFieldsToApproveForUser(cognito.getUserEmail(authToken)));
+//        return ResponseEntity.ok(fieldApprobationService.getFieldsToApproveForUser(cognito.getInvitedEmails(authToken)));
         return null;
     }
 
@@ -62,16 +62,16 @@ public class ProtocolInstanceController {
     @PostMapping("/my/protocols")
     @ApiOperation(value = "Create protocol.", response = ProtocolInstance.class)
     public ResponseEntity<ProtocolInstance> addProtocol(@RequestHeader("Authentification") String authToken,
-                                                        final @Validated @RequestBody ProtocolCreation proto) throws Exception {
+                                                        final @Validated @RequestBody ProtocolInstance protocol) throws Exception {
         final String userMail = cognito.getUserEmail(authToken);
 
-        String formUUID = protoService.create(proto.getProtocol(), userMail, proto.getRelatedUserId());
-        if (proto.getRelatedUserId() != null) {
-            EmailNotifier.senInvitationEmailTo(proto.getRelatedUserId());
+        String formUUID = protoService.create(protocol, userMail);
+        if (protocol.getInvitedEmails() != null && protocol.getInvitedEmails().size() > 0) {
+            protocol.getInvitedEmails().forEach(EmailNotifier::senInvitationEmailTo);
         } else {
             throw new Exception("A colleague's email must be linked to create a court case.");
         }
-        return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(proto.getProtocol());
+        return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(protocol);
     }
 
     @PostMapping("my/protocols/edit")
