@@ -19,12 +19,19 @@ public class CognitoService {
         this.cognitoCredentials = cognitoCredentials;
     }
 
-    public String getUserEmail(String token) {
+    public CognitoRequestResult<String> getUserEmail(String token) {
         final GetUserRequest request = new GetUserRequest();
         request.setAccessToken(token);
-        final GetUserResult result = this.cognitoClient.getUser(request);
-        return result.getUserAttributes().stream().filter(attributeType -> attributeType.getName().contentEquals("email"))
-                .findFirst().map(AttributeType::getValue).orElse(null);
+//
+        try {
+            final GetUserResult result = this.cognitoClient.getUser(request);
+            final CognitoRequestResult<String> cognitoRequestResult = new CognitoRequestResult<String>(true, "");
+            cognitoRequestResult.setPayload(result.getUserAttributes().stream().filter(attributeType -> attributeType.getName().contentEquals("email"))
+                    .findFirst().map(AttributeType::getValue).orElse(null));
+            return cognitoRequestResult;
+        } catch (NotAuthorizedException e) {
+            return new CognitoRequestResult<>(false, e.getErrorMessage(), e.getErrorCode());
+        }
     }
 
     public String getUserId(String token) {
