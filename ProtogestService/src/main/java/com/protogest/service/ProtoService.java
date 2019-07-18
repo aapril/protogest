@@ -4,7 +4,6 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.protogest.service.database.models.ProtocolInstance;
-import com.protogest.service.database.models.ProtocolSchema;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +20,10 @@ public class ProtoService {
         this.mapper = mapper;
     }
 
-    public String create(ProtocolInstance protocolInstance, String userEmail, String invitedUserEmail) {
-        protocolInstance.setUserEmail(userEmail);
-        protocolInstance.setInvitedUserEmail(invitedUserEmail);
+    public String create(ProtocolInstance protocolInstance, String userEmail) {
+        if (!userEmail.contentEquals(protocolInstance.getUserEmail())) {
+            // Throw an exception, not enabled yet. (Waiting for frontend
+        }
         protocolInstance.setStatus(ProtocolInstance.Status.PENDING);
 
         mapper.save(protocolInstance);
