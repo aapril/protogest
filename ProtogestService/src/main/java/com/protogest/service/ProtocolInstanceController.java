@@ -77,12 +77,11 @@ public class ProtocolInstanceController {
         return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(protocol);
     }
 
-    @PostMapping("my/protocols/edit/{formUUID}")
+    @PostMapping("my/protocols/edit")
     @ApiOperation(value = "Edit protocol.", response = ProtocolInstance.class)
     public @ResponseBody
     ResponseEntity editProtocol(
             @RequestHeader("Authentification") String authToken,
-            final @PathVariable String formUUID,
             final @Validated @RequestBody ProtocolUpdate protocolUpdate) throws URISyntaxException {
         protoService.update(protocolUpdate);
         return ResponseEntity.ok("Updated");
