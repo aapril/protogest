@@ -55,8 +55,14 @@ public class ProtoService {
     }
 
 
-    public void update(String formUUID, ProtocolInstance protocol) {
-        // wasn't working
+    public String update(ProtocolUpdate protocolUpdate) {
+        ProtocolInstance protocolInstance = mapper.load(ProtocolInstance.class, protocolUpdate.getUuid());
+
+        protocolInstance.setFields(protocolUpdate.getFields());
+
+        mapper.save(protocolInstance);
+
+        return "blah";
     }
 
     private class ScanRequest {

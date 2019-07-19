@@ -77,14 +77,15 @@ public class ProtocolInstanceController {
         return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(protocol);
     }
 
-    @PostMapping("my/protocols/edit")
+    @PostMapping("my/protocols/edit/{formUUID}")
     @ApiOperation(value = "Edit protocol.", response = ProtocolInstance.class)
     public @ResponseBody
-    String editProtocol(
+    ResponseEntity editProtocol(
             @RequestHeader("Authentification") String authToken,
             final @PathVariable String formUUID,
-            final @Validated @RequestBody ProtocolCreation proto) throws URISyntaxException {
-        return "Edit function not implemented yet.";
+            final @Validated @RequestBody ProtocolUpdate protocolUpdate) throws URISyntaxException {
+        protoService.update(protocolUpdate);
+        return ResponseEntity.ok("Updated");
     }
 
     @GetMapping("/my/protocols/{formUUID}")
@@ -112,7 +113,7 @@ public class ProtocolInstanceController {
         proto.getProtocol().setUserEmail(email);
 
         //TODO validate form belongs to user
-        protoService.update(formUUID, proto.getProtocol());
+        // protoService.update(formUUID, proto.getProtocol());
         return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(proto.getProtocol());
     }
 
