@@ -116,12 +116,8 @@ public class UserController {
     @ApiOperation(value = "set attribute in cognito.")
     public void setAttribute(@RequestHeader("Authentification") String authToken,
                              final @RequestBody Map<String,String> attributeBody) {
-        System.out.print("test");
         String userMail = this.cognitoService.getUserId(authToken);
-        System.out.println(attributeBody.get("firstName")+"test");
-        System.out.println(attributeBody.get("lastName")+"test");
-        System.out.println(userMail+"test");
-        //this.cognitoService.setUserInfo(userMail,attributeBody.get("firstName"),attributeBody.get("lastName"));
+        this.cognitoService.setUserInfo(userMail,attributeBody.get("firstName"),attributeBody.get("lastName"));
     }
 
 }
