@@ -69,11 +69,12 @@ public class ProtocolInstanceController {
             return ResponseEntity.badRequest().body(emailResult);
         }
         final String formUUID = protoService.create(protocol, emailResult.getPayload());
-        if (protocol.getInvitedEmails() != null && protocol.getInvitedEmails().size() > 0) {
-            protocol.getInvitedEmails().forEach(EmailNotifier::senInvitationEmailTo);
-        } else {
-            throw new Exception("A colleague's email must be linked to create a court case.");
-        }
+        // TODO: This is going to be a problem when auto-saving
+//        if (protocol.getInvitedEmails() != null && protocol.getInvitedEmails().size() > 0) {
+//            protocol.getInvitedEmails().forEach(EmailNotifier::senInvitationEmailTo);
+//        } else {
+//            throw new Exception("A colleague's email must be linked to create a court case.");
+//        }
         return ResponseEntity.created(new URI("/protocole-instance/" + formUUID)).body(protocol);
     }
 
@@ -83,8 +84,8 @@ public class ProtocolInstanceController {
     ResponseEntity editProtocol(
             @RequestHeader("Authentification") String authToken,
             final @Validated @RequestBody ProtocolUpdate protocolUpdate) throws URISyntaxException {
-        protoService.update(protocolUpdate);
-        return ResponseEntity.ok("Updated");
+        ProtocolInstance protocolInstance = protoService.update(protocolUpdate);
+        return ResponseEntity.ok(protocolInstance);
     }
 
     @GetMapping("/my/protocols/{formUUID}")

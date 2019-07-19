@@ -55,14 +55,14 @@ public class ProtoService {
     }
 
 
-    public String update(ProtocolUpdate protocolUpdate) {
+    public ProtocolInstance update(ProtocolUpdate protocolUpdate) {
         ProtocolInstance protocolInstance = mapper.load(ProtocolInstance.class, protocolUpdate.getUuid());
 
         protocolInstance.setFields(protocolUpdate.getFields());
 
         mapper.save(protocolInstance);
 
-        return "blah";
+        return protocolInstance;
     }
 
     private class ScanRequest {
