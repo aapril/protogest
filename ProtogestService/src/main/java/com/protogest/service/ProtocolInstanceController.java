@@ -35,12 +35,6 @@ public class ProtocolInstanceController {
         this.cognito = cognito;
     }
 
-    @GetMapping("/test")
-    public ResponseEntity test() {
-        protoService.getByUUID("test");
-        return ResponseEntity.ok("ok!");
-    }
-
     @GetMapping("/auth")
     public ResponseEntity auth(@RequestHeader("Authentification") String authToken) {
         return ResponseEntity.ok(cognito.getUserEmail(authToken));
