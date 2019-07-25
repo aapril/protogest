@@ -11,6 +11,9 @@ public class ProtocolInstance {
     private String uuid;
 
     @DynamoDBAttribute
+    private String name;
+
+    @DynamoDBAttribute
     private List<FormField> fields;
 
     @DynamoDBAttribute
@@ -99,6 +102,14 @@ public class ProtocolInstance {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<FormField> getFields() {
