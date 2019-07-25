@@ -31,6 +31,9 @@ public class ProtocolInstance {
     @DynamoDBAttribute
     private String protocolUuid;
 
+    @DynamoDBAttribute
+    private boolean approve = false;
+
     @DynamoDBTypeConvertedEnum
     @DynamoDBAttribute
     private Status status = Status.PENDING;
@@ -166,6 +169,14 @@ public class ProtocolInstance {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public boolean getApprove() {
+        return approve;
+    }
+
+    public void setApprove(boolean approve) {
+        this.approve = approve;
     }
 }
 
