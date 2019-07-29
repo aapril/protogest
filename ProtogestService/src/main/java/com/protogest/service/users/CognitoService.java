@@ -4,10 +4,7 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProvider;
 import com.amazonaws.services.cognitoidp.model.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class CognitoService {
@@ -51,12 +48,16 @@ public class CognitoService {
         AdminDeleteUserResult result = cognitoClient.adminDeleteUser(request);
     }
 
-    public CognitoRequestResult signUp(String email, String password) {
+    public CognitoRequestResult signUp(String email, String password, String firstName, String lastName) {
         try {
             final SignUpResult result = this.cognitoClient.signUp(new SignUpRequest()
                     .withClientId(this.cognitoCredentials.getClientId())
                     .withUsername(email)
-                    .withPassword(password));
+                    .withPassword(password)
+                    .withUserAttributes(Arrays.asList(
+                            new AttributeType().withName("name").withValue(firstName),
+                            new AttributeType().withName("family_name").withValue(lastName))
+                    ));
             return new CognitoRequestResult(true, result.getCodeDeliveryDetails().toString());
         } catch (AWSCognitoIdentityProviderException e) {
             return new CognitoRequestResult(false, e.getErrorMessage(), e.getErrorCode());
@@ -80,6 +81,7 @@ public class CognitoService {
         final Map<String, String> parameters = new HashMap<>(2);
         parameters.put("USERNAME", email);
         parameters.put("PASSWORD", password);
+
 
         try {
             final AdminInitiateAuthResult result = this.cognitoClient.adminInitiateAuth(
@@ -115,14 +117,14 @@ public class CognitoService {
     public String getUserFirstName(String userId) {
 
 
-        AdminGetUserRequest  userRequest  = new AdminGetUserRequest().withUserPoolId("ca-central-1_ZBpO9AVc6").withUsername(userId);
+        AdminGetUserRequest userRequest = new AdminGetUserRequest().withUserPoolId("ca-central-1_ZBpO9AVc6").withUsername(userId);
 
         AdminGetUserResult userResult = cognitoClient.adminGetUser(userRequest);
 
         String firstName = null;
 
         for (int i = 0; i < userResult.getUserAttributes().size(); i++) {
-            if(userResult.getUserAttributes().get(i).getName().equals("name")){
+            if (userResult.getUserAttributes().get(i).getName().equals("name")) {
                 firstName = userResult.getUserAttributes().get(i).getValue();
             }
         }
@@ -131,7 +133,7 @@ public class CognitoService {
     }
 
     public String getUserLastName(String userId) {
-        AdminGetUserRequest  userRequest  = new AdminGetUserRequest().withUserPoolId("ca-central-1_ZBpO9AVc6").withUsername(userId);
+        AdminGetUserRequest userRequest = new AdminGetUserRequest().withUserPoolId("ca-central-1_ZBpO9AVc6").withUsername(userId);
 
         AdminGetUserResult userResult = cognitoClient.adminGetUser(userRequest);
 
@@ -139,8 +141,8 @@ public class CognitoService {
 
         for (int i = 0; i < userResult.getUserAttributes().size(); i++) {
             System.out.println(userResult.getUserAttributes().get(i).getName());
-            if(userResult.getUserAttributes().get(i).getName().equals("family_name")){
-                System.out.println("test"+userResult.getUserAttributes().get(i).getName());
+            if (userResult.getUserAttributes().get(i).getName().equals("family_name")) {
+                System.out.println("test" + userResult.getUserAttributes().get(i).getName());
                 lastName = userResult.getUserAttributes().get(i).getValue();
             }
         }
@@ -150,7 +152,7 @@ public class CognitoService {
 
     public void changePassword(String authToken, String oldPassword, String newPassword) {
 
-        ChangePasswordRequest  passwordRequest = new ChangePasswordRequest()
+        ChangePasswordRequest passwordRequest = new ChangePasswordRequest()
                 .withAccessToken(authToken)
                 .withPreviousPassword(oldPassword)
                 .withProposedPassword(newPassword);
@@ -162,7 +164,7 @@ public class CognitoService {
 
     public void forgotPassword(String userName) {
 
-        ForgotPasswordRequest  forgotpasswordRequest = new ForgotPasswordRequest()
+        ForgotPasswordRequest forgotpasswordRequest = new ForgotPasswordRequest()
                 .withUsername(userName)
                 .withClientId(this.cognitoCredentials.getClientId());
 
@@ -171,9 +173,9 @@ public class CognitoService {
 
     }
 
-    public void resetPasswordCode(String password, String code,String userName) {
+    public void resetPasswordCode(String password, String code, String userName) {
 
-        ConfirmForgotPasswordRequest  forgotpasswordRequest = new ConfirmForgotPasswordRequest()
+        ConfirmForgotPasswordRequest forgotpasswordRequest = new ConfirmForgotPasswordRequest()
                 .withConfirmationCode(code)
                 .withPassword(password)
                 .withClientId(this.cognitoCredentials.getClientId())
@@ -184,8 +186,8 @@ public class CognitoService {
 
     }
 
-    public  void setUserInfo(String userId,  String firstName, String lastName) {
-        AdminUpdateUserAttributesRequest  userRequest  = new AdminUpdateUserAttributesRequest().withUserPoolId("ca-central-1_ZBpO9AVc6").withUsername(userId);
+    public void setUserInfo(String userId, String firstName, String lastName) {
+        AdminUpdateUserAttributesRequest userRequest = new AdminUpdateUserAttributesRequest().withUserPoolId("ca-central-1_ZBpO9AVc6").withUsername(userId);
 
 
         Collection<AttributeType> attribute = new ArrayList<AttributeType>();
