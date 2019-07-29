@@ -29,8 +29,10 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, value = "/users/signup")
     public @ResponseBody
     ResponseEntity signUp(@RequestParam("email") String email,
-                          @RequestParam("password") String password) {
-        return ResponseEntity.ok().body(this.cognitoService.signUp(email, password));
+                          @RequestParam("password") String password,
+                          @RequestParam("firstName") String firstName,
+                          @RequestParam("lastName") String lastName) {
+        return ResponseEntity.ok().body(this.cognitoService.signUp(email, password, firstName, lastName));
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/users/confirm_signup")
