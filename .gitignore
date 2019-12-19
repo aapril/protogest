@@ -88,5 +88,9 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/
-
+.classpath
+.factorypath
+.project
+.settings/
+.recommenders/
 ProtogestService/.aws-sam/
